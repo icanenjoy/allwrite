@@ -3,15 +3,14 @@ import { IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
-const HeartButton = () => {
-  const [clicked, setClicked] = useState(false);
+interface HeartButtonProps {
+  onClick: () => void;
+  clicked: boolean;
+}
 
-  const handleClick = () => {
-    setClicked(!clicked);
-  };
-
+const HeartButton: React.FC<HeartButtonProps> = ({ onClick, clicked }) => {
   return (
-    <IconButton onClick={handleClick}>
+    <IconButton onClick={onClick}>
       {clicked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
     </IconButton>
   );

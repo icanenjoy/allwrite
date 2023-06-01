@@ -1,7 +1,8 @@
 import React from "react";
+import MessageComponent from "./MessageComponent";
 
 const MainPage = () => {
-  return <div>main page</div>;
+  return <MessageComponent />;
 };
 
 export default MainPage;

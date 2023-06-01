@@ -21,9 +21,9 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/answer" element={<AnswerPage />} />
-        <Route path="/mypage" element={<MyPage />}></Route>
-        <Route path="/login" element={<LoginPage />}></Route>
-        <Route path="/signup" element={<SignUpPage />}></Route>
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
       </Routes>
     </BrowserRouter>
   );
