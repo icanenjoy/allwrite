@@ -189,7 +189,7 @@ const Container = styled.div`
 
 const Progress = styled.div`
   background-color: #a7e2f9;
-  width: 30%;
+  width: 80%;
   height: 100%;
   transition: width 1s;
   border-radius: 20px;
