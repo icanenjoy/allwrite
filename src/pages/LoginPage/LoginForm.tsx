@@ -10,6 +10,7 @@ import {
   Container,
 } from "@mui/material";
 import { useLocalStorage } from "usehooks-ts";
+import { useNavigate } from "react-router-dom";
 
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import axios from "axios";
@@ -18,6 +19,11 @@ type JwtLoginPayload = JwtPayload & {
   name: string;
   isAdmin: Boolean;
   isTempPassword: Boolean;
+};
+
+type LoginFormValues = {
+  email: string;
+  password: string;
 };
 
 const LoginForm: React.FC = () => {
@@ -33,6 +39,19 @@ const LoginForm: React.FC = () => {
     null
   );
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .post("http://34.64.145.63:5000/api/v1/auth", data)
+      .then((response) => {
+        setAccessToken(response.data.accessToken);
+        setRefreshToken(response.data.refreshToken);
+        navigate("/main"); // 로그인 성공 시 /main으로 이동
+      })
+      .catch((err) => {});
+  }, []);
+
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
@@ -41,38 +60,41 @@ const LoginForm: React.FC = () => {
     setPassword(e.target.value);
   };
 
+  const data: LoginFormValues = {
+    email: email,
+    password: password,
+  };
+
   const HandleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 로그인 요청 후 응답에서 토큰을 받아와서 저장하는 코드
-    // axios
-    //   .post("/api/auth", { email, password })
-    //   .then((response) => {
-    //     const token = response.data.token;
-    //     const decodedToken = jwt_decode<JwtLoginPayload>(token || "") || null; //토큰을 해석
-    //     console.log(decodedToken.name); //로그인한 유저의 이름
-    //     console.log(decodedToken.isAdmin); //로그인한 유저의 관리자 여부
-    //     console.log(decodedToken.isTempPassword); //로그인한 유저의 임시패스워드 여부
-    //     saveToken(token);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
-
-    axios.get("http://localhost:9999/auth").then((response) => {
-      setAccessToken(response.data.accessToken);
-      setRefreshToken(response.data.refreshToken);
-    });
+    axios
+      .post("http://34.64.145.63:5000/api/v1/auth", data)
+      .then((response) => {
+        setAccessToken(response.data.accessToken);
+        setRefreshToken(response.data.refreshToken);
+        navigate("/main"); // 로그인 성공 시 /main으로 이동
+      })
+      .catch((err) => {
+        alert("아이디 혹은 패스워드가 잘못되었습니다.");
+      });
   };
 
   useEffect(() => {
-    try {
-      if (accessToken !== "1") {
-        console.log(accessToken);
-        console.log(jwt_decode<JwtLoginPayload>(accessToken as string));
+    const checkToken = async () => {
+      try {
+        if (accessToken !== null) {
+          console.log(accessToken);
+          console.log(jwt_decode<JwtLoginPayload>(accessToken as string));
+          navigate("/main"); // 토큰이 있을 경우 바로 /main으로 이동
+        }
+      } catch (e) {
+        console.error("Token decoding error:", e);
       }
-    } catch (e) {}
-  }, [accessToken, refreshToken]);
+    };
+
+    checkToken();
+  }, []);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -119,8 +141,8 @@ const LoginForm: React.FC = () => {
       </Paper>
       <Button
         onClick={() => {
-          setAccessToken("1");
-          setRefreshToken("1");
+          setAccessToken("");
+          setRefreshToken("");
         }}
         variant="contained"
       >

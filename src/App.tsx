@@ -24,11 +24,11 @@ function App() {
     <BrowserRouter>
       <LoginCheck></LoginCheck>
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="/main" element={<MainPage />} />
         <Route path="/answer" element={<AnswerPage />} />
         <Route path="/mypage" element={<MyPage />} />
-        <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   );

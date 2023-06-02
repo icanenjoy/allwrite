@@ -15,7 +15,7 @@ const LoginCheck = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (accessToken === "1" || refreshToken === "1") navigate("/answer");
+    if (accessToken === "" || refreshToken === "") navigate("/login");
   }, [refreshToken, accessToken]);
 
   return <header></header>;

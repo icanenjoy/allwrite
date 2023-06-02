@@ -9,6 +9,7 @@ interface HeartButtonProps {
 }
 
 const HeartButton: React.FC<HeartButtonProps> = ({ onClick, clicked }) => {
+  // Heart 상태값이 바뀔때마다 요청을 보내는 코드가 추가될 예정
   return (
     <IconButton onClick={onClick}>
       {clicked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
