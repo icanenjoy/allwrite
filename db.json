@@ -1,19 +1,81 @@
 {
-  "posts": [
+  "auth": {
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiY2RkIiwiaXNBZG1pbiI6ZmFsc2UsImlzVGVtcFBhc3N3b3JkIjp0cnVlfQ.CYNxe12Pju6fbKKJipz_rKN0Hk8hLlxP8l9fMloDv3g",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiY2RkIiwiaXNBZG1pbiI6ZmFsc2UsImlzVGVtcFBhc3N3b3JkIjp0cnVlfQ.CYNxe12Pju6fbKKJipz_rKN0Hk8hLlxP8l9fMloDv3g"
+  },
+
+  "answer": [
     {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
-    }
-  ],
-  "comments": [
+      "answer_id": 1,
+      "nick_name": "철수",
+      "question_id": "json-server",
+      "content": "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
+      "state_code": "friend",
+      "date": "2023.05.01",
+      "report_count": 3
+    },
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "answer_id": 2,
+      "nick_name": "영희",
+      "question_id": "json-server",
+      "content": "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이 보전하세 남산 위에 저 소나무 철갑을 두른 듯 ",
+      "state_code": "friend",
+      "date": "2023.05.01",
+      "report_count": 3
+    },
+    {
+      "answer_id": 3,
+      "nick_name": "종운",
+      "question_id": "json-server",
+      "content": "You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You and me, we made a vow For better or for worse I can't believe you let me down But the proof's in the way it hurts For months on end I've had my doubts Denying every tear I wish this would be over now But I know that I still need you here You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You've been so unavailable Now, sadly, I know why Your heart is unobtainable Even though, Lord knows you kept mine You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one I have loved you for many years Maybe I am just not enough You've made me realize my deepest fear By lying and tearing us up You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one I know I'm not the only one I know I'm not the only one And I know, and I know, and I know, and I know, and I know, and I know, know I know I'm not the only one",
+      "state_code": "friend",
+      "date": "2023.05.01",
+      "report_count": 3
+    },
+    {
+      "answer_id": 4,
+      "nick_name": "윤서",
+      "question_id": "json-server",
+      "content": "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
+      "state_code": "friend",
+      "date": "2023.05.01",
+      "report_count": 3
+    },
+    {
+      "answer_id": 5,
+      "nick_name": "종운",
+      "question_id": "json-server",
+      "content": "You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You and me, we made a vow For better or for worse I can't believe you let me down But the proof's in the way it hurts For months on end I've had my doubts Denying every tear I wish this would be over now But I know that I still need you here You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You've been so unavailable Now, sadly, I know why Your heart is unobtainable Even though, Lord knows you kept mine You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one I have loved you for many years Maybe I am just not enough You've made me realize my deepest fear By lying and tearing us up You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one I know I'm not the only one I know I'm not the only one And I know, and I know, and I know, and I know, and I know, and I know, know I know I'm not the only one",
+      "state_code": "friend",
+      "date": "2023.05.01",
+      "report_count": 3
+    },
+    {
+      "answer_id": 6,
+      "nick_name": "종운",
+      "question_id": "json-server",
+      "content": "You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You and me, we made a vow For better or for worse I can't believe you let me down But the proof's in the way it hurts For months on end I've had my doubts Denying every tear I wish this would be over now But I know that I still need you here You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You've been so unavailable Now, sadly, I know why Your heart is unobtainable Even though, Lord knows you kept mine You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one I have loved you for many years Maybe I am just not enough You've made me realize my deepest fear By lying and tearing us up You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one I know I'm not the only one I know I'm not the only one And I know, and I know, and I know, and I know, and I know, and I know, know I know I'm not the only one",
+      "state_code": "friend",
+      "date": "2023.05.01",
+      "report_count": 3
+    },
+    {
+      "answer_id": 7,
+      "nick_name": "종운",
+      "question_id": "json-server",
+      "content": "You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You and me, we made a vow For better or for worse I can't believe you let me down But the proof's in the way it hurts For months on end I've had my doubts Denying every tear I wish this would be over now But I know that I still need you here You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You've been so unavailable Now, sadly, I know why Your heart is unobtainable Even though, Lord knows you kept mine You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one I have loved you for many years Maybe I am just not enough You've made me realize my deepest fear By lying and tearing us up You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one I know I'm not the only one I know I'm not the only one And I know, and I know, and I know, and I know, and I know, and I know, know I know I'm not the only one",
+      "state_code": "friend",
+      "date": "2023.05.01",
+      "report_count": 3
+    },
+    {
+      "answer_id": 8,
+      "nick_name": "종운",
+      "question_id": "json-server",
+      "content": "You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You and me, we made a vow For better or for worse I can't believe you let me down But the proof's in the way it hurts For months on end I've had my doubts Denying every tear I wish this would be over now But I know that I still need you here You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You've been so unavailable Now, sadly, I know why Your heart is unobtainable Even though, Lord knows you kept mine You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one I have loved you for many years Maybe I am just not enough You've made me realize my deepest fear By lying and tearing us up You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one You say I'm crazy 'Cause you don't think I know what you've done But when you call me baby I know I'm not the only one I know I'm not the only one I know I'm not the only one And I know, and I know, and I know, and I know, and I know, and I know, know I know I'm not the only one",
+      "state_code": "friend",
+      "date": "2023.05.01",
+      "report_count": 3
     }
-  ],
-  "profile": {
-    "name": "typicode"
-  }
+  ]
 }

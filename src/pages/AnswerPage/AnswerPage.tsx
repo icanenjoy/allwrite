@@ -1,7 +1,8 @@
 import React from "react";
+import AnswerRender from "./AnswerRender";
 
 const AnswerPage = () => {
-  return <div>answerpage</div>;
+  return <AnswerRender />;
 };
 
 export default AnswerPage;
