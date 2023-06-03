@@ -17,7 +17,7 @@ function BestAnswer3() {
           backgroundColor: "skyblue",
           padding: "5px",
           width: "25rem",
-          height: "4rem",
+          height: "3rem",
           borderRadius: "1.5rem",
           transition: "transform 0.3s",
           "&:hover": {
@@ -29,7 +29,7 @@ function BestAnswer3() {
         <Button
           sx={{
             width: "100%",
-            height: "4.4rem",
+            height: "3rem",
             backgroundColor: "skyblue",
             "&:hover": {
               backgroundColor: "skyblue",
@@ -47,7 +47,7 @@ function BestAnswer3() {
 const Container = styled.div`
   width: 29.5rem;
   height: 5rem;
-  margin-top: 2rem;
+
   display: flex;
   justify-content: center;
   text-align: center;

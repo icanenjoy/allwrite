@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import TodayAnswer from "./TodayAnswer";
+import Calendar from "./Calendar";
 import rabbit1 from "./rabbit1.png";
 import rabbit2 from "./rabbit2.png";
 import rabbit3 from "./rabbit3.png";
@@ -43,15 +44,14 @@ function Main() {
       </Container1>
       <Container2></Container2>
       <Container3>
-        <BestQuestion>가장 답변이 많은 질문</BestQuestion>
+        <Calendar />
         <BestAnswerContainer>
+          <Date>2023.05.05</Date>
           <BestAnswer1 />
           <BestAnswer2 />
-        </BestAnswerContainer>
-        <BestAnswerContainer2>
           <BestAnswer3 />
           <BestAnswer4 />
-        </BestAnswerContainer2>
+        </BestAnswerContainer>
       </Container3>
     </Background>
   );
@@ -60,14 +60,14 @@ function Main() {
 export default Main;
 const Background = styled.div`
   width: 100%;
-  height: 100%;
+  height: 90rem;
   text-align: center;
   background-color: #dbeff4;
 `;
 
 const Container1 = styled.div`
   width: 100%;
-  height: 34rem;
+  height: 35rem;
   margin-top: 2rem;
   text-align: center;
   background-color: #dbeff4;
@@ -199,7 +199,7 @@ const Progress = styled.div`
 
 const Container2 = styled.div`
   width: 100%;
-  height: 5rem;
+  height: 6rem;
   margin-top: 3rem;
   display: flex;
   justify-content: center;
@@ -220,39 +220,29 @@ const Question = styled.div`
 `;
 
 const Container3 = styled.div`
-  width: 100%;
+  width: 50%;
   height: 27rem;
-  display: block;
-  justify-content: center;
-  text-align: center;
-  color: #73a1ec;
-  font-weight: 750;
+  display: flex;
+  justify-content: right;
+  position: relative;
+  text-align: right;
 `;
 
-const BestQuestion = styled.div`
+const Date = styled.div`
   font-size: 1.2rem;
-  height: 2rem;
   width: 100%;
+  margin-left: 2rem;
+  margin-top: 1rem;
   overflow: visible;
   position: absoulte;
-  margin-top: 6rem;
   color: #73a1ec;
-  font-weight: 750;
 `;
 
 const BestAnswerContainer = styled.div`
-  width: 100%;
-  height: 8rem;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  color: #73a1ec;
-  font-weight: 750;
-`;
-const BestAnswerContainer2 = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
+  height: 30rem;
+  width: 1rem;
+  display: block;
+  justify-content: right;
   text-align: center;
   color: #73a1ec;
   font-weight: 750;
