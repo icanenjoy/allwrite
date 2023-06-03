@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import TodayAnswer from "./TodayAnswer";
 import Calendar from "./Calendar";
@@ -13,6 +13,7 @@ import BestAnswer4 from "./BestAnswer4";
 
 function Main() {
   const [count, setCount] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(0);
 
   function add_count() {
     if (count === 5) {
@@ -21,6 +22,15 @@ function Main() {
       setCount(count + 1);
     }
   }
+
+  useEffect(() => {
+    // Update the container width to its full width after a delay
+    const timeout = setTimeout(() => {
+      setContainerWidth(70);
+    }, 700);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Background>
@@ -32,12 +42,13 @@ function Main() {
 
         <Name>토롱이</Name>
         <Level>LV14</Level>
-        <Container
-          onClick={() => {
-            add_count();
-          }}
-        >
-          <Progress></Progress>
+        <Container>
+          <Progress
+            style={{ width: `${containerWidth}%` }} // Set the width dynamically
+            onClick={() => {
+              add_count();
+            }}
+          ></Progress>
         </Container>
         <Question>오늘의 질문</Question>
         <TodayAnswer />
@@ -180,16 +191,17 @@ const Level = styled.div`
 const Container = styled.div`
   margin: 10px auto;
   background-color: #e8e3e3;
-  width: 500px;
+  width: 30rem;
   height: 35px;
   display: flex;
   align-items: center;
   border-radius: 20px;
+  transition: width 1s; // Add transition for width changes
 `;
 
 const Progress = styled.div`
   background-color: #a7e2f9;
-  width: 80%;
+  width: ${(props) => props.style?.width || 0}%;
   height: 100%;
   transition: width 1s;
   border-radius: 20px;
