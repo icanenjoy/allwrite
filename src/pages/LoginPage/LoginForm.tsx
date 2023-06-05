@@ -65,18 +65,26 @@ const LoginForm: React.FC = () => {
     password: password,
   };
 
+  const signInData = {
+    nickName: "디디",
+    name: "김종운",
+    email: "cdd@kakao.com",
+    password: "#Awoon0325",
+  };
+
   const HandleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     axios
       .post("http://34.64.145.63:5000/api/v1/auth", data)
       .then((response) => {
-        setAccessToken(response.data.accessToken);
-        setRefreshToken(response.data.refreshToken);
+        setAccessToken(response.data.token.accessToken);
+        setRefreshToken(response.data.token.refreshToken);
         navigate("/main"); // 로그인 성공 시 /main으로 이동
       })
       .catch((err) => {
-        alert("아이디 혹은 패스워드가 잘못되었습니다.");
+        console.log(data);
+        alert(err);
       });
   };
 
@@ -95,6 +103,10 @@ const LoginForm: React.FC = () => {
 
     checkToken();
   }, []);
+
+  const handleSignUp = () => {
+    navigate("/signup"); // 회원가입 페이지로 이동
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -138,11 +150,19 @@ const LoginForm: React.FC = () => {
             Sign In
           </Button>
         </form>
+        <Button
+          onClick={handleSignUp}
+          variant="contained"
+          fullWidth
+          sx={{ marginBottom: 2 }}
+        >
+          회원가입
+        </Button>
       </Paper>
       <Button
         onClick={() => {
-          setAccessToken("");
-          setRefreshToken("");
+          setAccessToken(null);
+          setRefreshToken(null);
         }}
         variant="contained"
       >

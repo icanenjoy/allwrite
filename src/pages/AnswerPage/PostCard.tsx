@@ -6,6 +6,7 @@ import HeartButton from "./HeartButton";
 import TruncatedText from "./TextSlicer";
 import { Height } from "@mui/icons-material";
 import { AnswerDetail } from "./AnswerDetail";
+import { PostCardProps } from "./PostCardProps";
 
 const HoverCard = styled(Card)`
   height: 320px;
@@ -15,17 +16,6 @@ const HoverCard = styled(Card)`
     transform: scale(1.05);
   }
 `;
-
-export interface AnswerDetailProps {
-  answer_id: number;
-  onClose: () => void;
-}
-
-interface PostCardProps {
-  answer_id: number;
-  nick_name: string;
-  content: string;
-}
 
 const PostCard: React.FC<PostCardProps> = (answer) => {
   const [count, setCount] = useState(0);
