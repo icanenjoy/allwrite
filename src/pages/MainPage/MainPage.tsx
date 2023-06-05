@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import TodayAnswer from "./TodayAnswer";
 import Calendar from "./Calendar";
-import rabbit1 from "./rabbit1.png";
-import rabbit2 from "./rabbit2.png";
-import rabbit3 from "./rabbit3.png";
-import rabbit4 from "./rabbit4.png";
+import rabbit1 from "./img/rabbit1.png";
+import rabbit2 from "./img/rabbit2.png";
+import rabbit3 from "./img/rabbit3.png";
+import rabbit4 from "./img/rabbit4.png";
 import BestAnswer1 from "./BestAnswer1";
 import BestAnswer2 from "./BestAnswer2";
 import BestAnswer3 from "./BestAnswer3";
@@ -14,6 +14,7 @@ import BestAnswer4 from "./BestAnswer4";
 function Main() {
   const [count, setCount] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
+  const [selectedProfile, setSelectedProfile] = useState(rabbit1);
 
   function add_count() {
     if (count === 5) {
@@ -23,6 +24,15 @@ function Main() {
     }
   }
 
+  function changeProfile2() {
+    setSelectedProfile(rabbit2); // Set the selectedProfile to rabbit2
+  }
+  function changeProfile3() {
+    setSelectedProfile(rabbit3); // Set the selectedProfile to rabbit2
+  }
+  function changeProfile4() {
+    setSelectedProfile(rabbit4); // Set the selectedProfile to rabbit2
+  }
   useEffect(() => {
     // Update the container width to its full width after a delay
     const timeout = setTimeout(() => {
@@ -35,10 +45,12 @@ function Main() {
   return (
     <Background>
       <Container1>
-        <Profile></Profile>
-        <Profile2></Profile2>
-        <Profile3></Profile3>
-        <Profile4></Profile4>
+        <Profile
+          style={{ backgroundImage: `url(${selectedProfile})` }}
+        ></Profile>
+        <Profile2 onClick={changeProfile2}></Profile2>
+        <Profile3 onClick={changeProfile3}></Profile3>
+        <Profile4 onClick={changeProfile4}></Profile4>
 
         <Name>토롱이</Name>
         <Level>LV14</Level>

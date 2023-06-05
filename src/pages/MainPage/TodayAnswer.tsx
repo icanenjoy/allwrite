@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import { Box, IconButton, Button } from "@mui/material";
 
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 
-function TodayAnswer() {
-  const messages = [
-    "10년 전 과거로 가기 vs 10년 후 미래로 가기",
-    "주로 보는 유튜브 채널은?",
-    "잠수이별 VS 환승이별",
-  ];
+const TodayAnswer = () => {
+  const [question, setQuestion] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:9999/answer")
+      .then((response) => {
+        setQuestion(response.data);
+        setLoading(false);
+        console.log(response.data);
+      })
+      .catch((err) => {});
+  }, []);
 
   const StyledArrowBack = styled(ArrowBackIosRoundedIcon)(({ theme }) => ({
     color: "deepskyblue",
@@ -23,20 +32,25 @@ function TodayAnswer() {
       fontSize: "32px",
     })
   );
-
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
   const handleNextClick = () => {
-    setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+    setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % question.length);
   };
 
   const handlePrevClick = () => {
     setCurrentMessageIndex((prevIndex) =>
-      prevIndex === 0 ? messages.length - 1 : prevIndex - 1
+      prevIndex === 0 ? question.length - 1 : prevIndex - 1
     );
   };
 
-  const currentMessage = messages[currentMessageIndex];
+  if (loading) {
+    return <div>Loading...</div>; // 로딩 중이면 로딩 표시
+  }
+
+  const currentMessage =
+    question.length > 0 ? question[currentMessageIndex] : null;
+  console.log(currentMessage);
 
   return (
     <Container>
@@ -69,7 +83,7 @@ function TodayAnswer() {
             },
           }}
         >
-          {currentMessage}
+          {currentMessage?.question}
         </Button>
         <IconButton onClick={handleNextClick}>
           <StyledArrowForward />
@@ -77,7 +91,7 @@ function TodayAnswer() {
       </Box>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   width: 100%;
