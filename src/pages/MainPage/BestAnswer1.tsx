@@ -19,7 +19,7 @@ function BestAnswer() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          backgroundColor: "skyblue",
+          backgroundColor: "#f9aa43",
           padding: "5px",
           width: "25rem",
           height: "3rem",
@@ -35,9 +35,10 @@ function BestAnswer() {
           sx={{
             width: "100%",
             height: "3rem",
-            backgroundColor: "skyblue",
+            backgroundColor: "#f9aa43",
+            color: "#8d3e02",
             "&:hover": {
-              backgroundColor: "skyblue",
+              backgroundColor: "#f9aa43",
             },
           }}
         >

@@ -59,7 +59,7 @@ const TodayAnswer = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          backgroundColor: "skyblue",
+          backgroundColor: "#f9aa43",
           padding: "5px",
           width: "54.8rem",
           height: "4rem",
@@ -71,22 +71,23 @@ const TodayAnswer = () => {
         }}
       >
         <IconButton onClick={handlePrevClick}>
-          <StyledArrowBack />
+          <StyledArrowBack sx={{ color: "#8d3e02" }} />
         </IconButton>
         <Button
           sx={{
             width: "55rem",
             height: "4.4rem",
-            backgroundColor: "skyblue",
+            backgroundColor: "#f9aa43",
+            color: "#8d3e02",
             "&:hover": {
-              backgroundColor: "skyblue",
+              backgroundColor: "#f9aa43",
             },
           }}
         >
           {currentMessage?.question}
         </Button>
         <IconButton onClick={handleNextClick}>
-          <StyledArrowForward />
+          <StyledArrowForward sx={{ color: "#8d3e02" }} />
         </IconButton>
       </Box>
     </Container>
@@ -100,7 +101,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
-  color: #73a1ec;
+  color: #f9aa43;
   font-weight: 750;
 `;
 

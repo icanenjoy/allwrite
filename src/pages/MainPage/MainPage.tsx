@@ -6,6 +6,7 @@ import rabbit1 from "./img/rabbit1.png";
 import rabbit2 from "./img/rabbit2.png";
 import rabbit3 from "./img/rabbit3.png";
 import rabbit4 from "./img/rabbit4.png";
+import bgImg from "./img/bgImg.png";
 import BestAnswer1 from "./BestAnswer1";
 import BestAnswer2 from "./BestAnswer2";
 import BestAnswer3 from "./BestAnswer3";
@@ -83,9 +84,10 @@ function Main() {
 export default Main;
 const Background = styled.div`
   width: 100%;
-  height: 90rem;
-  text-align: center;
-  background-color: #dbeff4;
+  height: 100rem;
+  background-image: url(${bgImg});
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
 
 const Container1 = styled.div`
@@ -93,7 +95,6 @@ const Container1 = styled.div`
   height: 35rem;
   margin-top: 2rem;
   text-align: center;
-  background-color: #dbeff4;
 `;
 
 const Profile = styled.button`
@@ -103,7 +104,7 @@ const Profile = styled.button`
   border: none;
   border-radius: 1rem;
   margin-top: 2rem;
-  background-color: #dbeff4;
+  background-color: #ffe256;
   background-repeat: no-repeat;
   background-image: url(${rabbit1});
   transition: transform 0.3s;
@@ -122,9 +123,9 @@ const Profile3 = styled.button`
   border: none;
   border-radius: 1rem;
   margin-top: 15rem;
-  margin-left: 10rem;
+  margin-left: 9rem;
   position: absolute;
-  background-color: #dbeff4;
+  background-color: #ffe256;
   background-repeat: no-repeat;
   background-image: url(${rabbit3});
   transition: transform 0.3s;
@@ -143,10 +144,10 @@ const Profile4 = styled.button`
   background-size: 100% 100%;
   border: none;
   border-radius: 1rem;
-  margin-top: 1rem;
-  margin-left: 15rem;
+  margin-top: 3rem;
+  margin-left: 6rem;
   position: absolute;
-  background-color: #dbeff4;
+  background-color: #ffe256;
   background-repeat: no-repeat;
   background-image: url(${rabbit4});
   transition: transform 0.3s;
@@ -164,10 +165,10 @@ const Profile2 = styled.button`
   background-size: 100% 100%;
   border: none;
   border-radius: 1rem;
-  margin-top: 5rem;
-  margin-left: -38rem;
+  margin-top: 11rem;
+  margin-left: -35rem;
   position: absolute;
-  background-color: #dbeff4;
+  background-color: #ffe256;
   background-repeat: no-repeat;
   background-image: url(${rabbit2});
   transition: transform 0.3s;
@@ -185,7 +186,7 @@ const Name = styled.div`
   width: 100%;
   overflow: visible;
   margin-top: 2rem;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;
 
@@ -196,7 +197,7 @@ const Level = styled.div`
   overflow: visible;
   position: absoulte;
   margin-top: 1rem;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;
 
@@ -212,7 +213,7 @@ const Container = styled.div`
 `;
 
 const Progress = styled.div`
-  background-color: #a7e2f9;
+  background-color: #f9aa43;
   width: ${(props) => props.style?.width || 0}%;
   height: 100%;
   transition: width 1s;
@@ -228,7 +229,7 @@ const Container2 = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;
 
@@ -239,7 +240,7 @@ const Question = styled.div`
   overflow: visible;
   position: absoulte;
   margin-top: 4rem;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;
 
@@ -259,7 +260,7 @@ const Date = styled.div`
   margin-top: 1rem;
   overflow: visible;
   position: absoulte;
-  color: #73a1ec;
+  color: #ea9f27;
 `;
 
 const BestAnswerContainer = styled.div`
@@ -268,6 +269,6 @@ const BestAnswerContainer = styled.div`
   display: block;
   justify-content: right;
   text-align: center;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;
