@@ -44,7 +44,7 @@ const PostCard: React.FC<PostCardProps> = (answer) => {
               variant="circular"
               style={{ marginRight: "16px" }}
             />
-            <Typography variant="h5">{answer.nick_name}</Typography>
+            <Typography variant="h5">{answer.nickName}</Typography>
           </div>
         </CardContent>
         <CardContent
@@ -53,9 +53,9 @@ const PostCard: React.FC<PostCardProps> = (answer) => {
         >
           <TruncatedText text={answer.content} maxLength={100} />
         </CardContent>
-        <CardContent>
+        {/* <CardContent>
           <HeartButton answer_id={answer.answer_id} />
-        </CardContent>
+        </CardContent> */}
       </HoverCard>
 
       {open && (

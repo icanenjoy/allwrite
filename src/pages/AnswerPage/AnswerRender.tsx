@@ -49,15 +49,15 @@ const AnswerRender = () => {
       <h1>Fetch Test</h1>
       <WriteButton></WriteButton>
 
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div style={{ display: "flex", justifyContent: "center", margin: 20 }}>
         <Grid container spacing={3}>
           {data &&
             data.map(
-              (answer: { _id: string; nick_name: string; content: string }) => (
+              (answer: { _id: string; nickName: string; content: string }) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <PostCard
                     answer_id={answer._id}
-                    nick_name={answer.nick_name}
+                    nickName={answer.nickName}
                     content={answer.content}
                   />
                 </Grid>

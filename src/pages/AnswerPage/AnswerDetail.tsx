@@ -12,21 +12,7 @@ import {
 import { Edit, Delete } from "@mui/icons-material";
 import axios from "axios";
 import HeartButton from "./HeartButton";
-import { AnswerDetailProps } from "./PostCardProps";
-
-interface Comment {
-  id: string;
-  content: string;
-  user: {
-    name: string;
-    profilePicture: string;
-  };
-}
-
-interface Answer {
-  content: string;
-  comments: Comment[];
-}
+import { Answer, Comment, AnswerDetailProps } from "./PostCardProps";
 
 export const AnswerDetail: React.FC<AnswerDetailProps> = ({
   answer_id,

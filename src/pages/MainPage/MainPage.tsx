@@ -6,9 +6,9 @@ import rabbit1 from "./img/rabbit1.png";
 import rabbit2 from "./img/rabbit2.png";
 import rabbit3 from "./img/rabbit3.png";
 import rabbit4 from "./img/rabbit4.png";
-import bgImg from "./img/bgImg.png";
 import BestAnswer from "./BestAnswer";
 import HeaderBar from "../../common/HeaderBar";
+import { Background } from "../../common/Background";
 
 function Main() {
   const [count, setCount] = useState(0);
@@ -42,7 +42,8 @@ function Main() {
   }, []);
 
   return (
-    <Background>
+    // <Background>
+    <>
       <Container1>
         <Profile
           style={{ backgroundImage: `url(${selectedProfile})` }}
@@ -73,23 +74,15 @@ function Main() {
           <BestAnswer msg="ssss" />
         </BestAnswerContainer>
       </Container3>
-    </Background>
+    </>
   );
 }
 
 export default Main;
-const Background = styled.div`
-  width: 100%;
-  height: 100rem;
-  background-image: url(${bgImg});
-  background-repeat: no-repeat;
-  background-size: cover;
-`;
-
 const Container1 = styled.div`
   width: 100%;
   height: 35rem;
-  margin-top: 2rem;
+
   text-align: center;
 `;
 

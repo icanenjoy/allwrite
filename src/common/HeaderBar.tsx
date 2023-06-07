@@ -212,6 +212,7 @@ export default function HeaderBar() {
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
+      sx={{ color: "red" }}
     >
       <MenuItem>
         <IconButton
@@ -313,11 +314,17 @@ export default function HeaderBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
-        position="static"
+        position="sticky"
         sx={{
-          backgroundColor: "white",
+          top: 0,
+          backgroundColor: "transparent",
           color: "primary.main",
           boxShadow: "none",
+        }}
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 9999,
         }}
       >
         <Toolbar>
