@@ -9,6 +9,7 @@ import BestAnswer1 from "./BestAnswer1";
 import BestAnswer2 from "./BestAnswer2";
 import BestAnswer3 from "./BestAnswer3";
 import BestAnswer4 from "./BestAnswer4";
+import HeaderBar from "../../common/HeaderBar";
 
 function Main() {
   const [count, setCount] = useState(0);
@@ -23,6 +24,7 @@ function Main() {
 
   return (
     <Background>
+      <HeaderBar />
       <Container1>
         <Profile></Profile>
         <Profile2></Profile2>
