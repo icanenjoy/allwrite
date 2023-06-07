@@ -17,6 +17,11 @@ const AnswerRender = () => {
   );
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const questionId = urlParams.get("questionId");
+
+    console.log(questionId);
+
     const fetchData = async () => {
       try {
         // const response = await axios.get("http://localhost:9999/answer");
@@ -28,7 +33,10 @@ const AnswerRender = () => {
               Authorization: `Bearer ${accessToken}`,
             },
           })
-          .then((response) => setData(response.data));
+          .then((response) => {
+            setData(response.data);
+            console.log(response.data);
+          });
       } catch (err) {
         console.log(err);
       }
