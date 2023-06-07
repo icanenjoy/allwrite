@@ -6,6 +6,7 @@ import HeartButton from "./HeartButton";
 import TruncatedText from "./TextSlicer";
 import { Height } from "@mui/icons-material";
 import { AnswerDetail } from "./AnswerDetail";
+import { PostCardProps, HeartButtonProps } from "./PostCardProps";
 
 const HoverCard = styled(Card)`
   height: 320px;
@@ -16,33 +17,16 @@ const HoverCard = styled(Card)`
   }
 `;
 
-export interface AnswerDetailProps {
-  answer_id: number;
-  onClose: () => void;
-}
-
-interface PostCardProps {
-  answer_id: number;
-  nick_name: string;
-  content: string;
-}
-
 const PostCard: React.FC<PostCardProps> = (answer) => {
-  const [count, setCount] = useState(0);
-  const [clicked, setClicked] = useState(false);
   const [open, setOpen] = useState(false);
-
-  const handleHeartClick = () => {
-    if (!clicked) {
-      setCount((prev) => prev + 1);
-    } else if (clicked) {
-      setCount((prev) => prev - 1);
-    }
-    setClicked(!clicked);
-  };
+  const [like, setLike] = useState(false);
 
   const handleCardClick = () => {
     setOpen(true);
+  };
+
+  const handleLikeClick = () => {
+    setLike((prev) => !prev);
   };
 
   const handleClose = () => {
@@ -63,17 +47,23 @@ const PostCard: React.FC<PostCardProps> = (answer) => {
             <Typography variant="h5">{answer.nick_name}</Typography>
           </div>
         </CardContent>
-        <CardContent onClick={handleCardClick}>
+        <CardContent
+          style={{ height: "100px", overflow: "hidden" }}
+          onClick={handleCardClick}
+        >
           <TruncatedText text={answer.content} maxLength={100} />
         </CardContent>
         <CardContent>
-          <HeartButton onClick={handleHeartClick} clicked={clicked} />
-          {count}
+          <HeartButton answer_id={answer.answer_id} />
         </CardContent>
       </HoverCard>
 
       {open && (
-        <AnswerDetail answer_id={answer.answer_id} onClose={handleClose} />
+        <AnswerDetail
+          answer_id={answer.answer_id}
+          content={answer.content}
+          onClose={handleClose}
+        />
       )}
     </>
   );

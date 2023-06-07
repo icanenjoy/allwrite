@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import TodayAnswer from "./TodayAnswer";
-import rabbit1 from "./rabbit1.png";
-import rabbit2 from "./rabbit2.png";
-import rabbit3 from "./rabbit3.png";
-import rabbit4 from "./rabbit4.png";
-import BestAnswer1 from "./BestAnswer1";
-import BestAnswer2 from "./BestAnswer2";
-import BestAnswer3 from "./BestAnswer3";
-import BestAnswer4 from "./BestAnswer4";
+import Calendar from "./Calendar";
+import rabbit1 from "./img/rabbit1.png";
+import rabbit2 from "./img/rabbit2.png";
+import rabbit3 from "./img/rabbit3.png";
+import rabbit4 from "./img/rabbit4.png";
+import bgImg from "./img/bgImg.png";
+import BestAnswer from "./BestAnswer";
+import HeaderBar from "../../common/HeaderBar";
 
 function Main() {
   const [count, setCount] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [selectedProfile, setSelectedProfile] = useState(rabbit1);
 
   function add_count() {
     if (count === 5) {
@@ -21,37 +23,55 @@ function Main() {
     }
   }
 
+  function changeProfile2() {
+    setSelectedProfile(rabbit2); // Set the selectedProfile to rabbit2
+  }
+  function changeProfile3() {
+    setSelectedProfile(rabbit3); // Set the selectedProfile to rabbit2
+  }
+  function changeProfile4() {
+    setSelectedProfile(rabbit4); // Set the selectedProfile to rabbit2
+  }
+  useEffect(() => {
+    // Update the container width to its full width after a delay
+    const timeout = setTimeout(() => {
+      setContainerWidth(70);
+    }, 700);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
     <Background>
       <Container1>
-        <Profile></Profile>
-        <Profile2></Profile2>
-        <Profile3></Profile3>
-        <Profile4></Profile4>
+        <Profile
+          style={{ backgroundImage: `url(${selectedProfile})` }}
+        ></Profile>
+        <Profile2 onClick={changeProfile2}></Profile2>
+        <Profile3 onClick={changeProfile3}></Profile3>
+        <Profile4 onClick={changeProfile4}></Profile4>
 
         <Name>토롱이</Name>
         <Level>LV14</Level>
-        <Container
-          onClick={() => {
-            add_count();
-          }}
-        >
-          <Progress></Progress>
+        <Container>
+          <Progress
+            style={{ width: `${containerWidth}%` }} // Set the width dynamically
+            onClick={() => {
+              add_count();
+            }}
+          ></Progress>
         </Container>
         <Question>오늘의 질문</Question>
         <TodayAnswer />
       </Container1>
       <Container2></Container2>
       <Container3>
-        <BestQuestion>가장 답변이 많은 질문</BestQuestion>
+        <Calendar />
         <BestAnswerContainer>
-          <BestAnswer1 />
-          <BestAnswer2 />
+          <BestAnswer msg="kkkk" />
+          <BestAnswer msg="bbbb" />
+          <BestAnswer msg="ssss" />
         </BestAnswerContainer>
-        <BestAnswerContainer2>
-          <BestAnswer3 />
-          <BestAnswer4 />
-        </BestAnswerContainer2>
       </Container3>
     </Background>
   );
@@ -60,17 +80,17 @@ function Main() {
 export default Main;
 const Background = styled.div`
   width: 100%;
-  height: 100%;
-  text-align: center;
-  background-color: #dbeff4;
+  height: 100rem;
+  background-image: url(${bgImg});
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
 
 const Container1 = styled.div`
   width: 100%;
-  height: 34rem;
+  height: 35rem;
   margin-top: 2rem;
   text-align: center;
-  background-color: #dbeff4;
 `;
 
 const Profile = styled.button`
@@ -80,7 +100,7 @@ const Profile = styled.button`
   border: none;
   border-radius: 1rem;
   margin-top: 2rem;
-  background-color: #dbeff4;
+  background-color: #ffe256;
   background-repeat: no-repeat;
   background-image: url(${rabbit1});
   transition: transform 0.3s;
@@ -99,9 +119,9 @@ const Profile3 = styled.button`
   border: none;
   border-radius: 1rem;
   margin-top: 15rem;
-  margin-left: 10rem;
+  margin-left: 9rem;
   position: absolute;
-  background-color: #dbeff4;
+  background-color: #ffe256;
   background-repeat: no-repeat;
   background-image: url(${rabbit3});
   transition: transform 0.3s;
@@ -120,10 +140,10 @@ const Profile4 = styled.button`
   background-size: 100% 100%;
   border: none;
   border-radius: 1rem;
-  margin-top: 1rem;
-  margin-left: 15rem;
+  margin-top: 3rem;
+  margin-left: 6rem;
   position: absolute;
-  background-color: #dbeff4;
+  background-color: #ffe256;
   background-repeat: no-repeat;
   background-image: url(${rabbit4});
   transition: transform 0.3s;
@@ -141,10 +161,10 @@ const Profile2 = styled.button`
   background-size: 100% 100%;
   border: none;
   border-radius: 1rem;
-  margin-top: 5rem;
-  margin-left: -38rem;
+  margin-top: 11rem;
+  margin-left: -35rem;
   position: absolute;
-  background-color: #dbeff4;
+  background-color: #ffe256;
   background-repeat: no-repeat;
   background-image: url(${rabbit2});
   transition: transform 0.3s;
@@ -162,7 +182,7 @@ const Name = styled.div`
   width: 100%;
   overflow: visible;
   margin-top: 2rem;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;
 
@@ -173,23 +193,24 @@ const Level = styled.div`
   overflow: visible;
   position: absoulte;
   margin-top: 1rem;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;
 
 const Container = styled.div`
   margin: 10px auto;
   background-color: #e8e3e3;
-  width: 500px;
+  width: 30rem;
   height: 35px;
   display: flex;
   align-items: center;
   border-radius: 20px;
+  transition: width 1s; // Add transition for width changes
 `;
 
 const Progress = styled.div`
-  background-color: #a7e2f9;
-  width: 80%;
+  background-color: #f9aa43;
+  width: ${(props) => props.style?.width || 0}%;
   height: 100%;
   transition: width 1s;
   border-radius: 20px;
@@ -199,12 +220,12 @@ const Progress = styled.div`
 
 const Container2 = styled.div`
   width: 100%;
-  height: 5rem;
+  height: 6rem;
   margin-top: 3rem;
   display: flex;
   justify-content: center;
   text-align: center;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;
 
@@ -215,45 +236,25 @@ const Question = styled.div`
   overflow: visible;
   position: absoulte;
   margin-top: 4rem;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;
 
 const Container3 = styled.div`
-  width: 100%;
+  width: 50%;
   height: 27rem;
-  display: block;
-  justify-content: center;
-  text-align: center;
-  color: #73a1ec;
-  font-weight: 750;
-`;
-
-const BestQuestion = styled.div`
-  font-size: 1.2rem;
-  height: 2rem;
-  width: 100%;
-  overflow: visible;
-  position: absoulte;
-  margin-top: 6rem;
-  color: #73a1ec;
-  font-weight: 750;
+  display: flex;
+  justify-content: right;
+  position: relative;
+  text-align: right;
 `;
 
 const BestAnswerContainer = styled.div`
-  width: 100%;
-  height: 8rem;
-  display: flex;
-  justify-content: center;
+  height: 30rem;
+  width: 1rem;
+  display: block;
+  justify-content: right;
   text-align: center;
-  color: #73a1ec;
-  font-weight: 750;
-`;
-const BestAnswerContainer2 = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;

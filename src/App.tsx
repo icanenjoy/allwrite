@@ -18,11 +18,13 @@ import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import { useLocalStorage } from "usehooks-ts";
 import LoginCheck from "./common/LoginCheck";
 import { Login } from "@mui/icons-material";
+import HeaderBar from "./common/HeaderBar";
 
 function App() {
   return (
     <BrowserRouter>
       <LoginCheck></LoginCheck>
+      <HeaderBar></HeaderBar>
       <Routes>
         <Route path="/main" element={<MainPage />} />
         <Route path="/answer" element={<AnswerPage />} />
