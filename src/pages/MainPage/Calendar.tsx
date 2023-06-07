@@ -5,55 +5,57 @@ import styled from "styled-components";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import {
+  DateCalendar,
+  DateCalendarProps,
+} from "@mui/x-date-pickers/DateCalendar";
 import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
-
-function getRandomNumber(min: number, max: number) {
-  return Math.round(Math.random() * (max - min) + min);
-}
-
-/**
- * Mimic fetch with abort controller https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
- * ⚠️ No IE11 support
- */
-function fakeFetch(date: Dayjs, { signal }: { signal: AbortSignal }) {
-  return new Promise<{ daysToHighlight: number[] }>((resolve, reject) => {
-    const timeout = setTimeout(() => {
-      const daysInMonth = date.daysInMonth();
-      const daysToHighlight = [1, 2, 3].map(() =>
-        getRandomNumber(1, daysInMonth)
-      );
-
-      resolve({ daysToHighlight });
-    }, 500);
-
-    signal.onabort = () => {
-      clearTimeout(timeout);
-      reject(new DOMException("aborted", "AbortError"));
-    };
-  });
-}
+import rabbit1 from "./img/rabbit1.png";
 
 const initialValue = dayjs();
 
+// 각 날짜를 나타내는 컴포넌트
 function ServerDay(
-  props: PickersDayProps<Dayjs> & { highlightedDays?: number[] }
+  props: PickersDayProps<Dayjs> & {
+    highlightedDays?: number[];
+    selectedDate: Dayjs;
+    setSelectedDate: React.Dispatch<React.SetStateAction<Dayjs>>;
+  }
 ) {
-  const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
+  const {
+    highlightedDays = [],
+    day,
+    outsideCurrentMonth,
+    selectedDate,
+    setSelectedDate,
+    ...other
+  } = props;
 
   const isSelected =
-    !props.outsideCurrentMonth && highlightedDays.indexOf(props.day.date()) > 0;
+    !outsideCurrentMonth && highlightedDays.indexOf(day.date()) > 0;
+
+  const handleClick = () => {
+    setSelectedDate(day);
+    console.log(day);
+  };
 
   return (
     <Badge
-      key={props.day.toString()}
+      key={day.toString()}
       overlap="circular"
-      badgeContent={isSelected ? "😊" : undefined}
+      badgeContent={
+        isSelected ? (
+          <img src={rabbit1} alt="rabbit" style={{ width: 16, height: 16 }} />
+        ) : undefined
+      }
+
+      // style={{ backgroundColor: "red" }}
     >
       <PickersDay
         {...other}
         outsideCurrentMonth={outsideCurrentMonth}
         day={day}
+        onClick={handleClick}
       />
     </Badge>
   );
@@ -63,22 +65,10 @@ export default function DateCalendarServerRequest() {
   const requestAbortController = React.useRef<AbortController | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [highlightedDays, setHighlightedDays] = React.useState([1, 2, 15]);
+  const [selectedDate, setSelectedDate] = React.useState<Dayjs>(initialValue);
 
   const fetchHighlightedDays = (date: Dayjs) => {
     const controller = new AbortController();
-    fakeFetch(date, {
-      signal: controller.signal,
-    })
-      .then(({ daysToHighlight }) => {
-        setHighlightedDays(daysToHighlight);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        // ignore the error if it's caused by `controller.abort`
-        if (error.name !== "AbortError") {
-          throw error;
-        }
-      });
 
     requestAbortController.current = controller;
   };
@@ -104,18 +94,33 @@ export default function DateCalendarServerRequest() {
   return (
     <Container>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <SelectedDateText
+          style={{
+            width: "100%",
+            color: "#ed7e28",
+            marginLeft: "20rem",
+            marginTop: "-1rem",
+          }}
+        >
+          {selectedDate && `${selectedDate.format("YYYY.MM.DD")}`}
+        </SelectedDateText>
         <DateCalendar
           defaultValue={initialValue}
           loading={isLoading}
           onMonthChange={handleMonthChange}
           renderLoading={() => <DayCalendarSkeleton />}
           slots={{
-            day: ServerDay,
+            day: (slotProps) => (
+              <ServerDay
+                {...slotProps}
+                highlightedDays={highlightedDays}
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+              />
+            ),
           }}
           slotProps={{
-            day: {
-              highlightedDays,
-            } as any,
+            day: {},
           }}
         />
       </LocalizationProvider>
@@ -131,4 +136,9 @@ const Container = styled.div`
   text-align: center;
   position: relative;
   font-weight: 750;
+`;
+
+const SelectedDateText = styled.div`
+  margin-top: 1rem;
+  font-size: 1.2rem;
 `;

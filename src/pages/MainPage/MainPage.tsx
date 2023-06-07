@@ -7,10 +7,7 @@ import rabbit2 from "./img/rabbit2.png";
 import rabbit3 from "./img/rabbit3.png";
 import rabbit4 from "./img/rabbit4.png";
 import bgImg from "./img/bgImg.png";
-import BestAnswer1 from "./BestAnswer1";
-import BestAnswer2 from "./BestAnswer2";
-import BestAnswer3 from "./BestAnswer3";
-import BestAnswer4 from "./BestAnswer4";
+import BestAnswer from "./BestAnswer";
 
 function Main() {
   const [count, setCount] = useState(0);
@@ -70,11 +67,9 @@ function Main() {
       <Container3>
         <Calendar />
         <BestAnswerContainer>
-          <Date>2023.05.05</Date>
-          <BestAnswer1 />
-          <BestAnswer2 />
-          <BestAnswer3 />
-          <BestAnswer4 />
+          <BestAnswer msg="kkkk" />
+          <BestAnswer msg="bbbb" />
+          <BestAnswer msg="ssss" />
         </BestAnswerContainer>
       </Container3>
     </Background>
@@ -251,16 +246,6 @@ const Container3 = styled.div`
   justify-content: right;
   position: relative;
   text-align: right;
-`;
-
-const Date = styled.div`
-  font-size: 1.2rem;
-  width: 100%;
-  margin-left: 2rem;
-  margin-top: 1rem;
-  overflow: visible;
-  position: absoulte;
-  color: #ea9f27;
 `;
 
 const BestAnswerContainer = styled.div`

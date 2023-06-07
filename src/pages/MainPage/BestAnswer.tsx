@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import { Box, IconButton, Button } from "@mui/material";
 
-function BestAnswer3() {
-  const messages = ["월 150 백수 VS 월 500 직장인"];
+function BestAnswer(props: any) {
+  const currentMessage = props.msg;
 
-  const currentMessage = messages;
+  const [question, setQuestion] = useState<any>([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:9999/answer")
+      .then((response) => {
+        setQuestion(response.data);
+        console.log(response.data);
+      })
+      .catch((err) => {});
+  }, []);
 
   return (
     <Container>
@@ -17,8 +28,8 @@ function BestAnswer3() {
           backgroundColor: "#f9aa43",
           padding: "5px",
           width: "25rem",
-          height: "3rem",
-          borderRadius: "1.5rem",
+          height: "4rem",
+          borderRadius: "1rem",
           transition: "transform 0.3s",
           "&:hover": {
             transform: "scale(1.05)",
@@ -37,7 +48,7 @@ function BestAnswer3() {
             },
           }}
         >
-          {currentMessage}
+          {currentMessage?.question}
         </Button>
         <IconButton></IconButton>
       </Box>
@@ -47,14 +58,13 @@ function BestAnswer3() {
 
 const Container = styled.div`
   width: 29.5rem;
-  height: 5rem;
-
-  display: flex;
+  height: 1rem;
+  margin-top: 5.5rem;
+  display: grid;
   justify-content: center;
   text-align: center;
   color: #73a1ec;
-
   font-weight: 750;
 `;
 
-export default BestAnswer3;
+export default BestAnswer;
