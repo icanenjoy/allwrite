@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import { Box, IconButton, Button } from "@mui/material";
 
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 
-function TodayAnswer() {
-  const messages = [
-    "10년 전 과거로 가기 vs 10년 후 미래로 가기",
-    "주로 보는 유튜브 채널은?",
-    "잠수이별 VS 환승이별",
-  ];
+const TodayAnswer = () => {
+  const [question, setQuestion] = useState<any>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:9999/answer")
+      .then((response) => {
+        setQuestion(response.data);
+        setLoading(false);
+        console.log(response.data);
+      })
+      .catch((err) => {});
+  }, []);
 
   const StyledArrowBack = styled(ArrowBackIosRoundedIcon)(({ theme }) => ({
     color: "deepskyblue",
@@ -23,20 +32,25 @@ function TodayAnswer() {
       fontSize: "32px",
     })
   );
-
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
   const handleNextClick = () => {
-    setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
+    setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % question.length);
   };
 
   const handlePrevClick = () => {
     setCurrentMessageIndex((prevIndex) =>
-      prevIndex === 0 ? messages.length - 1 : prevIndex - 1
+      prevIndex === 0 ? question.length - 1 : prevIndex - 1
     );
   };
 
-  const currentMessage = messages[currentMessageIndex];
+  if (loading) {
+    return <div>Loading...</div>; // 로딩 중이면 로딩 표시
+  }
+
+  const currentMessage =
+    question.length > 0 ? question[currentMessageIndex] : null;
+  console.log(currentMessage);
 
   return (
     <Container>
@@ -45,7 +59,7 @@ function TodayAnswer() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          backgroundColor: "skyblue",
+          backgroundColor: "#f9aa43",
           padding: "5px",
           width: "54.8rem",
           height: "4rem",
@@ -57,27 +71,28 @@ function TodayAnswer() {
         }}
       >
         <IconButton onClick={handlePrevClick}>
-          <StyledArrowBack />
+          <StyledArrowBack sx={{ color: "#8d3e02" }} />
         </IconButton>
         <Button
           sx={{
             width: "55rem",
             height: "4.4rem",
-            backgroundColor: "skyblue",
+            backgroundColor: "#f9aa43",
+            color: "#8d3e02",
             "&:hover": {
-              backgroundColor: "skyblue",
+              backgroundColor: "#f9aa43",
             },
           }}
         >
-          {currentMessage}
+          {currentMessage?.question}
         </Button>
         <IconButton onClick={handleNextClick}>
-          <StyledArrowForward />
+          <StyledArrowForward sx={{ color: "#8d3e02" }} />
         </IconButton>
       </Box>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   width: 100%;
@@ -86,7 +101,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
-  color: #73a1ec;
+  color: #f9aa43;
   font-weight: 750;
 `;
 

@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import { Box, IconButton, Button } from "@mui/material";
 
-function BestAnswer4() {
-  const messages = ["불편한 상사랑 오마카세 먹기 VS 친구랑 같이 군대 밥 먹기"];
+function BestAnswer(props: any) {
+  const currentMessage = props.msg;
 
-  const currentMessage = messages;
+  const [question, setQuestion] = useState<any>([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:9999/answer")
+      .then((response) => {
+        setQuestion(response.data);
+        console.log(response.data);
+      })
+      .catch((err) => {});
+  }, []);
 
   return (
     <Container>
@@ -14,11 +25,11 @@ function BestAnswer4() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          backgroundColor: "skyblue",
+          backgroundColor: "#f9aa43",
           padding: "5px",
           width: "25rem",
           height: "4rem",
-          borderRadius: "1.5rem",
+          borderRadius: "1rem",
           transition: "transform 0.3s",
           "&:hover": {
             transform: "scale(1.05)",
@@ -29,14 +40,15 @@ function BestAnswer4() {
         <Button
           sx={{
             width: "100%",
-            height: "4.4rem",
-            backgroundColor: "skyblue",
+            height: "3rem",
+            backgroundColor: "#f9aa43",
+            color: "#8d3e02",
             "&:hover": {
-              backgroundColor: "skyblue",
+              backgroundColor: "#f9aa43",
             },
           }}
         >
-          {currentMessage}
+          {currentMessage?.question}
         </Button>
         <IconButton></IconButton>
       </Box>
@@ -46,14 +58,13 @@ function BestAnswer4() {
 
 const Container = styled.div`
   width: 29.5rem;
-  height: 5rem;
-  margin-top: 2rem;
-  display: flex;
+  height: 1rem;
+  margin-top: 5.5rem;
+  display: grid;
   justify-content: center;
   text-align: center;
   color: #73a1ec;
-
   font-weight: 750;
 `;
 
-export default BestAnswer4;
+export default BestAnswer;
