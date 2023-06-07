@@ -42,6 +42,7 @@ function Main() {
 
   return (
     <Background>
+      <HeaderBar />
       <Container1>
         <Profile
           style={{ backgroundImage: `url(${selectedProfile})` }}
