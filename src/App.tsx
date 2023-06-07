@@ -23,8 +23,8 @@ import HeaderBar from "./common/HeaderBar";
 function App() {
   return (
     <BrowserRouter>
-      <HeaderBar></HeaderBar>
       <LoginCheck></LoginCheck>
+      <HeaderBar></HeaderBar>
       <Routes>
         <Route path="/main" element={<MainPage />} />
         <Route path="/answer" element={<AnswerPage />} />

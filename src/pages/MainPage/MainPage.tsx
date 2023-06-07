@@ -8,6 +8,7 @@ import rabbit3 from "./img/rabbit3.png";
 import rabbit4 from "./img/rabbit4.png";
 import bgImg from "./img/bgImg.png";
 import BestAnswer from "./BestAnswer";
+import HeaderBar from "../../common/HeaderBar";
 
 function Main() {
   const [count, setCount] = useState(0);
@@ -42,7 +43,6 @@ function Main() {
 
   return (
     <Background>
-      <HeaderBar />
       <Container1>
         <Profile
           style={{ backgroundImage: `url(${selectedProfile})` }}
