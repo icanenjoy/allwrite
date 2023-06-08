@@ -78,8 +78,8 @@ const LoginForm: React.FC = () => {
     axios
       .post("http://34.64.145.63:5000/api/v1/auth", data)
       .then((response) => {
-        setAccessToken(response.data.accessToken);
-        setRefreshToken(response.data.refreshToken);
+        setAccessToken(response.data.token.accessToken);
+        setRefreshToken(response.data.token.refreshToken);
         navigate("/main"); // 로그인 성공 시 /main으로 이동
       })
       .catch((err) => {

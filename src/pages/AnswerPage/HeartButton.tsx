@@ -25,7 +25,7 @@ const HeartButton: React.FC<HeartButtonProps> = ({ answer_id }) => {
           `http://34.64.145.63:5000/api/v1/answer/like/${answer_id}`
         );
       } else {
-        await axios.post(
+        await axios.delete(
           `http://34.64.145.63:5000/api/v1/answer/like/${answer_id}`
         );
       }
