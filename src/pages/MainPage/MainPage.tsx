@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import TodayAnswer from "./TodayAnswer";
+import TodayAnswer from "../../common/TodayAnswer";
 import Calendar from "./Calendar";
 import MainProfileImg from "../../asset/img/croco.png";
 import ProfileImg2 from "../../asset/img/croco1.png";
@@ -42,7 +42,7 @@ function Main() {
   }, []);
 
   return (
-    <Background>
+    <>
       <Container1>
         <Profile
           style={{ backgroundImage: `url(${selectedProfile})` }}
@@ -73,18 +73,11 @@ function Main() {
           <BestAnswer msg="ssss" />
         </BestAnswerContainer>
       </Container3>
-    </Background>
+    </>
   );
 }
 
 export default Main;
-const Background = styled.div`
-  width: 100%;
-  height: 100rem;
-  background-image: url(${bgImg});
-  background-repeat: no-repeat;
-  background-size: cover;
-`;
 
 const Container1 = styled.div`
   width: 100%;
