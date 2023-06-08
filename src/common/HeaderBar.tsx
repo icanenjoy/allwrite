@@ -22,7 +22,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import logo from "./logo.svg";
+import logo from "./logo.png";
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckIcon from "@mui/icons-material/Check";
@@ -78,9 +78,9 @@ export default function HeaderBar() {
   const navigate = useNavigate();
 
   interface Friend {
-    friendNickName: string;
-    friendProfileImage: string;
-    _id?: string;
+    nickName: string;
+    profileImage: string;
+    _id: string;
   }
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
     "at",
@@ -94,29 +94,6 @@ export default function HeaderBar() {
 
   useEffect(() => {
     //처음에 친구목록 불러오기 //요청도 불러오기
-
-    let response = axios
-      .get("http://34.64.145.63:5000/api/v1/friend/all", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        setFriendList(response.data);
-      })
-      .catch((e) => console.log(e));
-
-    response = axios
-      .get("http://34.64.145.63:5000/api/v1/friend/request", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        setFriendReq(response.data);
-        console.log(friendReq);
-      })
-      .catch((e) => console.log(e));
   }, []);
 
   const handleLogout = () => {
@@ -126,6 +103,33 @@ export default function HeaderBar() {
 
   const handleFriendOpen = () => {
     //친구목록 열기
+    const friendslistload = async () => {
+      try {
+        let response = await axios.get(
+          "http://34.64.145.63:5000/api/v1/friend/all",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setFriendList(response.data);
+
+        response = await axios.get(
+          "http://34.64.145.63:5000/api/v1/friend/request",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setFriendReq(response.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    friendslistload();
     setOpen(true);
     handleMobileMenuClose();
   };
@@ -156,44 +160,43 @@ export default function HeaderBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleFriendReqDel = (index: number) => {
-    //친구요청 거절 근데 API 아직
-    //미완성 API 없음
-    // const deleteResponse = async () => {
-    //   try {
-    //     const response = await axios.delete(
-    //       "http://34.64.145.63:5000/api/v1/friend/reject",
-    //       {
-    //         headers: {
-    //           Authorization: `Bearer ${accessToken}`,
-    //         },
-    //       }
-    //     );
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // };
-    // deleteResponse();
+  const handleFriendReqOk = async (nickname: string) => {
+    //친구요청 수락 근데 API 아직
+    try {
+      const response = await axios.post(
+        "http://34.64.145.63:5000/api/v1/friend/response",
+        {
+          friendNickName: nickname,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      handleFriendOpen();
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  const handleFriendReqOk = (nickname: string) => {
-    //친구요청 수락 근데 API 아직
-    // const friendReq = async () => {
-    //   try {
-    //     const response = await axios.post(
-    //       "http://34.64.145.63:5000/api/v1/friend/response",
-    //       {
-    //         headers: {
-    //           Authorization: `Bearer ${accessToken}`,
-    //         },
-    //         body: JSON.stringify(nickname),
-    //       }
-    //     );
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // };
-    // friendReq();
+  const handleFriendReqDel = async (nickname: string) => {
+    //친구요청 거절 근데 API 아직
+    // try {
+    //   const response = await axios.delete(
+    //     "http://34.64.145.63:5000/api/v1/friend/reject",
+    //     {
+    //       friendNickName: nickname,
+    //     },
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${accessToken}`,
+    //       },
+    //     }
+    //   );
+    // } catch (e) {
+    //   console.error(e);
+    // }
   };
 
   const mobileMenuId = "primary-search-account-menu-mobile";
@@ -253,18 +256,15 @@ export default function HeaderBar() {
           {friendReq.map((friend, index) => (
             <ListItem button key={index}>
               <ListItemIcon sx={{ width: 20, height: 30 }}>
-                <img
-                  src={friend.friendProfileImage}
-                  alt={friend.friendNickName}
-                />
+                <img src={friend.profileImage} alt={friend.nickName} />
               </ListItemIcon>
-              <ListItemText primary={friend.friendNickName} />
+              <ListItemText primary={friend.nickName} />
 
               <IconButton
                 sx={{ width: 20, height: 30 }}
                 aria-label="check"
                 size="large"
-                onClick={() => handleFriendReqOk(friend.friendNickName)}
+                onClick={() => handleFriendReqOk(friend.nickName)}
               >
                 <CheckIcon />
               </IconButton>
@@ -272,7 +272,7 @@ export default function HeaderBar() {
                 sx={{ width: 20, height: 30, paddingLeft: "15px" }}
                 aria-label="delete"
                 size="large"
-                onClick={() => handleFriendReqDel(index)}
+                onClick={() => handleFriendReqDel(friend.nickName)}
               >
                 <DeleteIcon />
               </IconButton>
@@ -283,12 +283,9 @@ export default function HeaderBar() {
           {friendList.map((friend, index) => (
             <ListItem button onClick={handleFriendClose} key={index}>
               <ListItemIcon sx={{ width: 20, height: 30 }}>
-                <img
-                  src={friend.friendProfileImage}
-                  alt={friend.friendNickName}
-                />
+                <img src={friend.profileImage} alt={friend.nickName} />
               </ListItemIcon>
-              <ListItemText primary={friend.friendNickName} />
+              <ListItemText primary={friend.nickName} />
             </ListItem>
           ))}
         </List>
@@ -315,24 +312,29 @@ export default function HeaderBar() {
       <AppBar
         position="static"
         sx={{
-          backgroundColor: "white",
+          backgroundColor: "#ffe355",
           color: "primary.main",
           boxShadow: "none",
         }}
       >
         <Toolbar>
           <IconButton
-            size="large"
+            size="small"
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2 }}
+            sx={{
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
             onClick={handleHomeGo}
           >
-            <img src={logo} alt="로고" />
+            <img
+              src={logo}
+              alt="로고"
+              style={{ width: "70px", height: "70px" }}
+            />
           </IconButton>
-          <Box sx={{ flexGrow: 1 }} />
-
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               onClick={handleMyProfileGo}
