@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import TodayAnswer from "./TodayAnswer";
+import TodayAnswer from "../../common/TodayAnswer";
 import Calendar from "./Calendar";
-import rabbit1 from "./img/rabbit1.png";
-import rabbit2 from "./img/rabbit2.png";
-import rabbit3 from "./img/rabbit3.png";
-import rabbit4 from "./img/rabbit4.png";
+import rabbit1 from "../../asset/img/rabbit1.png";
+import rabbit2 from "../../asset/img/rabbit2.png";
+import rabbit3 from "../../asset/img/rabbit3.png";
+import rabbit4 from "../../asset/img/rabbit4.png";
 import BestAnswer from "./BestAnswer";
 import HeaderBar from "../../common/HeaderBar";
 import { Background } from "../../common/Background";

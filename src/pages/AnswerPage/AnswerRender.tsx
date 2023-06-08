@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import PostCard from "./PostCard";
 import WriteButton from "./WriteButton";
 import { useLocalStorage } from "usehooks-ts";
+import TodayAnswer from "../../common/TodayAnswer";
 
 const AnswerRender = () => {
   const [data, setData] = useState([]);
@@ -46,8 +47,10 @@ const AnswerRender = () => {
 
   return (
     <div>
-      <h1>Fetch Test</h1>
-      <WriteButton></WriteButton>
+      <TodayAnswer></TodayAnswer>
+      <div style={{ display: "flex", justifyContent: "right", margin: 20 }}>
+        <WriteButton></WriteButton>
+      </div>
 
       <div style={{ display: "flex", justifyContent: "center", margin: 20 }}>
         <Grid container spacing={3}>

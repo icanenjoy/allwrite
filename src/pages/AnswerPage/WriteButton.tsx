@@ -52,7 +52,7 @@ const WriteButton: React.FC = () => {
     <div>
       <Button
         variant="contained"
-        sx={{ backgroundColor: "#e3b3ff" }}
+        sx={{ backgroundColor: "#FFCF53" }}
         onClick={handleOpen}
       >
         작성하기

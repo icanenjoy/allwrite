@@ -79,7 +79,7 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
   };
 
   return (
-    <Dialog open={true} onClose={onClose}>
+    <Dialog open={true} onClose={onClose} sx={{ color: "#FFF3BA" }}>
       <DialogContent>
         <Typography variant="h6" align="center">
           {answer_id}

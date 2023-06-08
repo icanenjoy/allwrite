@@ -10,7 +10,7 @@ import {
   DateCalendarProps,
 } from "@mui/x-date-pickers/DateCalendar";
 import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
-import rabbit1 from "./img/rabbit1.png";
+import rabbit1 from "../../asset/img/rabbit1.png";
 
 const initialValue = dayjs();
 
