@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { Box, IconButton, Button } from "@mui/material";
-
+import { useLocalStorage } from "usehooks-ts";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 
@@ -10,17 +10,27 @@ const TodayAnswer = () => {
   const [question, setQuestion] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
+  const [accessToken, setAccessToken] = useLocalStorage<string | null>(
+    "at",
+    null
+  ); // accessToken
+
   useEffect(() => {
     axios
-      .get("http://localhost:9999/answer")
+      .get("http://34.64.145.63:5000/api/v1/question", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then((response) => {
         setQuestion(response.data);
         setLoading(false);
         console.log(response.data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log("error");
+      });
   }, []);
-
   const StyledArrowBack = styled(ArrowBackIosRoundedIcon)(({ theme }) => ({
     color: "deepskyblue",
     fontSize: "32px",
@@ -50,7 +60,6 @@ const TodayAnswer = () => {
 
   const currentMessage =
     question.length > 0 ? question[currentMessageIndex] : null;
-  console.log(currentMessage);
 
   return (
     <Container>
