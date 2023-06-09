@@ -7,7 +7,7 @@ import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRound
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 
 const TodayAnswer = () => {
-  const [question, setQuestion] = useState<any>([]);
+  const [question] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
@@ -23,9 +23,10 @@ const TodayAnswer = () => {
         },
       })
       .then((response) => {
-        setQuestion(response.data);
+        for (let i = 0; i < response.data.question.length; i++) {
+          question.push(response.data.question[i].content);
+        }
         setLoading(false);
-        console.log(response.data);
       })
       .catch((err) => {
         console.log("error");
@@ -93,7 +94,7 @@ const TodayAnswer = () => {
             },
           }}
         >
-          {currentMessage?.question}
+          {currentMessage}
         </Button>
         <IconButton onClick={handleNextClick}>
           <StyledArrowForward sx={{ color: "#8d3e02" }} />
