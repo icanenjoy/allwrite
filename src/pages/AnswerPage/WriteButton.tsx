@@ -57,7 +57,11 @@ const WriteButton: React.FC = () => {
       >
         작성하기
       </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        sx={{ "& .MuiDialog-paperWidthSm": { maxWidth: "600px" } }}
+      >
         <DialogTitle>글 작성</DialogTitle>
         <DialogContent>
           <TextField

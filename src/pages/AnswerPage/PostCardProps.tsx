@@ -13,16 +13,20 @@ export interface HeartButtonProps {
   answer_id: string;
 }
 
-export interface Comment {
+export interface Answer {
   id: string;
   content: string;
-  user: {
-    name: string;
-    profilePicture: string;
-  };
+  comments: Comment[];
 }
 
-export interface Answer {
+export interface CommentFormProps {
+  answer_id: string;
+}
+
+export interface Comment {
+  nickName: string;
+  profileImg: string;
   content: string;
-  comments: Comment[];
+  createdAt: string;
+  reportCount: number;
 }
