@@ -22,3 +22,11 @@ export interface Answer {
 export interface CommentFormProps {
   answer_id: string;
 }
+
+export interface Comment {
+  nickName: string;
+  profileImg: string;
+  content: string;
+  createdAt: string;
+  reportCount: number;
+}

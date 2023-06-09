@@ -27,9 +27,15 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
     <Dialog
       open={true}
       onClose={onClose}
-      sx={{ color: "#FFF3BA", height: 800 }}
+      sx={{
+        color: "#FFF3BA",
+        height: "100%", // 최대 크기로 설정
+        "& .MuiDialog-paper": {
+          height: "100%", // 최대 크기로 설정
+        },
+      }}
     >
-      <Paper sx={{ backgroundColor: "#FFF3BA" }}>
+      <Paper sx={{ backgroundColor: "#FFF3BA", width: "100%", height: "100%" }}>
         <DialogContent>
           <Typography variant="h6" align="center">
             {answer_id}
@@ -38,9 +44,6 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
             {content}
           </Typography>
           <HeartButton answer_id={answer_id} />
-          <Typography variant="h6" sx={{ textAlign: "left", mt: 2 }}>
-            Comments:
-          </Typography>
           <CommentForm answer_id={answer_id}></CommentForm>
         </DialogContent>
       </Paper>
