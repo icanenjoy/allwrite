@@ -4,7 +4,7 @@ import { styled } from "@mui/system";
 import React, { useState } from "react";
 import HeartButton from "./HeartButton";
 import TruncatedText from "./TextSlicer";
-import { Height } from "@mui/icons-material";
+import { Height, Translate } from "@mui/icons-material";
 import { AnswerDetail } from "./AnswerDetail";
 import { PostCardProps, HeartButtonProps } from "./PostCardProps";
 import { useNavigate } from "react-router-dom";
@@ -64,7 +64,7 @@ const PostCard: React.FC<PostCardProps> = (answer) => {
                 display: "flex",
                 alignItems: "center",
                 padding: 0,
-                marginTop: "10px", // Adjust the margin here
+                marginTop: "10px",
               }}
               onClick={(e) => goMyPage(e)}
             />
