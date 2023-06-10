@@ -20,12 +20,13 @@ import LoginCheck from "./common/LoginCheck";
 import { Login } from "@mui/icons-material";
 import HeaderBar from "./common/HeaderBar";
 import { Background } from "./common/Background";
-
+import Cloud from "./common/Cloud";
 function App() {
   return (
     <BrowserRouter>
       <LoginCheck></LoginCheck>
       <Background>
+        <Cloud />
         <HeaderBar></HeaderBar>
         <Routes>
           <Route path="/main" element={<MainPage />} />

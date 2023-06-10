@@ -13,9 +13,7 @@ import cloud2 from "../../asset/img/rightCloud.png";
 import cloud3 from "../../asset/img/cloud.png";
 import BestAnswer from "./BestAnswer";
 import FooterImage from "./FooterImage";
-import Footer from "./Footer";
 import HeaderBar from "../../common/HeaderBar";
-import "../styles.css";
 
 function Main() {
   const [count, setCount] = useState(0);
@@ -51,9 +49,6 @@ function Main() {
   return (
     <>
       <Container1>
-        <img className="cloud1" src={cloud1} alt="구름들"></img>
-        <img className="cloud2" src={cloud2} alt="구름들"></img>
-        <img className="cloud3" src={cloud3} alt="구름"></img>
         <Profile
           style={{ backgroundImage: `url(${selectedProfile})` }}
         ></Profile>
