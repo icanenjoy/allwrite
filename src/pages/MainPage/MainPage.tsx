@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import TodayAnswer from "./TodayAnswer";
-import rabbit1 from "./rabbit1.png";
-import rabbit2 from "./rabbit2.png";
-import rabbit3 from "./rabbit3.png";
-import rabbit4 from "./rabbit4.png";
-import BestAnswer1 from "./BestAnswer1";
-import BestAnswer2 from "./BestAnswer2";
-import BestAnswer3 from "./BestAnswer3";
-import BestAnswer4 from "./BestAnswer4";
+import TodayAnswer from "../../common/TodayAnswer";
+import Calendar from "./Calendar";
+import MainProfileImg from "../../asset/img/croco.png";
+import ProfileImg2 from "../../asset/img/croco1.png";
+import ProfileImg3 from "../../asset/img/croco2.png";
+import ProfileImg4 from "../../asset/img/croco3.png";
+import rightAnimals from "../../asset/img/rightAnimals.png";
+import leftAnimals from "../../asset/img/leftAnimals.png";
+import cloud1 from "../../asset/img/leftCloud.png";
+import cloud2 from "../../asset/img/rightCloud.png";
+import cloud3 from "../../asset/img/cloud.png";
+import BestAnswer from "./BestAnswer";
+import FooterImage from "./FooterImage";
+import Footer from "./Footer";
+import HeaderBar from "../../common/HeaderBar";
+import "../styles.css";
 
 function Main() {
   const [count, setCount] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [selectedProfile, setSelectedProfile] = useState(MainProfileImg);
 
   function add_count() {
     if (count === 5) {
@@ -21,70 +30,91 @@ function Main() {
     }
   }
 
-  return (
-    <Background>
-      <Container1>
-        <Profile></Profile>
-        <Profile2></Profile2>
-        <Profile3></Profile3>
-        <Profile4></Profile4>
+  function changeProfile2() {
+    setSelectedProfile(ProfileImg2); // Set the selectedProfile to rabbit2
+  }
+  function changeProfile3() {
+    setSelectedProfile(ProfileImg3); // Set the selectedProfile to rabbit2
+  }
+  function changeProfile4() {
+    setSelectedProfile(ProfileImg4); // Set the selectedProfile to rabbit2
+  }
+  useEffect(() => {
+    // Update the container width to its full width after a delay
+    const timeout = setTimeout(() => {
+      setContainerWidth(70);
+    }, 700);
 
-        <Name>토롱이</Name>
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return (
+    <>
+      <Container1>
+        <img className="cloud1" src={cloud1} alt="구름들"></img>
+        <img className="cloud2" src={cloud2} alt="구름들"></img>
+        <img className="cloud3" src={cloud3} alt="구름"></img>
+        <Profile
+          style={{ backgroundImage: `url(${selectedProfile})` }}
+        ></Profile>
+        <LeftProfile onClick={changeProfile2}></LeftProfile>
+        <RightProfile onClick={changeProfile3}></RightProfile>
+        <TopProfile onClick={changeProfile4}></TopProfile>
+
+        <Name>아거씨</Name>
         <Level>LV14</Level>
-        <Container
-          onClick={() => {
-            add_count();
-          }}
-        >
-          <Progress></Progress>
+        <Container>
+          <Progress
+            style={{ width: `${containerWidth}%` }} // Set the width dynamically
+            onClick={() => {
+              add_count();
+            }}
+          ></Progress>
         </Container>
         <Question>오늘의 질문</Question>
         <TodayAnswer />
       </Container1>
       <Container2></Container2>
       <Container3>
-        <BestQuestion>가장 답변이 많은 질문</BestQuestion>
+        <Calendar />
         <BestAnswerContainer>
-          <BestAnswer1 />
-          <BestAnswer2 />
+          <BestAnswer msg="kkkk" />
+          <BestAnswer msg="bbbb" />
+          <BestAnswer msg="ssss" />
         </BestAnswerContainer>
-        <BestAnswerContainer2>
-          <BestAnswer3 />
-          <BestAnswer4 />
-        </BestAnswerContainer2>
       </Container3>
-    </Background>
+      <FooterImage
+        leftSrc={leftAnimals}
+        leftAlt="왼쪽 동물들"
+        rightSrc={rightAnimals}
+        rightAlt="오른쪽 동물들"
+      />
+    </>
   );
 }
 
 export default Main;
-const Background = styled.div`
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  background-color: #dbeff4;
-`;
 
 const Container1 = styled.div`
   width: 100%;
-  height: 34rem;
-  margin-top: 2rem;
+  height: 35rem;
+  margin-top: 150px; /*구름 넣을 자리가 없어서 마진넣었습니다.*/
   text-align: center;
-  background-color: #dbeff4;
 `;
 
 const Profile = styled.button`
-  height: 17rem;
-  width: 16rem;
+  height: 12rem;
+  width: 12rem;
   font-weight: 700;
   border: none;
   border-radius: 1rem;
   margin-top: 2rem;
-  background-color: #dbeff4;
+  background-size: 100% 100%;
+  background-color: transparent;
   background-repeat: no-repeat;
-  background-image: url(${rabbit1});
+  background-image: url(${MainProfileImg});
   transition: transform 0.3s;
-
+  position: relative; /*position이 static으로 되어있었는데 구름이 프로필보다 위에있어서 아래로 내리기 위해 position을 조정했습니다. */
   &:hover {
     transform: scale(1.05);
     overflow: hidden;
@@ -92,18 +122,18 @@ const Profile = styled.button`
   }
 `;
 
-const Profile3 = styled.button`
-  height: 10rem;
-  width: 9rem;
-  background-size: 100% 100%;
+const RightProfile = styled.button`
+  height: 7rem;
+  width: 7rem;
   border: none;
   border-radius: 1rem;
-  margin-top: 15rem;
-  margin-left: 10rem;
+  margin-top: 12rem;
+  margin-left: 15rem;
   position: absolute;
-  background-color: #dbeff4;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
-  background-image: url(${rabbit3});
+  background-color: transparent;
+  background-image: url(${ProfileImg3});
   transition: transform 0.3s;
   /* background-color: red; */
 
@@ -114,18 +144,18 @@ const Profile3 = styled.button`
   }
 `;
 
-const Profile4 = styled.button`
-  height: 10rem;
-  width: 9rem;
+const TopProfile = styled.button`
+  height: 7rem;
+  width: 7rem;
   background-size: 100% 100%;
   border: none;
   border-radius: 1rem;
-  margin-top: 1rem;
-  margin-left: 15rem;
+  margin-top: 3rem;
+  margin-left: 10rem;
   position: absolute;
-  background-color: #dbeff4;
+  background-color: transparent;
   background-repeat: no-repeat;
-  background-image: url(${rabbit4});
+  background-image: url(${ProfileImg4});
   transition: transform 0.3s;
 
   &:hover {
@@ -135,18 +165,18 @@ const Profile4 = styled.button`
   }
 `;
 
-const Profile2 = styled.button`
-  height: 10rem;
-  width: 10rem;
+const LeftProfile = styled.button`
+  height: 7rem;
+  width: 8rem;
   background-size: 100% 100%;
   border: none;
   border-radius: 1rem;
-  margin-top: 5rem;
-  margin-left: -38rem;
+  margin-top: 11rem;
+  margin-left: -30rem;
   position: absolute;
-  background-color: #dbeff4;
+  background-color: transparent;
   background-repeat: no-repeat;
-  background-image: url(${rabbit2});
+  background-image: url(${ProfileImg2});
   transition: transform 0.3s;
 
   &:hover {
@@ -162,7 +192,7 @@ const Name = styled.div`
   width: 100%;
   overflow: visible;
   margin-top: 2rem;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;
 
@@ -173,23 +203,24 @@ const Level = styled.div`
   overflow: visible;
   position: absoulte;
   margin-top: 1rem;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;
 
 const Container = styled.div`
   margin: 10px auto;
   background-color: #e8e3e3;
-  width: 500px;
+  width: 30rem;
   height: 35px;
   display: flex;
   align-items: center;
   border-radius: 20px;
+  transition: width 1s; // Add transition for width changes
 `;
 
 const Progress = styled.div`
-  background-color: #a7e2f9;
-  width: 80%;
+  background-color: #f9aa43;
+  width: ${(props) => props.style?.width || 0}%;
   height: 100%;
   transition: width 1s;
   border-radius: 20px;
@@ -199,12 +230,12 @@ const Progress = styled.div`
 
 const Container2 = styled.div`
   width: 100%;
-  height: 5rem;
+  height: 6rem;
   margin-top: 3rem;
   display: flex;
   justify-content: center;
   text-align: center;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;
 
@@ -215,45 +246,22 @@ const Question = styled.div`
   overflow: visible;
   position: absoulte;
   margin-top: 4rem;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;
-
+/* flex안에 캘린더만 있어서 BestAnswerContainer도 flex 박스 안에 넣어서 정렬했습니다.*/
 const Container3 = styled.div`
   width: 100%;
   height: 27rem;
-  display: block;
+  display: flex;
   justify-content: center;
-  text-align: center;
-  color: #73a1ec;
-  font-weight: 750;
-`;
-
-const BestQuestion = styled.div`
-  font-size: 1.2rem;
-  height: 2rem;
-  width: 100%;
-  overflow: visible;
-  position: absoulte;
-  margin-top: 6rem;
-  color: #73a1ec;
-  font-weight: 750;
+  position: relative;
+  text-align: right;
 `;
 
 const BestAnswerContainer = styled.div`
-  width: 100%;
-  height: 8rem;
-  display: flex;
-  justify-content: center;
+  height: 30rem;
   text-align: center;
-  color: #73a1ec;
-  font-weight: 750;
-`;
-const BestAnswerContainer2 = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  color: #73a1ec;
+  color: #ea9f27;
   font-weight: 750;
 `;

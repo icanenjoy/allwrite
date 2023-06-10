@@ -1,76 +1,52 @@
+import React, { useState, useEffect, ChangeEvent } from "react";
 import {
   Dialog,
   DialogContent,
   Typography,
+  IconButton,
+  Avatar,
+  Box,
+  Paper,
   TextField,
   Button,
 } from "@mui/material";
-import React, { useState, useEffect } from "react";
-import { AnswerDetailProps } from "./PostCardProps";
+import { Edit, Delete } from "@mui/icons-material";
 import axios from "axios";
-
-interface Answer {
-  content: string;
-  comments: string[];
-}
+import HeartButton from "./HeartButton";
+import { Answer, AnswerDetailProps } from "./PostCardProps";
+import CommentForm from "./CommentForm";
 
 export const AnswerDetail: React.FC<AnswerDetailProps> = ({
   answer_id,
+  content,
   onClose,
 }) => {
-  const [data, setData] = useState<Answer>({ content: "", comments: [] });
-  const [commentText, setCommentText] = useState("");
-
-  useEffect(() => {
-    axios
-      .get("http://34.64.145.63:5000/api/v1/answer/" + answer_id)
-      .then((response) => setData(response.data))
-      .catch((error) => console.log(error));
-  }, [answer_id]);
-
-  const handleCommentTextChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setCommentText(event.target.value);
-  };
-
-  const handleAddComment = () => {
-    const newComments = [...data.comments, commentText];
-    setData((prevData) => ({
-      ...prevData,
-      comments: newComments,
-    }));
-    setCommentText("");
-  };
+  const [data, setData] = useState([]);
 
   return (
-    <Dialog open={true} onClose={onClose}>
-      <DialogContent>
-        <Typography variant="h6" sx={{ textAlign: "center" }}>
-          {answer_id}
-        </Typography>
-        <Typography variant="h6" sx={{ textAlign: "center" }}>
-          {data.content}
-        </Typography>
-        <Typography variant="h6" sx={{ textAlign: "center" }}>
-          Comments:
-        </Typography>
-        {data.comments.map((comment, index) => (
-          <Typography key={index} variant="body1" sx={{ textAlign: "center" }}>
-            {comment}
+    <Dialog
+      open={true}
+      onClose={onClose}
+      sx={{
+        color: "#FFF3BA",
+        height: "100%", // 최대 크기로 설정
+        "& .MuiDialog-paper": {
+          height: "100%", // 최대 크기로 설정
+        },
+      }}
+    >
+      <Paper sx={{ backgroundColor: "#FFF3BA", width: "100%", height: "100%" }}>
+        <DialogContent>
+          <Typography variant="h6" align="center">
+            {answer_id}
           </Typography>
-        ))}
-        <TextField
-          label="Add Comment"
-          value={commentText}
-          onChange={handleCommentTextChange}
-          fullWidth
-          margin="normal"
-        />
-        <Button variant="contained" onClick={handleAddComment}>
-          Add
-        </Button>
-      </DialogContent>
+          <Typography variant="h6" align="center">
+            {content}
+          </Typography>
+          <HeartButton answer_id={answer_id} />
+          <CommentForm answer_id={answer_id}></CommentForm>
+        </DialogContent>
+      </Paper>
     </Dialog>
   );
 };

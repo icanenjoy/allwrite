@@ -18,18 +18,23 @@ import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import { useLocalStorage } from "usehooks-ts";
 import LoginCheck from "./common/LoginCheck";
 import { Login } from "@mui/icons-material";
+import HeaderBar from "./common/HeaderBar";
+import { Background } from "./common/Background";
 
 function App() {
   return (
     <BrowserRouter>
       <LoginCheck></LoginCheck>
-      <Routes>
-        <Route path="/main" element={<MainPage />} />
-        <Route path="/answer" element={<AnswerPage />} />
-        <Route path="/mypage" element={<MyPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/" element={<LoginPage />} />
-      </Routes>
+      <Background>
+        <HeaderBar></HeaderBar>
+        <Routes>
+          <Route path="/main" element={<MainPage />} />
+          <Route path="/answer" element={<AnswerPage />} />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/" element={<LoginPage />} />
+        </Routes>
+      </Background>
     </BrowserRouter>
   );
 }

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import PostCard from "./PostCard";
 import WriteButton from "./WriteButton";
 import { useLocalStorage } from "usehooks-ts";
+import TodayAnswer from "../../common/TodayAnswer";
 
 const AnswerRender = () => {
   const [data, setData] = useState([]);
@@ -17,6 +18,11 @@ const AnswerRender = () => {
   );
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const questionId = urlParams.get("questionId");
+
+    console.log(questionId);
+
     const fetchData = async () => {
       try {
         // const response = await axios.get("http://localhost:9999/answer");
@@ -28,7 +34,10 @@ const AnswerRender = () => {
               Authorization: `Bearer ${accessToken}`,
             },
           })
-          .then((response) => setData(response.data));
+          .then((response) => {
+            setData(response.data);
+            console.log(response.data);
+          });
       } catch (err) {
         console.log(err);
       }
@@ -38,18 +47,20 @@ const AnswerRender = () => {
 
   return (
     <div>
-      <h1>Fetch Test</h1>
-      <WriteButton></WriteButton>
+      <TodayAnswer></TodayAnswer>
+      <div style={{ display: "flex", justifyContent: "right", margin: 20 }}>
+        <WriteButton></WriteButton>
+      </div>
 
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div style={{ display: "flex", justifyContent: "center", margin: 20 }}>
         <Grid container spacing={3}>
           {data &&
             data.map(
-              (answer: { _id: string; nick_name: string; content: string }) => (
+              (answer: { _id: string; nickName: string; content: string }) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                   <PostCard
                     answer_id={answer._id}
-                    nick_name={answer.nick_name}
+                    nickName={answer.nickName}
                     content={answer.content}
                   />
                 </Grid>

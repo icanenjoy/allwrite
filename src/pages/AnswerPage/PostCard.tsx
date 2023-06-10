@@ -4,12 +4,13 @@ import { styled } from "@mui/system";
 import React, { useState } from "react";
 import HeartButton from "./HeartButton";
 import TruncatedText from "./TextSlicer";
-import { Height } from "@mui/icons-material";
+import { Height, Translate } from "@mui/icons-material";
 import { AnswerDetail } from "./AnswerDetail";
-import { PostCardProps } from "./PostCardProps";
+import { PostCardProps, HeartButtonProps } from "./PostCardProps";
+import { useNavigate } from "react-router-dom";
 
 const HoverCard = styled(Card)`
-  height: 320px;
+  height: 350px;
   transition: transform 0.3s ease-in-out;
   &:hover {
     cursor: pointer;
@@ -18,52 +19,95 @@ const HoverCard = styled(Card)`
 `;
 
 const PostCard: React.FC<PostCardProps> = (answer) => {
-  const [count, setCount] = useState(0);
-  const [clicked, setClicked] = useState(false);
   const [open, setOpen] = useState(false);
-
-  const handleHeartClick = () => {
-    if (!clicked) {
-      setCount((prev) => prev + 1);
-    } else if (clicked) {
-      setCount((prev) => prev - 1);
-    }
-    setClicked(!clicked);
-  };
+  const [like, setLike] = useState(false);
+  const navigate = useNavigate();
 
   const handleCardClick = () => {
     setOpen(true);
+  };
+
+  const handleLikeClick = () => {
+    setLike((prev) => !prev);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
+  const goMyPage = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+    e.stopPropagation();
+    navigate(`/mypage/nickname="${answer.nickName}"`);
+  };
   return (
     <>
-      <HoverCard>
+      <HoverCard
+        sx={{ backgroundColor: "#FFCF53", borderRadius: 6 }}
+        onClick={() => handleCardClick()}
+      >
         <CardContent onClick={handleCardClick}>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: "10px", // Adjust the margin here
+            }}
+          >
             <Avatar
               alt="Profile Image"
               src="https://i.namu.wiki/i/Pmt-X4ekyEZoJL003elEka-ePn1YUsaHlJps0EXgy92xgYISoP6lZptPuC1xcnvUkB09IFqNttUpyKSRjNVNUA.webp"
               variant="circular"
-              style={{ marginRight: "16px" }}
+              sx={{
+                width: 100,
+                height: 100,
+                display: "flex",
+                alignItems: "center",
+                padding: 0,
+                marginTop: "10px",
+              }}
+              onClick={(e) => goMyPage(e)}
             />
-            <Typography variant="h5">{answer.nick_name}</Typography>
           </div>
         </CardContent>
-        <CardContent onClick={handleCardClick}>
-          <TruncatedText text={answer.content} maxLength={100} />
+        <CardContent onClick={(e) => goMyPage(e)}>
+          <Typography
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 0,
+              marginTop: "-20px", // Adjust the margin here
+            }}
+            variant="h5"
+          >
+            {answer.nickName}
+          </Typography>
         </CardContent>
-        <CardContent>
-          <HeartButton onClick={handleHeartClick} clicked={clicked} />
-          {count}
+        <CardContent
+          style={{
+            height: "80px",
+            overflow: "hidden",
+            backgroundColor: "#FFE673",
+            padding: 20,
+            margin: "5px 20px", // Adjust the margins here
+            borderRadius: 15,
+          }}
+          onClick={handleCardClick}
+        >
+          <TruncatedText text={answer.content} maxLength={70} />
         </CardContent>
+        {/* <CardContent>
+          <HeartButton answer_id={answer.answer_id} />
+        </CardContent> */}
       </HoverCard>
 
       {open && (
-        <AnswerDetail answer_id={answer.answer_id} onClose={handleClose} />
+        <AnswerDetail
+          answer_id={answer.answer_id}
+          content={answer.content}
+          onClose={handleClose}
+        />
       )}
     </>
   );
