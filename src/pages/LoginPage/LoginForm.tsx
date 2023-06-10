@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import jwt_decode, { JwtPayload } from "jwt-decode";
+import styled from "styled-components";
 import {
   Button,
   TextField,
@@ -110,13 +111,10 @@ const LoginForm: React.FC = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Paper elevation={3} sx={{ marginTop: 8, padding: 3 }}>
-        <Avatar sx={{ margin: "auto", backgroundColor: "secondary.main" }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5" align="center">
-          Sign in
-        </Typography>
+      <Paper elevation={3} sx={{ marginTop: 8, padding: 3, borderRadius: 5 }}>
+        <div>
+          이미지 들어갈 부분
+        </div>
         <form onSubmit={HandleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -159,15 +157,6 @@ const LoginForm: React.FC = () => {
           회원가입
         </Button>
       </Paper>
-      <Button
-        onClick={() => {
-          setAccessToken(null);
-          setRefreshToken(null);
-        }}
-        variant="contained"
-      >
-        로그아웃
-      </Button>
     </Container>
   );
 };
