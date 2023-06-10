@@ -6,9 +6,16 @@ import MainProfileImg from "../../asset/img/croco.png";
 import ProfileImg2 from "../../asset/img/croco1.png";
 import ProfileImg3 from "../../asset/img/croco2.png";
 import ProfileImg4 from "../../asset/img/croco3.png";
-import bgImg from "../../asset/img/bgImg.png";
+import rightAnimals from "../../asset/img/rightAnimals.png";
+import leftAnimals from "../../asset/img/leftAnimals.png";
+import cloud1 from "../../asset/img/leftCloud.png";
+import cloud2 from "../../asset/img/rightCloud.png";
+import cloud3 from "../../asset/img/cloud.png";
 import BestAnswer from "./BestAnswer";
+import FooterImage from "./FooterImage";
+import Footer from "./Footer";
 import HeaderBar from "../../common/HeaderBar";
+import "../styles.css";
 
 function Main() {
   const [count, setCount] = useState(0);
@@ -44,6 +51,9 @@ function Main() {
   return (
     <>
       <Container1>
+        <img className="cloud1" src={cloud1} alt="구름들"></img>
+        <img className="cloud2" src={cloud2} alt="구름들"></img>
+        <img className="cloud3" src={cloud3} alt="구름"></img>
         <Profile
           style={{ backgroundImage: `url(${selectedProfile})` }}
         ></Profile>
@@ -73,6 +83,12 @@ function Main() {
           <BestAnswer msg="ssss" />
         </BestAnswerContainer>
       </Container3>
+      <FooterImage
+        leftSrc={leftAnimals}
+        leftAlt="왼쪽 동물들"
+        rightSrc={rightAnimals}
+        rightAlt="오른쪽 동물들"
+      />
     </>
   );
 }
@@ -82,7 +98,7 @@ export default Main;
 const Container1 = styled.div`
   width: 100%;
   height: 35rem;
-
+  margin-top: 150px; /*구름 넣을 자리가 없어서 마진넣었습니다.*/
   text-align: center;
 `;
 
@@ -98,7 +114,7 @@ const Profile = styled.button`
   background-repeat: no-repeat;
   background-image: url(${MainProfileImg});
   transition: transform 0.3s;
-
+  position: relative; /*position이 static으로 되어있었는데 구름이 프로필보다 위에있어서 아래로 내리기 위해 position을 조정했습니다. */
   &:hover {
     transform: scale(1.05);
     overflow: hidden;
@@ -233,21 +249,18 @@ const Question = styled.div`
   color: #ea9f27;
   font-weight: 750;
 `;
-
+/* flex안에 캘린더만 있어서 BestAnswerContainer도 flex 박스 안에 넣어서 정렬했습니다.*/
 const Container3 = styled.div`
-  width: 50%;
+  width: 100%;
   height: 27rem;
   display: flex;
-  justify-content: right;
+  justify-content: center;
   position: relative;
   text-align: right;
 `;
 
 const BestAnswerContainer = styled.div`
   height: 30rem;
-  width: 1rem;
-  display: block;
-  justify-content: right;
   text-align: center;
   color: #ea9f27;
   font-weight: 750;
