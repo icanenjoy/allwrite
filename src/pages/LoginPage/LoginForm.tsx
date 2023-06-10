@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import styled from "styled-components";
+import catImage from "./img/cat.png";
+import catBack from "./img/cat-back.png";
+import catFront from "./img/cat-front.png";
+import closedCat from "./img/closed-cat.png";
+
 import {
   Button,
   TextField,
@@ -30,6 +35,7 @@ type LoginFormValues = {
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
 
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
     "at",
@@ -53,12 +59,24 @@ const LoginForm: React.FC = () => {
       .catch((err) => {});
   }, []);
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
+  const handleEmailChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(e.target.value);
+    },
+    []
+  );
+  
+  const catPosition = useMemo(() => {
+    const emailLength = email.length;
+    const top = 50 + emailLength * 0.1;
+    const left = 50 + emailLength * 0.2;
+  
+    return { top: `${top}%`, left: `${left}%` };
+  }, [email]);
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
+    setIsPasswordEmpty(e.target.value === "");
   };
 
   const data: LoginFormValues = {
@@ -109,12 +127,43 @@ const LoginForm: React.FC = () => {
     navigate("/signup"); // 회원가입 페이지로 이동
   };
 
+  const Profile = React.memo(styled.div`
+  position: relative;
+  height: 17rem;
+  width: 17rem;
+  background-image: url(${isPasswordEmpty ? catBack : closedCat});
+  background-size: cover;
+
+  ${isPasswordEmpty
+    ? `
+    &::after {
+      content: "";
+      position: absolute;
+      top: ${catPosition.top};
+      left: ${catPosition.left};
+      transform: translate(-50%, -50%);
+      height: 17rem;
+      width: 17rem;
+      background-image: url(${catFront});
+      background-size: cover;
+      transition: transform 0.3s ease;
+    }
+  `
+    : ''}
+`);
+
   return (
     <Container component="main" maxWidth="xs">
-      <Paper elevation={3} sx={{ marginTop: 8, padding: 3, borderRadius: 5 }}>
-        <div>
-          이미지 들어갈 부분
-        </div>
+      <Paper 
+        elevation={3} 
+        sx={{display: 'flex',
+             flexDirection: 'column',
+             justifyContent: 'center',
+             alignItems: 'center',   
+             marginTop: 8, 
+             padding: 3, 
+             borderRadius: 5 }}>
+        <Profile/>
         <form onSubmit={HandleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
