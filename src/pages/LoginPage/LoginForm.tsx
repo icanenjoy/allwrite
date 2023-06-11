@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import jwt_decode, { JwtPayload } from "jwt-decode";
+import styled from "styled-components";
+import catImage from "./img/cat.png";
+import catBack from "./img/cat-back.png";
+import catFront from "./img/cat-front.png";
+import closedCat from "./img/closed-cat.png";
+
 import {
   Button,
   TextField,
@@ -29,6 +35,7 @@ type LoginFormValues = {
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
 
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
     "at",
@@ -38,6 +45,7 @@ const LoginForm: React.FC = () => {
     "rt",
     null
   );
+  const [loginStatus, setLoginStatus] = useState<"success" | "failure" | null>(null);
 
   const navigate = useNavigate();
 
@@ -52,12 +60,35 @@ const LoginForm: React.FC = () => {
       .catch((err) => {});
   }, []);
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
+  const handleEmailChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(e.target.value);
+    },
+    []
+  );
+  
+  const catPosition = useMemo(() => {
+    const emailLength = email.length;
+    let top = 50;
+    let left = 50;
+
+    if (emailLength <= 20) {
+      top = 50 + emailLength * 0.1;
+      left = 50 + emailLength * 0.2;
+    } else {
+      top = 52 - (emailLength - 20) * 0.1;
+      left = 54 + (emailLength - 20) * 0.1;
+    }
+  
+    return { top: `${top}%`, left: `${left}%` };
+  }, [email]);
+
+  const catTop = catPosition.top;
+  const catLeft = catPosition.left;
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
+    setIsPasswordEmpty(e.target.value === "");
   };
 
   const data: LoginFormValues = {
@@ -78,13 +109,14 @@ const LoginForm: React.FC = () => {
     axios
       .post("http://34.64.145.63:5000/api/v1/auth", data)
       .then((response) => {
-        setAccessToken(response.data.token.accessToken);
-        setRefreshToken(response.data.token.refreshToken);
+        setAccessToken(response.data.accessToken);
+        setRefreshToken(response.data.refreshToken);
+        setLoginStatus("success");
         navigate("/main"); // 로그인 성공 시 /main으로 이동
       })
       .catch((err) => {
         console.log(data);
-        alert(err);
+        setLoginStatus("failure");
       });
   };
 
@@ -108,15 +140,44 @@ const LoginForm: React.FC = () => {
     navigate("/signup"); // 회원가입 페이지로 이동
   };
 
+  const Profile = React.memo(styled.div`
+  position: relative;
+  height: 17rem;
+  width: 17rem;
+  background-image: url(${isPasswordEmpty ? catBack : closedCat});
+  background-size: cover;
+
+  ${isPasswordEmpty
+    ? `
+    &::after {
+      content: "";
+      position: absolute;
+      top: ${catTop};
+      left: ${catLeft};
+      transform: translate(-50%, -50%);
+      height: 17rem;
+      width: 17rem;
+      background-image: url(${catFront});
+      background-size: cover;
+    }
+  `
+    : ''}
+`);
+
   return (
     <Container component="main" maxWidth="xs">
-      <Paper elevation={3} sx={{ marginTop: 8, padding: 3 }}>
-        <Avatar sx={{ margin: "auto", backgroundColor: "secondary.main" }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5" align="center">
-          Sign in
-        </Typography>
+      <Paper 
+        elevation={3} 
+        sx={{display: "flex",
+             flexDirection: "column",
+             justifyContent: "center",
+             alignItems: "center",  
+             textAlign: "center", 
+             marginTop: 8, 
+             padding: 3, 
+             borderRadius: 5 }}>
+        <div style={{fontSize: "3rem", fontWeight: 750}}>Login</div>
+        <Profile/>
         <form onSubmit={HandleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -140,6 +201,11 @@ const LoginForm: React.FC = () => {
               />
             </Grid>
           </Grid>
+          {loginStatus === "failure" && (
+            <div style={{fontSize: "0.8rem", fontWeight: 350, color: "red"}}>
+              <br/>아이디 또는 비밀번호를 잘못 입력했습니다.
+            </div>
+          )}
           <Button
             type="submit"
             variant="contained"
@@ -147,7 +213,7 @@ const LoginForm: React.FC = () => {
             fullWidth
             sx={{ marginTop: 3, marginBottom: 2 }}
           >
-            Sign In
+            로그인
           </Button>
         </form>
         <Button
@@ -159,15 +225,6 @@ const LoginForm: React.FC = () => {
           회원가입
         </Button>
       </Paper>
-      <Button
-        onClick={() => {
-          setAccessToken(null);
-          setRefreshToken(null);
-        }}
-        variant="contained"
-      >
-        로그아웃
-      </Button>
     </Container>
   );
 };
