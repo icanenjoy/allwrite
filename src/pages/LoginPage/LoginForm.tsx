@@ -45,6 +45,7 @@ const LoginForm: React.FC = () => {
     "rt",
     null
   );
+  const [loginStatus, setLoginStatus] = useState<"success" | "failure" | null>(null);
 
   const navigate = useNavigate();
 
@@ -68,11 +69,22 @@ const LoginForm: React.FC = () => {
   
   const catPosition = useMemo(() => {
     const emailLength = email.length;
-    const top = 50 + emailLength * 0.1;
-    const left = 50 + emailLength * 0.2;
+    let top = 50;
+    let left = 50;
+
+    if (emailLength <= 20) {
+      top = 50 + emailLength * 0.1;
+      left = 50 + emailLength * 0.2;
+    } else {
+      top = 52 - (emailLength - 20) * 0.1;
+      left = 54 + (emailLength - 20) * 0.1;
+    }
   
     return { top: `${top}%`, left: `${left}%` };
   }, [email]);
+
+  const catTop = catPosition.top;
+  const catLeft = catPosition.left;
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -99,11 +111,12 @@ const LoginForm: React.FC = () => {
       .then((response) => {
         setAccessToken(response.data.accessToken);
         setRefreshToken(response.data.refreshToken);
+        setLoginStatus("success");
         navigate("/main"); // 로그인 성공 시 /main으로 이동
       })
       .catch((err) => {
         console.log(data);
-        alert(err);
+        setLoginStatus("failure");
       });
   };
 
@@ -139,14 +152,13 @@ const LoginForm: React.FC = () => {
     &::after {
       content: "";
       position: absolute;
-      top: ${catPosition.top};
-      left: ${catPosition.left};
+      top: ${catTop};
+      left: ${catLeft};
       transform: translate(-50%, -50%);
       height: 17rem;
       width: 17rem;
       background-image: url(${catFront});
       background-size: cover;
-      transition: transform 0.3s ease;
     }
   `
     : ''}
@@ -156,13 +168,15 @@ const LoginForm: React.FC = () => {
     <Container component="main" maxWidth="xs">
       <Paper 
         elevation={3} 
-        sx={{display: 'flex',
-             flexDirection: 'column',
-             justifyContent: 'center',
-             alignItems: 'center',   
+        sx={{display: "flex",
+             flexDirection: "column",
+             justifyContent: "center",
+             alignItems: "center",  
+             textAlign: "center", 
              marginTop: 8, 
              padding: 3, 
              borderRadius: 5 }}>
+        <div style={{fontSize: "3rem", fontWeight: 750}}>Login</div>
         <Profile/>
         <form onSubmit={HandleSubmit}>
           <Grid container spacing={2}>
@@ -187,6 +201,11 @@ const LoginForm: React.FC = () => {
               />
             </Grid>
           </Grid>
+          {loginStatus === "failure" && (
+            <div style={{fontSize: "0.8rem", fontWeight: 350, color: "red"}}>
+              <br/>아이디 또는 비밀번호를 잘못 입력했습니다.
+            </div>
+          )}
           <Button
             type="submit"
             variant="contained"
@@ -194,7 +213,7 @@ const LoginForm: React.FC = () => {
             fullWidth
             sx={{ marginTop: 3, marginBottom: 2 }}
           >
-            Sign In
+            로그인
           </Button>
         </form>
         <Button
