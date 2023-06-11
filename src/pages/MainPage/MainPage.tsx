@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import TodayAnswer from "./TodayAnswer";
+import TodayAnswer from "../../common/TodayAnswer";
 import Calendar from "./Calendar";
-import rabbit1 from "./img/rabbit1.png";
-import rabbit2 from "./img/rabbit2.png";
-import rabbit3 from "./img/rabbit3.png";
-import rabbit4 from "./img/rabbit4.png";
+import MainProfileImg from "../../asset/img/croco.png";
+import ProfileImg2 from "../../asset/img/croco1.png";
+import ProfileImg3 from "../../asset/img/croco2.png";
+import ProfileImg4 from "../../asset/img/croco3.png";
+import bgImg from "../../asset/img/bgImg.png";
 import BestAnswer from "./BestAnswer";
 import HeaderBar from "../../common/HeaderBar";
-import { Background } from "../../common/Background";
 
 function Main() {
   const [count, setCount] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
-  const [selectedProfile, setSelectedProfile] = useState(rabbit1);
+  const [selectedProfile, setSelectedProfile] = useState(MainProfileImg);
 
   function add_count() {
     if (count === 5) {
@@ -24,13 +24,13 @@ function Main() {
   }
 
   function changeProfile2() {
-    setSelectedProfile(rabbit2); // Set the selectedProfile to rabbit2
+    setSelectedProfile(ProfileImg2); // Set the selectedProfile to rabbit2
   }
   function changeProfile3() {
-    setSelectedProfile(rabbit3); // Set the selectedProfile to rabbit2
+    setSelectedProfile(ProfileImg3); // Set the selectedProfile to rabbit2
   }
   function changeProfile4() {
-    setSelectedProfile(rabbit4); // Set the selectedProfile to rabbit2
+    setSelectedProfile(ProfileImg4); // Set the selectedProfile to rabbit2
   }
   useEffect(() => {
     // Update the container width to its full width after a delay
@@ -42,17 +42,16 @@ function Main() {
   }, []);
 
   return (
-    // <Background>
     <>
       <Container1>
         <Profile
           style={{ backgroundImage: `url(${selectedProfile})` }}
         ></Profile>
-        <Profile2 onClick={changeProfile2}></Profile2>
-        <Profile3 onClick={changeProfile3}></Profile3>
-        <Profile4 onClick={changeProfile4}></Profile4>
+        <LeftProfile onClick={changeProfile2}></LeftProfile>
+        <RightProfile onClick={changeProfile3}></RightProfile>
+        <TopProfile onClick={changeProfile4}></TopProfile>
 
-        <Name>토롱이</Name>
+        <Name>아거씨</Name>
         <Level>LV14</Level>
         <Container>
           <Progress
@@ -79,6 +78,7 @@ function Main() {
 }
 
 export default Main;
+
 const Container1 = styled.div`
   width: 100%;
   height: 35rem;
@@ -87,15 +87,16 @@ const Container1 = styled.div`
 `;
 
 const Profile = styled.button`
-  height: 17rem;
-  width: 16rem;
+  height: 12rem;
+  width: 12rem;
   font-weight: 700;
   border: none;
   border-radius: 1rem;
   margin-top: 2rem;
-  background-color: #ffe256;
+  background-size: 100% 100%;
+  background-color: transparent;
   background-repeat: no-repeat;
-  background-image: url(${rabbit1});
+  background-image: url(${MainProfileImg});
   transition: transform 0.3s;
 
   &:hover {
@@ -105,18 +106,18 @@ const Profile = styled.button`
   }
 `;
 
-const Profile3 = styled.button`
-  height: 10rem;
-  width: 9rem;
-  background-size: 100% 100%;
+const RightProfile = styled.button`
+  height: 7rem;
+  width: 7rem;
   border: none;
   border-radius: 1rem;
-  margin-top: 15rem;
-  margin-left: 9rem;
+  margin-top: 12rem;
+  margin-left: 15rem;
   position: absolute;
-  background-color: #ffe256;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
-  background-image: url(${rabbit3});
+  background-color: transparent;
+  background-image: url(${ProfileImg3});
   transition: transform 0.3s;
   /* background-color: red; */
 
@@ -127,18 +128,18 @@ const Profile3 = styled.button`
   }
 `;
 
-const Profile4 = styled.button`
-  height: 10rem;
-  width: 9rem;
+const TopProfile = styled.button`
+  height: 7rem;
+  width: 7rem;
   background-size: 100% 100%;
   border: none;
   border-radius: 1rem;
   margin-top: 3rem;
-  margin-left: 6rem;
+  margin-left: 10rem;
   position: absolute;
-  background-color: #ffe256;
+  background-color: transparent;
   background-repeat: no-repeat;
-  background-image: url(${rabbit4});
+  background-image: url(${ProfileImg4});
   transition: transform 0.3s;
 
   &:hover {
@@ -148,18 +149,18 @@ const Profile4 = styled.button`
   }
 `;
 
-const Profile2 = styled.button`
-  height: 10rem;
-  width: 10rem;
+const LeftProfile = styled.button`
+  height: 7rem;
+  width: 8rem;
   background-size: 100% 100%;
   border: none;
   border-radius: 1rem;
   margin-top: 11rem;
-  margin-left: -35rem;
+  margin-left: -30rem;
   position: absolute;
-  background-color: #ffe256;
+  background-color: transparent;
   background-repeat: no-repeat;
-  background-image: url(${rabbit2});
+  background-image: url(${ProfileImg2});
   transition: transform 0.3s;
 
   &:hover {

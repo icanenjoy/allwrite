@@ -10,7 +10,7 @@ import {
   DateCalendarProps,
 } from "@mui/x-date-pickers/DateCalendar";
 import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
-import rabbit1 from "./img/rabbit1.png";
+import rabbit1 from "../../asset/img/croco.png";
 
 const initialValue = dayjs();
 
@@ -98,7 +98,7 @@ export default function DateCalendarServerRequest() {
           style={{
             width: "100%",
             color: "#ed7e28",
-            marginLeft: "20rem",
+            marginLeft: "20.5rem",
             marginTop: "-1rem",
           }}
         >
@@ -136,6 +136,7 @@ const Container = styled.div`
   text-align: center;
   position: relative;
   font-weight: 750;
+  display: block;
 `;
 
 const SelectedDateText = styled.div`
