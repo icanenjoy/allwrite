@@ -21,22 +21,26 @@ import { Login } from "@mui/icons-material";
 import HeaderBar from "./common/HeaderBar";
 import { Background } from "./common/Background";
 import Cloud from "./common/Cloud";
+import { Provider } from "react-redux";
+import store from "./store";
 function App() {
   return (
-    <BrowserRouter>
-      <LoginCheck></LoginCheck>
-      <Background>
-        <Cloud />
-        <HeaderBar></HeaderBar>
-        <Routes>
-          <Route path="/main" element={<MainPage />} />
-          <Route path="/answer" element={<AnswerPage />} />
-          <Route path="/mypage" element={<MyPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/" element={<LoginPage />} />
-        </Routes>
-      </Background>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <LoginCheck></LoginCheck>
+        <Background>
+          <Cloud />
+          <HeaderBar></HeaderBar>
+          <Routes>
+            <Route path="/main" element={<MainPage />} />
+            <Route path="/answer" element={<AnswerPage />} />
+            <Route path="/mypage" element={<MyPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/" element={<LoginPage />} />
+          </Routes>
+        </Background>
+      </BrowserRouter>
+    </Provider>
   );
 }
 

@@ -5,6 +5,8 @@ import { Box, IconButton, Button } from "@mui/material";
 import { useLocalStorage } from "usehooks-ts";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, setQuestionId } from "../store";
 
 const TodayAnswer = () => {
   const [question] = useState<any>([]);
@@ -15,6 +17,9 @@ const TodayAnswer = () => {
     null
   ); // accessToken
 
+  const dispatch = useDispatch();
+  const questionId = useSelector((state: RootState) => state.questionId);
+
   useEffect(() => {
     axios
       .get("http://34.64.145.63:5000/api/v1/question", {
@@ -24,14 +29,19 @@ const TodayAnswer = () => {
       })
       .then((response) => {
         for (let i = 0; i < response.data.question.length; i++) {
-          question.push(response.data.question[i].content);
+          question.push([
+            response.data.question[i]._id,
+            response.data.question[i].content,
+          ]);
         }
+        console.log("가나다라", question);
         setLoading(false);
       })
       .catch((err) => {
         console.log("error");
       });
   }, []);
+
   const StyledArrowBack = styled(ArrowBackIosRoundedIcon)(({ theme }) => ({
     color: "deepskyblue",
     fontSize: "32px",
@@ -47,12 +57,14 @@ const TodayAnswer = () => {
 
   const handleNextClick = () => {
     setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % question.length);
+    dispatch(setQuestionId(question[currentMessageIndex][0])); // questionId 업데이트
   };
 
   const handlePrevClick = () => {
     setCurrentMessageIndex((prevIndex) =>
       prevIndex === 0 ? question.length - 1 : prevIndex - 1
     );
+    dispatch(setQuestionId(question[currentMessageIndex][0])); // questionId 업데이트
   };
 
   if (loading) {
@@ -60,7 +72,7 @@ const TodayAnswer = () => {
   }
 
   const currentMessage =
-    question.length > 0 ? question[currentMessageIndex] : null;
+    question.length > 0 ? question[currentMessageIndex][1] : null;
 
   return (
     <Container>

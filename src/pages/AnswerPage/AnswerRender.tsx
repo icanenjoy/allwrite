@@ -5,6 +5,8 @@ import PostCard from "./PostCard";
 import WriteButton from "./WriteButton";
 import { useLocalStorage } from "usehooks-ts";
 import TodayAnswer from "../../common/TodayAnswer";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const AnswerRender = () => {
   const [data, setData] = useState([]);
@@ -16,11 +18,10 @@ const AnswerRender = () => {
     "rt",
     null
   );
+  const questionId = useSelector((state: RootState) => state.questionId);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const questionId = urlParams.get("questionId");
-
     console.log(questionId);
 
     const fetchData = async () => {
@@ -30,7 +31,7 @@ const AnswerRender = () => {
 
         const response = await axios
           // .get(`http://34.64.145.63:5000/api/v1/question/${questionId)/answer`)
-          .get("http://34.64.145.63:5000/api/v1/answer", {
+          .get(`http://34.64.145.63:5000/api/v1/answer/${questionId}`, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
@@ -44,7 +45,7 @@ const AnswerRender = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [questionId]);
 
   return (
     <div>

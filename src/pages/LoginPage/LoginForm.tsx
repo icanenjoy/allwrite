@@ -45,7 +45,9 @@ const LoginForm: React.FC = () => {
     "rt",
     null
   );
-  const [loginStatus, setLoginStatus] = useState<"success" | "failure" | null>(null);
+  const [loginStatus, setLoginStatus] = useState<"success" | "failure" | null>(
+    null
+  );
 
   const navigate = useNavigate();
 
@@ -53,8 +55,8 @@ const LoginForm: React.FC = () => {
     axios
       .post("http://34.64.145.63:5000/api/v1/auth", data)
       .then((response) => {
-        setAccessToken(response.data.accessToken);
-        setRefreshToken(response.data.refreshToken);
+        setAccessToken(response.data.token.accessToken);
+        setRefreshToken(response.data.token.refreshToken);
         navigate("/main"); // 로그인 성공 시 /main으로 이동
       })
       .catch((err) => {});
@@ -66,7 +68,7 @@ const LoginForm: React.FC = () => {
     },
     []
   );
-  
+
   const catPosition = useMemo(() => {
     const emailLength = email.length;
     let top = 50;
@@ -79,7 +81,7 @@ const LoginForm: React.FC = () => {
       top = 52 - (emailLength - 20) * 0.1;
       left = 54 + (emailLength - 20) * 0.1;
     }
-  
+
     return { top: `${top}%`, left: `${left}%` };
   }, [email]);
 
@@ -109,8 +111,8 @@ const LoginForm: React.FC = () => {
     axios
       .post("http://34.64.145.63:5000/api/v1/auth", data)
       .then((response) => {
-        setAccessToken(response.data.accessToken);
-        setRefreshToken(response.data.refreshToken);
+        setAccessToken(response.data.token.accessToken);
+        setRefreshToken(response.data.token.refreshToken);
         setLoginStatus("success");
         navigate("/main"); // 로그인 성공 시 /main으로 이동
       })
@@ -141,14 +143,14 @@ const LoginForm: React.FC = () => {
   };
 
   const Profile = React.memo(styled.div`
-  position: relative;
-  height: 17rem;
-  width: 17rem;
-  background-image: url(${isPasswordEmpty ? catBack : closedCat});
-  background-size: cover;
+    position: relative;
+    height: 17rem;
+    width: 17rem;
+    background-image: url(${isPasswordEmpty ? catBack : closedCat});
+    background-size: cover;
 
-  ${isPasswordEmpty
-    ? `
+    ${isPasswordEmpty
+      ? `
     &::after {
       content: "";
       position: absolute;
@@ -161,23 +163,26 @@ const LoginForm: React.FC = () => {
       background-size: cover;
     }
   `
-    : ''}
-`);
+      : ""}
+  `);
 
   return (
     <Container component="main" maxWidth="xs">
-      <Paper 
-        elevation={3} 
-        sx={{display: "flex",
-             flexDirection: "column",
-             justifyContent: "center",
-             alignItems: "center",  
-             textAlign: "center", 
-             marginTop: 8, 
-             padding: 3, 
-             borderRadius: 5 }}>
-        <div style={{fontSize: "3rem", fontWeight: 750}}>Login</div>
-        <Profile/>
+      <Paper
+        elevation={3}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          marginTop: 8,
+          padding: 3,
+          borderRadius: 5,
+        }}
+      >
+        <div style={{ fontSize: "3rem", fontWeight: 750 }}>Login</div>
+        <Profile />
         <form onSubmit={HandleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -202,8 +207,9 @@ const LoginForm: React.FC = () => {
             </Grid>
           </Grid>
           {loginStatus === "failure" && (
-            <div style={{fontSize: "0.8rem", fontWeight: 350, color: "red"}}>
-              <br/>아이디 또는 비밀번호를 잘못 입력했습니다.
+            <div style={{ fontSize: "0.8rem", fontWeight: 350, color: "red" }}>
+              <br />
+              아이디 또는 비밀번호를 잘못 입력했습니다.
             </div>
           )}
           <Button
