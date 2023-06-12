@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckIcon from "@mui/icons-material/Check";
 import { useLocalStorage } from "usehooks-ts";
+import queryString from "query-string";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -74,6 +75,7 @@ export default function HeaderBar() {
   const [open, setOpen] = useState(false);
   const [friendList, setFriendList] = useState<Friend[]>([]);
   const [friendReq, setFriendReq] = useState<Friend[]>([]);
+  const [friendSearch, setFriendSearch] = useState<any>("");
   const [searchText, setSearchText] = useState("");
 
   const navigate = useNavigate();
@@ -162,7 +164,7 @@ export default function HeaderBar() {
   };
 
   const handleFriendReqOk = async (nickname: string) => {
-    //친구요청 수락 근데 API 아직
+    //친구요청 수락
     try {
       const response = await axios.post(
         "http://34.64.145.63:5000/api/v1/friend/response",
@@ -182,7 +184,7 @@ export default function HeaderBar() {
   };
 
   const handleFriendReqDel = async (nickname: string) => {
-    //친구요청 거절 근데 API 아직
+    //친구요청 거절
     try {
       const response = await axios.delete(
         "http://34.64.145.63:5000/api/v1/friend/reject",
@@ -201,8 +203,31 @@ export default function HeaderBar() {
     }
   };
 
-  const handleSearch = () => {
-    console.log("검색어:", searchText);
+  const handleKeyPress = async (e: any) => {
+    if (e.key === "Enter") {
+      try {
+        const response = await axios.get(
+          "http://34.64.145.63:5000/api/v1/user/" + searchText,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setFriendSearch(response.data);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+  const handleFriendPage = (nickName: string) => {
+    const queryStringParams = queryString.stringify({
+      nickName: nickName,
+    });
+    navigate(`/main`);
+    navigate(`/mypage?${queryStringParams}`);
+    handleFriendClose();
   };
 
   const mobileMenuId = "primary-search-account-menu-mobile";
@@ -250,7 +275,7 @@ export default function HeaderBar() {
       </MenuItem>
       <Drawer anchor="right" open={open} onClose={handleFriendClose}>
         <Search>
-          <SearchIconWrapper onClick={handleSearch}>
+          <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
           <StyledInputBase
@@ -258,11 +283,18 @@ export default function HeaderBar() {
             inputProps={{ "aria-label": "search" }}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
         </Search>
         <List>
           {friendReq.map((friend, index) => (
-            <ListItem button key={index}>
+            <ListItem
+              button
+              key={index}
+              onClick={() => {
+                handleFriendPage(friend.nickName);
+              }}
+            >
               <ListItemIcon sx={{ width: 20, height: 30 }}>
                 <img src={friend.profileImage} alt={friend.nickName} />
               </ListItemIcon>
@@ -289,7 +321,13 @@ export default function HeaderBar() {
         </List>
         <List>
           {friendList.map((friend, index) => (
-            <ListItem button onClick={handleFriendClose} key={index}>
+            <ListItem
+              button
+              onClick={() => {
+                handleFriendPage(friend.nickName);
+              }}
+              key={index}
+            >
               <ListItemIcon sx={{ width: 20, height: 30 }}>
                 <img src={friend.profileImage} alt={friend.nickName} />
               </ListItemIcon>
@@ -297,6 +335,22 @@ export default function HeaderBar() {
             </ListItem>
           ))}
         </List>
+        {searchText && (
+          <ListItem
+            button
+            onClick={() => {
+              handleFriendPage(friendSearch.nickName);
+            }}
+          >
+            <ListItemIcon sx={{ width: 20, height: 30 }}>
+              <img
+                src={friendSearch.profileImage}
+                alt={friendSearch.nickName}
+              />
+            </ListItemIcon>
+            <ListItemText primary={friendSearch.nickName} />
+          </ListItem>
+        )}
       </Drawer>
 
       <MenuItem onClick={handleLogout}>
