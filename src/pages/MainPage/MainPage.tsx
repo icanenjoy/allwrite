@@ -7,13 +7,34 @@ import ProfileImg2 from "../../asset/img/croco1.png";
 import ProfileImg3 from "../../asset/img/croco2.png";
 import ProfileImg4 from "../../asset/img/croco3.png";
 import bgImg from "../../asset/img/bgImg.png";
-import BestAnswer from "./BestAnswer";
+
 import HeaderBar from "../../common/HeaderBar";
+import { useLocalStorage } from "usehooks-ts";
+import jwt_decode from "jwt-decode";
 
 function Main() {
   const [count, setCount] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [selectedProfile, setSelectedProfile] = useState(MainProfileImg);
+  const [accessToken, setAccessToken] = useLocalStorage<string | null>(
+    "at",
+    null
+  );
+
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        if (accessToken !== null) {
+          console.log(accessToken);
+          console.log(jwt_decode(accessToken));
+        }
+      } catch (e) {
+        console.error("Token decoding error:", e);
+      }
+    };
+
+    checkToken();
+  }, []);
 
   function add_count() {
     if (count === 5) {
@@ -67,11 +88,7 @@ function Main() {
       <Container2></Container2>
       <Container3>
         <Calendar />
-        <BestAnswerContainer>
-          <BestAnswer msg="kkkk" />
-          <BestAnswer msg="bbbb" />
-          <BestAnswer msg="ssss" />
-        </BestAnswerContainer>
+        <BestAnswerContainer></BestAnswerContainer>
       </Container3>
     </>
   );
