@@ -29,6 +29,7 @@ const AnswerRender = () => {
         // setData(response.data);
 
         const response = await axios
+          // .get(`http://34.64.145.63:5000/api/v1/question/${questionId)/answer`)
           .get("http://34.64.145.63:5000/api/v1/answer", {
             headers: {
               Authorization: `Bearer ${accessToken}`,
