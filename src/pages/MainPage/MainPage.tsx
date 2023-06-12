@@ -11,11 +11,14 @@ import bgImg from "../../asset/img/bgImg.png";
 import HeaderBar from "../../common/HeaderBar";
 import { useLocalStorage } from "usehooks-ts";
 import jwt_decode from "jwt-decode";
+import userEvent from "@testing-library/user-event";
 
 function Main() {
   const [count, setCount] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [selectedProfile, setSelectedProfile] = useState(MainProfileImg);
+  const [user, setUser] = useState<any | null>(null);
+
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
     "at",
     null
@@ -25,24 +28,17 @@ function Main() {
     const checkToken = async () => {
       try {
         if (accessToken !== null) {
-          console.log(accessToken);
+          // console.log(accessToken);
           console.log(jwt_decode(accessToken));
+          setUser(jwt_decode(accessToken));
         }
       } catch (e) {
         console.error("Token decoding error:", e);
       }
     };
-
     checkToken();
   }, []);
-
-  function add_count() {
-    if (count === 5) {
-      setCount(0);
-    } else {
-      setCount(count + 1);
-    }
-  }
+  console.log(user);
 
   function changeProfile2() {
     setSelectedProfile(ProfileImg2); // Set the selectedProfile to rabbit2
@@ -56,7 +52,7 @@ function Main() {
   useEffect(() => {
     // Update the container width to its full width after a delay
     const timeout = setTimeout(() => {
-      setContainerWidth(70);
+      setContainerWidth(80);
     }, 700);
 
     return () => clearTimeout(timeout);
@@ -72,14 +68,11 @@ function Main() {
         <RightProfile onClick={changeProfile3}></RightProfile>
         <TopProfile onClick={changeProfile4}></TopProfile>
 
-        <Name>아거씨</Name>
+        <Name>{user && <div>{user.nickName}</div>}</Name>
         <Level>LV14</Level>
         <Container>
           <Progress
             style={{ width: `${containerWidth}%` }} // Set the width dynamically
-            onClick={() => {
-              add_count();
-            }}
           ></Progress>
         </Container>
         <Question>오늘의 질문</Question>
