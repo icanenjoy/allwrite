@@ -6,27 +6,39 @@ import MainProfileImg from "../../asset/img/croco.png";
 import ProfileImg2 from "../../asset/img/croco1.png";
 import ProfileImg3 from "../../asset/img/croco2.png";
 import ProfileImg4 from "../../asset/img/croco3.png";
-import rightAnimals from "../../asset/img/rightAnimals.png";
-import leftAnimals from "../../asset/img/leftAnimals.png";
-import cloud1 from "../../asset/img/leftCloud.png";
-import cloud2 from "../../asset/img/rightCloud.png";
-import cloud3 from "../../asset/img/cloud.png";
-import BestAnswer from "./BestAnswer";
-import FooterImage from "./FooterImage";
+import bgImg from "../../asset/img/bgImg.png";
+
 import HeaderBar from "../../common/HeaderBar";
+import { useLocalStorage } from "usehooks-ts";
+import jwt_decode from "jwt-decode";
+import userEvent from "@testing-library/user-event";
 
 function Main() {
   const [count, setCount] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [selectedProfile, setSelectedProfile] = useState(MainProfileImg);
+  const [user, setUser] = useState<any | null>(null);
 
-  function add_count() {
-    if (count === 5) {
-      setCount(0);
-    } else {
-      setCount(count + 1);
-    }
-  }
+  const [accessToken, setAccessToken] = useLocalStorage<string | null>(
+    "at",
+    null
+  );
+
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        if (accessToken !== null) {
+          // console.log(accessToken);
+          console.log(jwt_decode(accessToken));
+          setUser(jwt_decode(accessToken));
+        }
+      } catch (e) {
+        console.error("Token decoding error:", e);
+      }
+    };
+    checkToken();
+  }, []);
+  console.log(user);
 
   function changeProfile2() {
     setSelectedProfile(ProfileImg2); // Set the selectedProfile to rabbit2
@@ -40,7 +52,7 @@ function Main() {
   useEffect(() => {
     // Update the container width to its full width after a delay
     const timeout = setTimeout(() => {
-      setContainerWidth(70);
+      setContainerWidth(80);
     }, 700);
 
     return () => clearTimeout(timeout);
@@ -56,14 +68,11 @@ function Main() {
         <RightProfile onClick={changeProfile3}></RightProfile>
         <TopProfile onClick={changeProfile4}></TopProfile>
 
-        <Name>아거씨</Name>
+        <Name>{user && <div>{user.nickName}</div>}</Name>
         <Level>LV14</Level>
         <Container>
           <Progress
             style={{ width: `${containerWidth}%` }} // Set the width dynamically
-            onClick={() => {
-              add_count();
-            }}
           ></Progress>
         </Container>
         <Question>오늘의 질문</Question>
@@ -72,18 +81,8 @@ function Main() {
       <Container2></Container2>
       <Container3>
         <Calendar />
-        <BestAnswerContainer>
-          <BestAnswer msg="kkkk" />
-          <BestAnswer msg="bbbb" />
-          <BestAnswer msg="ssss" />
-        </BestAnswerContainer>
+        <BestAnswerContainer></BestAnswerContainer>
       </Container3>
-      <FooterImage
-        leftSrc={leftAnimals}
-        leftAlt="왼쪽 동물들"
-        rightSrc={rightAnimals}
-        rightAlt="오른쪽 동물들"
-      />
     </>
   );
 }
@@ -93,7 +92,7 @@ export default Main;
 const Container1 = styled.div`
   width: 100%;
   height: 35rem;
-  margin-top: 150px; /*구름 넣을 자리가 없어서 마진넣었습니다.*/
+
   text-align: center;
 `;
 
@@ -109,7 +108,7 @@ const Profile = styled.button`
   background-repeat: no-repeat;
   background-image: url(${MainProfileImg});
   transition: transform 0.3s;
-  position: relative; /*position이 static으로 되어있었는데 구름이 프로필보다 위에있어서 아래로 내리기 위해 position을 조정했습니다. */
+
   &:hover {
     transform: scale(1.05);
     overflow: hidden;
@@ -244,18 +243,21 @@ const Question = styled.div`
   color: #ea9f27;
   font-weight: 750;
 `;
-/* flex안에 캘린더만 있어서 BestAnswerContainer도 flex 박스 안에 넣어서 정렬했습니다.*/
+
 const Container3 = styled.div`
-  width: 100%;
+  width: 50%;
   height: 27rem;
   display: flex;
-  justify-content: center;
+  justify-content: right;
   position: relative;
   text-align: right;
 `;
 
 const BestAnswerContainer = styled.div`
   height: 30rem;
+  width: 1rem;
+  display: block;
+  justify-content: right;
   text-align: center;
   color: #ea9f27;
   font-weight: 750;
