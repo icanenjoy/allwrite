@@ -10,6 +10,8 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const MAX_CONTENT_LENGTH = 200;
 
@@ -17,6 +19,7 @@ const WriteButton: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
   const [content, setContent] = useState("");
+  const questionId = useSelector((state: RootState) => state.questionId);
 
   const handleOpen = () => {
     setOpen(true);
@@ -43,6 +46,11 @@ const WriteButton: React.FC = () => {
       content: content,
       isPublic: isPublic,
     };
+
+    axios
+      .post(`api/v1/question/answer/${questionId}`, data)
+      .then(() => alert("게시글 작성이 완료되었습니다."))
+      .catch((e) => alert(e));
 
     // 작성 완료 후 모달을 닫으려면 handleClose() 함수를 호출하세요.
     handleClose();

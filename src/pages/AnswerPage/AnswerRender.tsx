@@ -31,11 +31,14 @@ const AnswerRender = () => {
 
         const response = await axios
           // .get(`http://34.64.145.63:5000/api/v1/question/${questionId)/answer`)
-          .get(`http://34.64.145.63:5000/api/v1/answer/${questionId}`, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          })
+          .get(
+            `http://34.64.145.63:5000/api/v1/question/answer/${questionId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          )
           .then((response) => {
             setData(response.data);
             console.log(response.data);
