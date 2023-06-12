@@ -8,15 +8,15 @@ function BestAnswer(props: any) {
 
   const [question, setQuestion] = useState<any>([]);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:9999/answer")
-      .then((response) => {
-        setQuestion(response.data);
-        console.log(response.data);
-      })
-      .catch((err) => {});
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:9999/answer")
+  //     .then((response) => {
+  //       setQuestion(response.data);
+  //       console.log(response.data);
+  //     })
+  //     .catch((err) => {});
+  // }, []);
 
   return (
     <Container>

@@ -2,23 +2,44 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { Box, IconButton, Button } from "@mui/material";
-
+import { useLocalStorage } from "usehooks-ts";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, setQuestionId } from "../store";
 
 const TodayAnswer = () => {
-  const [question, setQuestion] = useState<any>([]);
+  const [question] = useState<any>([]);
   const [loading, setLoading] = useState(true);
+
+  const [accessToken, setAccessToken] = useLocalStorage<string | null>(
+    "at",
+    null
+  ); // accessToken
+
+  const dispatch = useDispatch();
+  const questionId = useSelector((state: RootState) => state.questionId);
 
   useEffect(() => {
     axios
-      .get("http://localhost:9999/answer")
-      .then((response) => {
-        setQuestion(response.data);
-        setLoading(false);
-        console.log(response.data);
+      .get("http://34.64.145.63:5000/api/v1/question", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
-      .catch((err) => {});
+      .then((response) => {
+        for (let i = 0; i < response.data.question.length; i++) {
+          question.push([
+            response.data.question[i]._id,
+            response.data.question[i].content,
+          ]);
+        }
+        console.log("가나다라", question);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log("error");
+      });
   }, []);
 
   const StyledArrowBack = styled(ArrowBackIosRoundedIcon)(({ theme }) => ({
@@ -36,12 +57,14 @@ const TodayAnswer = () => {
 
   const handleNextClick = () => {
     setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % question.length);
+    dispatch(setQuestionId(question[currentMessageIndex][0])); // questionId 업데이트
   };
 
   const handlePrevClick = () => {
     setCurrentMessageIndex((prevIndex) =>
       prevIndex === 0 ? question.length - 1 : prevIndex - 1
     );
+    dispatch(setQuestionId(question[currentMessageIndex][0])); // questionId 업데이트
   };
 
   if (loading) {
@@ -49,8 +72,7 @@ const TodayAnswer = () => {
   }
 
   const currentMessage =
-    question.length > 0 ? question[currentMessageIndex] : null;
-  console.log(currentMessage);
+    question.length > 0 ? question[currentMessageIndex][1] : null;
 
   return (
     <Container>
@@ -84,7 +106,7 @@ const TodayAnswer = () => {
             },
           }}
         >
-          {currentMessage?.question}
+          {currentMessage}
         </Button>
         <IconButton onClick={handleNextClick}>
           <StyledArrowForward sx={{ color: "#8d3e02" }} />

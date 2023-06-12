@@ -7,21 +7,41 @@ import ProfileImg2 from "../../asset/img/croco1.png";
 import ProfileImg3 from "../../asset/img/croco2.png";
 import ProfileImg4 from "../../asset/img/croco3.png";
 import bgImg from "../../asset/img/bgImg.png";
-import BestAnswer from "./BestAnswer";
+import rightAnimals from "../../asset/img/rightAnimals.png";
+import leftAnimals from "../../asset/img/leftAnimals.png";
+
 import HeaderBar from "../../common/HeaderBar";
+import { useLocalStorage } from "usehooks-ts";
+import jwt_decode from "jwt-decode";
+import userEvent from "@testing-library/user-event";
+import FooterImage from "./FooterImage";
 
 function Main() {
   const [count, setCount] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [selectedProfile, setSelectedProfile] = useState(MainProfileImg);
+  const [user, setUser] = useState<any | null>(null);
 
-  function add_count() {
-    if (count === 5) {
-      setCount(0);
-    } else {
-      setCount(count + 1);
-    }
-  }
+  const [accessToken, setAccessToken] = useLocalStorage<string | null>(
+    "at",
+    null
+  );
+
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        if (accessToken !== null) {
+          // console.log(accessToken);
+          console.log(jwt_decode(accessToken));
+          setUser(jwt_decode(accessToken));
+        }
+      } catch (e) {
+        console.error("Token decoding error:", e);
+      }
+    };
+    checkToken();
+  }, []);
+  console.log(user);
 
   function changeProfile2() {
     setSelectedProfile(ProfileImg2); // Set the selectedProfile to rabbit2
@@ -35,7 +55,7 @@ function Main() {
   useEffect(() => {
     // Update the container width to its full width after a delay
     const timeout = setTimeout(() => {
-      setContainerWidth(70);
+      setContainerWidth(80);
     }, 700);
 
     return () => clearTimeout(timeout);
@@ -51,14 +71,11 @@ function Main() {
         <RightProfile onClick={changeProfile3}></RightProfile>
         <TopProfile onClick={changeProfile4}></TopProfile>
 
-        <Name>아거씨</Name>
+        <Name>{user && <div>{user.nickName}</div>}</Name>
         <Level>LV14</Level>
         <Container>
           <Progress
             style={{ width: `${containerWidth}%` }} // Set the width dynamically
-            onClick={() => {
-              add_count();
-            }}
           ></Progress>
         </Container>
         <Question>오늘의 질문</Question>
@@ -67,12 +84,14 @@ function Main() {
       <Container2></Container2>
       <Container3>
         <Calendar />
-        <BestAnswerContainer>
-          <BestAnswer msg="kkkk" />
-          <BestAnswer msg="bbbb" />
-          <BestAnswer msg="ssss" />
-        </BestAnswerContainer>
+        <BestAnswerContainer></BestAnswerContainer>
       </Container3>
+      <FooterImage
+        leftSrc={leftAnimals}
+        leftAlt="왼쪽 동물들"
+        rightSrc={rightAnimals}
+        rightAlt="오른쪽 동물들"
+      />
     </>
   );
 }
@@ -82,6 +101,7 @@ export default Main;
 const Container1 = styled.div`
   width: 100%;
   height: 35rem;
+  margin-top: 150px;
 
   text-align: center;
 `;
@@ -98,6 +118,7 @@ const Profile = styled.button`
   background-repeat: no-repeat;
   background-image: url(${MainProfileImg});
   transition: transform 0.3s;
+  position: relative;
 
   &:hover {
     transform: scale(1.05);
@@ -246,8 +267,8 @@ const Container3 = styled.div`
 const BestAnswerContainer = styled.div`
   height: 30rem;
   width: 1rem;
-  display: block;
-  justify-content: right;
+  display: flex;
+  justify-content: center;
   text-align: center;
   color: #ea9f27;
   font-weight: 750;
