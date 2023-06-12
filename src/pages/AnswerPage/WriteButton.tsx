@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { useLocalStorage } from "usehooks-ts";
 
 const MAX_CONTENT_LENGTH = 200;
 
@@ -20,6 +21,15 @@ const WriteButton: React.FC = () => {
   const [isPublic, setIsPublic] = useState(false);
   const [content, setContent] = useState("");
   const questionId = useSelector((state: RootState) => state.questionId);
+
+  const [accessToken, setAccessToken] = useLocalStorage<string | null>(
+    "at",
+    null
+  );
+  const [refreshToken, setRefreshToken] = useLocalStorage<string | null>(
+    "rt",
+    null
+  );
 
   const handleOpen = () => {
     setOpen(true);
@@ -42,13 +52,24 @@ const WriteButton: React.FC = () => {
 
   const handleSave = () => {
     // 작성 완료 버튼을 눌렀을 때 실행될 로직을 여기에 작성하세요.
+    if (isPublic) {
+      var pub = 0;
+    } else {
+      var pub = 1;
+    }
     const data = {
       content: content,
-      isPublic: isPublic,
+      stateCode: pub,
     };
 
     axios
-      .post(`api/v1/question/answer/${questionId}`, data)
+      .post(
+        `https://allwrite.kro.kr/api/v1/question/answer/${questionId}`,
+        data,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` }, // 수정된 부분
+        }
+      )
       .then(() => alert("게시글 작성이 완료되었습니다."))
       .catch((e) => alert(e));
 
