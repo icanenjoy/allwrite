@@ -7,11 +7,14 @@ import ProfileImg2 from "../../asset/img/croco1.png";
 import ProfileImg3 from "../../asset/img/croco2.png";
 import ProfileImg4 from "../../asset/img/croco3.png";
 import bgImg from "../../asset/img/bgImg.png";
+import rightAnimals from "../../asset/img/rightAnimals.png";
+import leftAnimals from "../../asset/img/leftAnimals.png";
 
 import HeaderBar from "../../common/HeaderBar";
 import { useLocalStorage } from "usehooks-ts";
 import jwt_decode from "jwt-decode";
 import userEvent from "@testing-library/user-event";
+import FooterImage from "./FooterImage";
 
 function Main() {
   const [count, setCount] = useState(0);
@@ -83,6 +86,12 @@ function Main() {
         <Calendar />
         <BestAnswerContainer></BestAnswerContainer>
       </Container3>
+      <FooterImage
+        leftSrc={leftAnimals}
+        leftAlt="왼쪽 동물들"
+        rightSrc={rightAnimals}
+        rightAlt="오른쪽 동물들"
+      />
     </>
   );
 }
@@ -92,6 +101,7 @@ export default Main;
 const Container1 = styled.div`
   width: 100%;
   height: 35rem;
+  margin-top: 150px;
 
   text-align: center;
 `;
@@ -108,6 +118,7 @@ const Profile = styled.button`
   background-repeat: no-repeat;
   background-image: url(${MainProfileImg});
   transition: transform 0.3s;
+  position: relative;
 
   &:hover {
     transform: scale(1.05);
@@ -256,8 +267,8 @@ const Container3 = styled.div`
 const BestAnswerContainer = styled.div`
   height: 30rem;
   width: 1rem;
-  display: block;
-  justify-content: right;
+  display: flex;
+  justify-content: center;
   text-align: center;
   color: #ea9f27;
   font-weight: 750;
