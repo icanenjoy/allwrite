@@ -19,14 +19,14 @@ export interface Answer {
   comments: Comment[];
 }
 
-export interface CommentFormProps {
-  answer_id: string;
-}
+export interface CommentFormProps {}
 
 export interface Comment {
-  nickName: string;
-  profileImg: string;
-  content: string;
-  createdAt: string;
-  reportCount: number;
+  comment: {
+    nickName: string;
+    profileImg: string;
+    content: string;
+    createdAt: string;
+    reportCount: string;
+  };
 }
