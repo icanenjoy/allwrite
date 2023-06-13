@@ -8,6 +8,7 @@ import axios from "axios";
 import styled from "styled-components";
 import profileImg from "../../asset/img/profileImg.png";
 import Calendar from "../MainPage/Calendar";
+import jwtDecode from "jwt-decode";
 
 function MyPage() {
   const Relation = {
@@ -24,35 +25,51 @@ function MyPage() {
 
   const location = useLocation();
   const [nickName, setNickName] = useState(""); // 페이지 유저아이디
-  const [profile, setProfile] = useState(); //페이지 유저정보 가져오기
+  const [profile, setProfile] = useState<any | null>(); //페이지 유저정보 가져오기
   const [myprofile, setmyprofile] = useState(false); //본인인지 상대 페이지 인지 구분
   const [relation, setRelation] = useState<Relation>(Relation); //친구와의 관계
-
+  const [user, setUser] = useState<any | null>("");
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
     "at",
     null
   ); // accessToken
 
   useEffect(() => {
+    //주소바뀔때 아이디값 받아오기
     const searchParams = new URLSearchParams(location.search);
     const nickName = searchParams.get("nickName");
     setNickName(nickName || "");
-    console.log(nickName);
+    if (accessToken !== null) setUser(jwtDecode(accessToken));
   }, [location]);
 
   useEffect(() => {
-    if (nickName === "") getMyProfile();
-    else getFriendProfile();
+    if (nickName === user.nickName) {
+      getMyProfile();
+    } else if (user.nickName) {
+      getFriendProfile();
+    }
   }, [nickName]);
 
-  const getMyProfile = () => {
+  const getMyProfile = async () => {
     setmyprofile(true);
+    try {
+      const response = await axios.get("http://34.64.145.63:5000/api/v1/user", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      setProfile(response.data);
+      console.log(response.data);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const getFriendProfile = async () => {
     setmyprofile(false);
     try {
-      const response = await axios.post(
+      let response = await axios.post(
         "http://34.64.145.63:5000/api/v1/friend/relation",
         {
           friendNickName: nickName,
@@ -65,6 +82,18 @@ function MyPage() {
         }
       );
       setRelation(response.data);
+
+      response = await axios.get(
+        `http://34.64.145.63:5000/api/v1/user/${nickName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setProfile(response.data);
+      console.log(response.data);
     } catch (e) {
       console.log(e);
     }
@@ -155,41 +184,41 @@ function MyPage() {
     }
   };
   const ProfileButton = () => {
-    if (myprofile) {
+    if (relation.isFriend) {
       return (
-        <Button variant="contained" onClick={handleProfileChange}>
-          수정
+        <Button variant="contained" onClick={handleStopFriend}>
+          친구끊기
         </Button>
       );
     } else {
-      if (relation.isFriend) {
-        return (
-          <Button variant="contained" onClick={handleStopFriend}>
-            친구끊기
-          </Button>
-        );
+      if (relation.isReqFriend) {
+        return <Button variant="contained">친구요청중</Button>;
       } else {
-        if (relation.isReqFriend) {
-          return <Button variant="contained">친구요청중</Button>;
-        } else {
-          if (relation.isResFriend) {
-            return (
-              <>
-                <Button variant="contained" onClick={handleFriendReqOk}>
-                  친구수락
-                </Button>
-                <Button variant="contained" onClick={handleFriendReqdel}>
-                  친구거절
-                </Button>
-              </>
-            );
-          } else {
-            return (
-              <Button variant="contained" onClick={handleFriendRes}>
-                친구요청보내기
+        if (relation.isResFriend) {
+          return (
+            <>
+              <Button variant="contained" onClick={handleFriendReqOk}>
+                친구수락
               </Button>
-            );
-          }
+              <Button
+                sx={{
+                  marginLeft: 2,
+                  backgroundColor: "red",
+                  borderRadius: "2rem",
+                }}
+                variant="contained"
+                onClick={handleFriendReqdel}
+              >
+                친구거절
+              </Button>
+            </>
+          );
+        } else {
+          return (
+            <Button variant="contained" onClick={handleFriendRes}>
+              친구요청보내기
+            </Button>
+          );
         }
       }
     }
@@ -200,11 +229,13 @@ function MyPage() {
       <Container>
         <LeftContainer>
           <Profiles>
-            <ProfileButton />
-            <EditBtn>수정</EditBtn>
-            <Profile />
-            <Name>GUEST</Name>
+            {myprofile && <EditBtn onClick={handleProfileChange}>수정</EditBtn>}
+            <Profile
+            // style={{ backgroundImage: `url(${profile.profileImage})` }}
+            />
+            <Name>profile.nickName</Name>
             <Level>LV 18</Level>
+            {!myprofile && <ProfileButton />}
           </Profiles>
         </LeftContainer>
         <StyledCalendar />
@@ -259,16 +290,6 @@ const EditBtn = styled.button`
   padding: 0.5rem;
 `;
 
-const Profile = styled.div`
-  width: 10rem;
-  height: 10rem;
-  margin-left: 7.5rem;
-  margin-top: 1rem;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-image: url(${profileImg});
-`;
-
 const Name = styled.div`
   width: 10rem;
   height: 1rem;
@@ -283,4 +304,13 @@ const Level = styled.div`
   height: 1rem;
   margin-left: 7.5rem;
   margin-top: 1rem;
+`;
+
+const Profile = styled.div`
+  width: 10rem;
+  height: 10rem;
+  margin-left: 7.5rem;
+  margin-top: 1rem;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 `;

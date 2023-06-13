@@ -28,6 +28,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CheckIcon from "@mui/icons-material/Check";
 import { useLocalStorage } from "usehooks-ts";
 import queryString from "query-string";
+import jwtDecode from "jwt-decode";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -77,6 +78,7 @@ export default function HeaderBar() {
   const [friendReq, setFriendReq] = useState<Friend[]>([]);
   const [friendSearch, setFriendSearch] = useState<any>("");
   const [searchText, setSearchText] = useState("");
+  const [user, setUser] = useState<any | null>("");
 
   const navigate = useNavigate();
 
@@ -97,7 +99,46 @@ export default function HeaderBar() {
 
   useEffect(() => {
     //처음에 친구목록 불러오기 //요청도 불러오기
-  }, []);
+    const friendslistload = async () => {
+      try {
+        let response = await axios.get(
+          "http://34.64.145.63:5000/api/v1/friend/all",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setFriendList(response.data);
+
+        response = await axios.get(
+          "http://34.64.145.63:5000/api/v1/friend/request",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setFriendReq(response.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    friendslistload();
+
+    const checkToken = async () => {
+      try {
+        if (accessToken !== null) {
+          setUser(jwtDecode(accessToken));
+          console.log(jwtDecode(accessToken));
+        }
+      } catch (e) {
+        console.error("Token decoding error:", e);
+      }
+    };
+    checkToken();
+  }, [accessToken]);
 
   const handleLogout = () => {
     setAccessToken(null);
@@ -145,7 +186,12 @@ export default function HeaderBar() {
 
   const handleMyProfileGo = () => {
     //내 프로필로 이동
-    navigate("/mypage");
+
+    const queryStringParams = queryString.stringify({
+      nickName: user.nickName,
+    });
+    navigate(`/mypage?${queryStringParams}`);
+    handleFriendClose();
   };
 
   const handleHomeGo = () => {
@@ -225,7 +271,6 @@ export default function HeaderBar() {
     const queryStringParams = queryString.stringify({
       nickName: nickName,
     });
-    navigate(`/main`);
     navigate(`/mypage?${queryStringParams}`);
     handleFriendClose();
   };
