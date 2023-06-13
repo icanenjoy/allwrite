@@ -13,32 +13,26 @@ import {
 } from "@mui/material";
 import { Report } from "@mui/icons-material";
 import { Comment } from "./PostCardProps";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
-const CommentForm: React.FC<CommentFormProps> = ({ answer_id }) => {
+const CommentForm = () => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
+  const answerId = useSelector((state: RootState) => state.answerId);
 
   useEffect(() => {
     axios
       .get<Comment[]>(
-        `http://34.64.145.63:5000/api/v1/answer/${answer_id}/comments`
+        `http://34.64.145.63:5000/api/v1/answer/${answerId}/comments`
       )
       .then((response) => setComments(response.data))
       .catch((error) => console.log(error));
-  }, [answer_id]);
+  }, [answerId]);
 
   const handleSubmit = () => {
     // 실제로 서버에 댓글을 등록하는 로직을 구현해야 합니다.
     // 여기서는 단순히 새 댓글을 comments 상태에 추가하는 예시입니다.
-    const newCommentObj: Comment = {
-      nickName: "카리나",
-      profileImg:
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fencrypted-tbn0.gstatic.com%2Flicensed-image%3Fq%3Dtbn%3AANd9GcTTZLOxH1_o-Ci3z-onw0oMeUwjmlaL1-nlW9rRHlwSh10wOKYRuEwbGErOQh6o48exnXqYVnmEVKalj8k&psig=AOvVaw155_x7P1-aMTEAFeKhvQGG&ust=1686372633893000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCNDw-d-xtf8CFQAAAAAdAAAAABAE",
-      content: newComment,
-      createdAt: new Date().toISOString(),
-      reportCount: 0,
-    };
-
     setComments((prevComments) => [...prevComments, newCommentObj]);
     setNewComment("");
   };

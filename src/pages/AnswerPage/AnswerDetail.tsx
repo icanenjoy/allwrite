@@ -43,8 +43,8 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
           <Typography variant="h6" align="center">
             {content}
           </Typography>
-          <HeartButton answer_id={answer_id} />
-          <CommentForm answer_id={answer_id}></CommentForm>
+          <HeartButton />
+          <CommentForm></CommentForm>
         </DialogContent>
       </Paper>
     </Dialog>
