@@ -58,7 +58,7 @@ function Main() {
 
   useEffect(() => {
     axios
-      .get("http://34.64.145.63:5000/api/v1/user", {
+      .get("https://allwrite.kro.kr/api/v1/user", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

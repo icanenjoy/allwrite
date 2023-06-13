@@ -25,11 +25,11 @@ const HeartButton: React.FC = () => {
     try {
       if (clicked) {
         await axios.post(
-          `http://34.64.145.63:5000/api/v1/answer/like/${answerId}`
+          `https://allwrite.kro.kr/api/v1/answer/like/${answerId}`
         );
       } else {
         await axios.delete(
-          `http://34.64.145.63:5000/api/v1/answer/like/${answerId}`
+          `https://allwrite.kro.kr/api/v1/answer/like/${answerId}`
         );
       }
     } catch (error) {

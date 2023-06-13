@@ -109,7 +109,7 @@ export default function HeaderBar() {
     const friendslistload = async () => {
       try {
         let response = await axios.get(
-          "http://34.64.145.63:5000/api/v1/friend/all",
+          "https://allwrite.kro.kr/api/v1/friend/all",
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -119,7 +119,7 @@ export default function HeaderBar() {
         setFriendList(response.data);
 
         response = await axios.get(
-          "http://34.64.145.63:5000/api/v1/friend/request",
+          "https://allwrite.kro.kr/api/v1/friend/request",
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -167,7 +167,7 @@ export default function HeaderBar() {
     //친구요청 수락
     try {
       const response = await axios.post(
-        "http://34.64.145.63:5000/api/v1/friend/response",
+        "https://allwrite.kro.kr/api/v1/friend/response",
         {
           friendNickName: nickname,
         },
@@ -187,7 +187,7 @@ export default function HeaderBar() {
     //친구요청 거절
     try {
       const response = await axios.delete(
-        "http://34.64.145.63:5000/api/v1/friend/reject",
+        "https://allwrite.kro.kr/api/v1/friend/reject",
         {
           data: {
             friendNickName: nickname,
@@ -207,7 +207,7 @@ export default function HeaderBar() {
     if (e.key === "Enter") {
       try {
         const response = await axios.get(
-          "http://34.64.145.63:5000/api/v1/user/" + searchText,
+          "https://allwrite.kro.kr/api/v1/user/" + searchText,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
