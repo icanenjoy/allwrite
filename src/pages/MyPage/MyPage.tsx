@@ -8,6 +8,7 @@ import axios from "axios";
 import styled from "styled-components";
 import profileImg from "../../asset/img/profileImg.png";
 import Calendar from "../MainPage/Calendar";
+import jwtDecode from "jwt-decode";
 
 function MyPage() {
   const Relation = {
@@ -23,37 +24,63 @@ function MyPage() {
   }
 
   const location = useLocation();
+  const [containerWidth, setContainerWidth] = useState(0);
   const [nickName, setNickName] = useState(""); // 페이지 유저아이디
-  const [profile, setProfile] = useState(); //페이지 유저정보 가져오기
+  const [profile, setProfile] = useState<any | null>(); //페이지 유저정보 가져오기
   const [myprofile, setmyprofile] = useState(false); //본인인지 상대 페이지 인지 구분
   const [relation, setRelation] = useState<Relation>(Relation); //친구와의 관계
-
+  const [user, setUser] = useState<any | null>("");
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
     "at",
     null
   ); // accessToken
 
   useEffect(() => {
+    //주소바뀔때 아이디값 받아오기
     const searchParams = new URLSearchParams(location.search);
     const nickName = searchParams.get("nickName");
     setNickName(nickName || "");
-    console.log(nickName);
+    if (accessToken !== null) setUser(jwtDecode(accessToken));
   }, [location]);
 
   useEffect(() => {
-    if (nickName === "") getMyProfile();
-    else getFriendProfile();
-  }, [nickName]);
+    if (nickName === user.nickName) {
+      getMyProfile();
+    } else if (nickName) {
+      getFriendProfile();
+    }
+  }, [user]);
 
-  const getMyProfile = () => {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      {
+        profile && setContainerWidth(parseInt(profile.currentExp));
+      }
+    }, 700);
+    return () => clearTimeout(timeout);
+  }, [profile]);
+
+  const getMyProfile = async () => {
     setmyprofile(true);
+    try {
+      const response = await axios.get("http://34.64.145.63:5000/api/v1/user", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      setProfile(response.data);
+      console.log(response.data);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const getFriendProfile = async () => {
     setmyprofile(false);
     try {
-      const response = await axios.post(
-        "https://allwrite.kro.kr/api/v1/friend/relation",
+      let response = await axios.post(
+        "http://34.64.145.63:5000/api/v1/friend/relation",
         {
           friendNickName: nickName,
         },
@@ -65,6 +92,18 @@ function MyPage() {
         }
       );
       setRelation(response.data);
+
+      response = await axios.get(
+        `http://34.64.145.63:5000/api/v1/user/${nickName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setProfile(response.data);
+      console.log(response.data);
     } catch (e) {
       console.log(e);
     }
@@ -86,7 +125,7 @@ function MyPage() {
         }
       );
       console.log(response);
-      alert("친구끊기");
+      window.location.reload();
     } catch (e) {
       console.error(e);
     }
@@ -107,7 +146,7 @@ function MyPage() {
         }
       );
       console.log(response);
-      alert("친구수락");
+      window.location.reload();
     } catch (e) {
       console.error(e);
     }
@@ -128,7 +167,7 @@ function MyPage() {
         }
       );
       console.log(response);
-      alert("친구거절");
+      window.location.reload();
     } catch (e) {
       console.error(e);
     }
@@ -149,47 +188,59 @@ function MyPage() {
         }
       );
       console.log(response);
-      alert("친구요청보냄");
+      window.location.reload();
     } catch (e) {
       console.error(e);
     }
   };
   const ProfileButton = () => {
-    if (myprofile) {
+    if (relation.isFriend) {
       return (
-        <Button variant="contained" onClick={handleProfileChange}>
-          수정
+        <Button
+          sx={ProfileFriendButton}
+          variant="contained"
+          onClick={handleStopFriend}
+        >
+          친구끊기
         </Button>
       );
     } else {
-      if (relation.isFriend) {
+      if (relation.isReqFriend) {
         return (
-          <Button variant="contained" onClick={handleStopFriend}>
-            친구끊기
+          <Button sx={ProfileFriendButton} variant="contained">
+            친구요청중
           </Button>
         );
       } else {
-        if (relation.isReqFriend) {
-          return <Button variant="contained">친구요청중</Button>;
-        } else {
-          if (relation.isResFriend) {
-            return (
-              <>
-                <Button variant="contained" onClick={handleFriendReqOk}>
-                  친구수락
-                </Button>
-                <Button variant="contained" onClick={handleFriendReqdel}>
-                  친구거절
-                </Button>
-              </>
-            );
-          } else {
-            return (
-              <Button variant="contained" onClick={handleFriendRes}>
-                친구요청보내기
+        if (relation.isResFriend) {
+          return (
+            <>
+              <Button
+                sx={ProfileFriendButton}
+                variant="contained"
+                onClick={handleFriendReqOk}
+              >
+                친구수락
               </Button>
-            );
-          }
+              <Button
+                sx={ProfileFriendButton2}
+                variant="contained"
+                onClick={handleFriendReqdel}
+              >
+                친구거절
+              </Button>
+            </>
+          );
+        } else {
+          return (
+            <Button
+              sx={ProfileFriendButton}
+              variant="contained"
+              onClick={handleFriendRes}
+            >
+              친구요청보내기
+            </Button>
+          );
         }
       }
     }
@@ -200,11 +251,19 @@ function MyPage() {
       <Container>
         <LeftContainer>
           <Profiles>
-            <ProfileButton />
-            <EditBtn>수정</EditBtn>
-            <Profile />
-            <Name>GUEST</Name>
-            <Level>LV 18</Level>
+            {myprofile && <EditBtn onClick={handleProfileChange}>수정</EditBtn>}
+            {!myprofile && <ProfileBox />}
+            <Profile
+              style={{
+                backgroundImage: `url(${profile && profile.profileImage})`,
+              }}
+            />
+            <Name>{profile && profile.nickName}</Name>
+            <Level>{profile && profile.level}LV</Level>
+            <Container2>
+              <Progress style={{ width: `${containerWidth}%` }}></Progress>
+            </Container2>
+            {!myprofile && <ProfileButton />}
           </Profiles>
         </LeftContainer>
         <StyledCalendar />
@@ -224,11 +283,11 @@ const Container = styled.div`
   height: 40rem;
   text-align: center;
   display: flex;
-  margin-top: 10rem;
+  margin-top: 6rem;
 `;
 
 const LeftContainer = styled.div`
-  width: 48rem;
+  width: 35rem;
   height: 50rem;
   display: flex;
   justify-content: center;
@@ -238,10 +297,15 @@ const Profiles = styled.div`
   width: 25rem;
   height: 45rem;
   display: block;
-  margin-left: 5rem;
+
   border-radius: 4rem;
   justify-content: center;
   background-color: #faaf2e;
+`;
+
+const ProfileBox = styled.div`
+  margin-top: 5rem;
+  background-color: #000;
 `;
 
 const EditBtn = styled.button`
@@ -259,16 +323,6 @@ const EditBtn = styled.button`
   padding: 0.5rem;
 `;
 
-const Profile = styled.div`
-  width: 10rem;
-  height: 10rem;
-  margin-left: 7.5rem;
-  margin-top: 1rem;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-image: url(${profileImg});
-`;
-
 const Name = styled.div`
   width: 10rem;
   height: 1rem;
@@ -282,5 +336,57 @@ const Level = styled.div`
   width: 10rem;
   height: 1rem;
   margin-left: 7.5rem;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 `;
+const Container2 = styled.div`
+  margin: 10px auto;
+  background-color: #e8e3e3;
+  width: 20rem;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  transition: width 1s; // Add transition for width changes
+`;
+
+const Progress = styled.div`
+  background-color: #2c9960;
+  width: ${(props) => props.style?.width || 0}%;
+  height: 100%;
+  transition: width 1s;
+  border-radius: 20px;
+`;
+
+const Profile = styled.div`
+  width: 10rem;
+  height: 10rem;
+  margin-left: 7.5rem;
+  margin-top: 1rem;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  background-size: 100% 100%;
+`;
+
+const ProfileFriendButton = {
+  marginTop: 2,
+  marginLeft: 0.5,
+  backgroundColor: "#2c9960",
+  borderRadius: "2rem",
+  color: "#e8e3e3",
+  "&:hover": {
+    backgroundColor: "#1f7047",
+    color: "white",
+  },
+};
+
+const ProfileFriendButton2 = {
+  marginTop: 2,
+  marginLeft: 2,
+  backgroundColor: "#2c9960",
+  borderRadius: "2rem",
+  color: "#e8e3e3",
+  "&:hover": {
+    backgroundColor: "#1f7047",
+    color: "white",
+  },
+};
