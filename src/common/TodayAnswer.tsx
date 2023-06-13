@@ -30,13 +30,14 @@ const TodayAnswer = () => {
         },
       })
       .then((response) => {
+        console.log("하영", response.data);
         for (let i = 0; i < response.data.question.length; i++) {
           question.push([
             response.data.question[i]._id,
             response.data.question[i].content,
           ]);
         }
-        console.log("가나다라", question);
+        console.log("Response Question", question);
         setLoading(false);
       })
       .catch((err) => {
@@ -60,6 +61,7 @@ const TodayAnswer = () => {
   const handleNextClick = () => {
     setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % question.length);
     dispatch(setQuestionId(question[currentMessageIndex][0])); // questionId 업데이트
+    console.log(currentMessageIndex);
   };
 
   const handlePrevClick = () => {

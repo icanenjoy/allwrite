@@ -32,6 +32,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
   );
 
   useEffect(() => {
+    console.log("과연", questionId, answerId);
     axios
       .get<{ comments: { comment: Comment[] }[] }>(
         `https://allwrite.kro.kr/api/v1/question/answer/detail/${questionId}/${answerId}`,
@@ -47,8 +48,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
           (comment: Comment) => {
             return {
               nickName: comment.nickName,
-              profileImg:
-                "https://i.namu.wiki/i/Pmt-X4ekyEZoJL003elEka-ePn1YUsaHlJps0EXgy92xgYISoP6lZptPuC1xcnvUkB09IFqNttUpyKSRjNVNUA.webp",
+              profileImage: comment.profileImage,
               content: comment.content,
               createdAt: comment.createdAt,
               reportCount: comment.reportCount,
@@ -92,11 +92,11 @@ const CommentForm: React.FC<CommentFormProps> = () => {
 
   return (
     <Paper elevation={2} sx={{ p: 2, backgroundColor: "orange" }}>
-      <Stack spacing={2}>
+      <Stack spacing={2} sx={{ marginBottom: 5 }}>
         {comments &&
           comments.map((comment, index) => (
             <Box key={index} display="flex" alignItems="center">
-              <Avatar src={comment.profileImg} alt={comment.nickName} />
+              <Avatar src={comment.profileImage} alt={comment.nickName} />
               <Box>
                 <Typography
                   sx={{ ml: 2, wordWrap: "break-word", whiteSpace: "pre-wrap" }}

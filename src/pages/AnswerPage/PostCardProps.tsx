@@ -31,8 +31,8 @@ export interface CommentFormProps {}
 
 export type Comment = {
   nickName: string;
-  profileImg: string;
+  profileImage: string;
   content: string;
   createdAt: string;
-  reportCount: string;
+  reportCount: number;
 };

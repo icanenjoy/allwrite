@@ -70,7 +70,10 @@ const WriteButton: React.FC = () => {
           headers: { Authorization: `Bearer ${accessToken}` }, // 수정된 부분
         }
       )
-      .then(() => alert("게시글 작성이 완료되었습니다."))
+      .then(() => {
+        console.log("작성", questionId);
+        alert("게시글 작성이 완료되었습니다.");
+      })
       .catch((e) => alert(e));
 
     // 작성 완료 후 모달을 닫으려면 handleClose() 함수를 호출하세요.
