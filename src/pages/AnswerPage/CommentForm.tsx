@@ -33,7 +33,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
 
   useEffect(() => {
     axios
-      .get<{ comments: Comment[] }>(
+      .get<{ comments: { comment: Comment[] }[] }>(
         `https://allwrite.kro.kr/api/v1/question/answer/detail/${questionId}/${answerId}`,
         {
           headers: {
@@ -43,27 +43,27 @@ const CommentForm: React.FC<CommentFormProps> = () => {
       )
       .then((response) => {
         console.log("useEffect", response.data);
-        // const extractedComments = response.data.comments[0].comment.map(
-        //   (comment: Comment) => {
-        //     return {
-        //       nickName: comment.nickName,
-        //       profileImg:
-        //         "https://i.namu.wiki/i/Pmt-X4ekyEZoJL003elEka-ePn1YUsaHlJps0EXgy92xgYISoP6lZptPuC1xcnvUkB09IFqNttUpyKSRjNVNUA.webp",
-        //       content: comment.content,
-        //       createdAt: comment.createdAt,
-        //       reportCount: comment.reportCount,
-        //     };
-        //   }
-        // );
-        // setComments(extractedComments);
+        const extractedComments = response.data.comments[0].comment.map(
+          (comment: Comment) => {
+            return {
+              nickName: comment.nickName,
+              profileImg:
+                "https://i.namu.wiki/i/Pmt-X4ekyEZoJL003elEka-ePn1YUsaHlJps0EXgy92xgYISoP6lZptPuC1xcnvUkB09IFqNttUpyKSRjNVNUA.webp",
+              content: comment.content,
+              createdAt: comment.createdAt,
+              reportCount: comment.reportCount,
+            };
+          }
+        );
+        setComments(extractedComments);
       })
       .catch((error) => console.log(error));
-  }, [answerId, questionId]);
+  }, [answerId, questionId, accessToken]);
 
   const handleSubmit = () => {
     const newCommentObj = {
       content: newComment,
-      reportCount: "0",
+      reportCount: 0,
     };
     axios
       .post(
@@ -84,7 +84,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
       const updatedComments = [...prevComments];
       updatedComments[index] = {
         ...updatedComments[index],
-        // reportCount: updatedComments[index].reportCount + 1,
+        reportCount: updatedComments[index].reportCount + 1,
       };
       return updatedComments;
     });
