@@ -22,7 +22,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import logo from "../asset/img/logo.png";
+import logo from "./logo.png";
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckIcon from "@mui/icons-material/Check";
@@ -179,9 +179,8 @@ export default function HeaderBar() {
   };
 
   const handleFriendClose = () => {
-    //^^미완성  //친구목록 닫기
     setOpen(false);
-    //navigate('/friend'); 친구꺼 누르면 친구프로필로 이동해야함
+    setSearchText("");
   };
 
   const handleMyProfileGo = () => {
@@ -196,7 +195,7 @@ export default function HeaderBar() {
 
   const handleHomeGo = () => {
     //홈페이지로 이동
-    navigate("/main");
+    if (accessToken) navigate("/main");
   };
 
   const handleMobileMenuClose = () => {
@@ -341,7 +340,11 @@ export default function HeaderBar() {
               }}
             >
               <ListItemIcon sx={{ width: 20, height: 30 }}>
-                <img src={friend.profileImage} alt={friend.nickName} />
+                <img
+                  src={friend.profileImage}
+                  alt={friend.nickName}
+                  style={{ borderRadius: "50%" }}
+                />
               </ListItemIcon>
               <ListItemText primary={friend.nickName} />
 
@@ -374,7 +377,11 @@ export default function HeaderBar() {
               key={index}
             >
               <ListItemIcon sx={{ width: 20, height: 30 }}>
-                <img src={friend.profileImage} alt={friend.nickName} />
+                <img
+                  src={friend.profileImage}
+                  alt={friend.nickName}
+                  style={{ borderRadius: "50%" }}
+                />
               </ListItemIcon>
               <ListItemText primary={friend.nickName} />
             </ListItem>
@@ -391,6 +398,7 @@ export default function HeaderBar() {
               <img
                 src={friendSearch.profileImage}
                 alt={friendSearch.nickName}
+                style={{ borderRadius: "50%" }}
               />
             </ListItemIcon>
             <ListItemText primary={friendSearch.nickName} />
@@ -420,72 +428,77 @@ export default function HeaderBar() {
         position="static"
         sx={{
           backgroundColor: "transparent",
-          color: "primary.main",
+          color: "#2c9960",
           boxShadow: "none",
         }}
       >
         <Toolbar>
           <IconButton
-            size="small"
+            size="large"
             edge="start"
             color="inherit"
-            aria-label="open drawer"
-            sx={{
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
             onClick={handleHomeGo}
+            sx={{
+              ml: "45%",
+            }}
           >
             <img
               src={logo}
               alt="로고"
-              style={{ width: "70px", height: "70px" }}
+              style={{ width: "117px", height: "81px" }}
             />
           </IconButton>
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton
-              onClick={handleMyProfileGo}
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <AccountCircleIcon />
-            </IconButton>
-
-            <IconButton
-              onClick={handleFriendOpen}
-              size="large"
-              aria-label="show 1 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={friendReq.length} color="error">
-                <PeopleOutlineIcon />
-              </Badge>
-            </IconButton>
-
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              //   aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleLogout}
-              color="inherit"
-            >
-              <LogoutIcon />
-            </IconButton>
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: { xs: "none", md: "flex" }, marginBottom: 2 }}>
+            {accessToken && (
+              <IconButton
+                onClick={handleMyProfileGo}
+                size="medium"
+                aria-label="show 4 new mails"
+                color="inherit"
+              >
+                <AccountCircleIcon sx={iconsize} />
+              </IconButton>
+            )}
+            {accessToken && (
+              <IconButton
+                onClick={handleFriendOpen}
+                size="medium"
+                aria-label="show 1 new notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={friendReq.length} color="error">
+                  <PeopleOutlineIcon sx={iconsize} />
+                </Badge>
+              </IconButton>
+            )}
+            {accessToken && (
+              <IconButton
+                size="medium"
+                edge="end"
+                aria-label="account of current user"
+                //   aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleLogout}
+                color="inherit"
+              >
+                <LogoutIcon sx={iconsize} />
+              </IconButton>
+            )}
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
+            {accessToken && (
+              <IconButton
+                size="medium"
+                aria-label="show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
@@ -493,3 +506,8 @@ export default function HeaderBar() {
     </Box>
   );
 }
+
+const iconsize = {
+  width: 35,
+  height: 35,
+};
