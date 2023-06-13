@@ -45,10 +45,10 @@ function MyPage() {
   useEffect(() => {
     if (nickName === user.nickName) {
       getMyProfile();
-    } else if (user.nickName) {
+    } else if (nickName) {
       getFriendProfile();
     }
-  }, [nickName]);
+  }, [user]);
 
   const getMyProfile = async () => {
     setmyprofile(true);
@@ -233,7 +233,7 @@ function MyPage() {
             <Profile
             // style={{ backgroundImage: `url(${profile.profileImage})` }}
             />
-            <Name>profile.nickName</Name>
+            <Name>{profile.nickName}</Name>
             <Level>LV 18</Level>
             {!myprofile && <ProfileButton />}
           </Profiles>
