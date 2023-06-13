@@ -33,8 +33,8 @@ const CommentForm = () => {
   const handleSubmit = () => {
     // 실제로 서버에 댓글을 등록하는 로직을 구현해야 합니다.
     // 여기서는 단순히 새 댓글을 comments 상태에 추가하는 예시입니다.
-    setComments((prevComments) => [...prevComments, newCommentObj]);
-    setNewComment("");
+    // setComments((prevComments) => [...prevComments, newCommentObj]);
+    // setNewComment("");
   };
 
   const handleReport = (index: number) => {

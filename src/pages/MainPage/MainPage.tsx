@@ -22,7 +22,6 @@ function Main() {
   const [user, setUser] = useState<any | null>(null);
   const [level, setLevel] = useState<any | null>(null);
   const [exp, setExp] = useState<number | null>(null);
-
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
     "at",
     null
