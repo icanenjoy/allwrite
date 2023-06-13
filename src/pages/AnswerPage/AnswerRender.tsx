@@ -28,10 +28,13 @@ const AnswerRender = () => {
       try {
         // const response = await axios.get("http://localhost:9999/answer");
         // setData(response.data);
+        console.log(
+          `https://34.64.145.63/api/v1/question/answer/${questionId}`
+        );
 
         const response = await axios
           // .get(`http://34.64.145.63:5000/api/v1/question/${questionId)/answer`)
-          .get(`http://34.64.145.63:5000/api/v1/answer/${questionId}`, {
+          .get(`https://34.64.145.63/api/v1/question/answer/${questionId}`, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
