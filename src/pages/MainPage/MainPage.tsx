@@ -15,6 +15,7 @@ import { useLocalStorage } from "usehooks-ts";
 import jwt_decode from "jwt-decode";
 import userEvent from "@testing-library/user-event";
 import FooterImage from "./FooterImage";
+import DoneIcon from "@mui/icons-material/Done";
 
 function Main() {
   const [containerWidth, setContainerWidth] = useState(0);
@@ -43,7 +44,7 @@ function Main() {
   }, []);
 
   function changeProfile2() {
-    setSelectedProfile(ProfileImg2); // Set the selectedProfile to rabbit2
+    setSelectedProfile(ProfileImg2);
     alert("2번 선택");
   }
   function changeProfile3() {
@@ -88,8 +89,10 @@ function Main() {
         <LeftProfile onClick={changeProfile2}></LeftProfile>
         <RightProfile onClick={changeProfile3}></RightProfile>
         <TopProfile onClick={changeProfile4}></TopProfile>
-
         <Name>{user && <div>{user.nickName}</div>}</Name>
+        <Save>
+          <DoneIcon />
+        </Save>
         <Level>LV {level}</Level>
         <Container>
           <Progress
@@ -205,6 +208,22 @@ const LeftProfile = styled.button`
   &:hover {
     transform: scale(1.05);
     overflow: hidden;
+    cursor: pointer;
+  }
+`;
+const Save = styled.button`
+  height: 2rem;
+  width: 2.4rem;
+  overflow: visible;
+  color: #c55c0c;
+  background-color: #f09936;
+  font-weight: 550;
+  border: none;
+  border-radius: 10rem;
+  &:hover {
+    transform: scale(1.05);
+    overflow: hidden;
+    background-color: #f3ad5e;
     cursor: pointer;
   }
 `;
