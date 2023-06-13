@@ -42,20 +42,20 @@ const CommentForm: React.FC<CommentFormProps> = () => {
         }
       )
       .then((response) => {
-        console.log(response.data);
-        const extractedComments = response.data.comments[0].map(
-          (comment: Comment) => {
-            return {
-              nickName: comment.comment.nickName,
-              profileImg:
-                "https://i.namu.wiki/i/Pmt-X4ekyEZoJL003elEka-ePn1YUsaHlJps0EXgy92xgYISoP6lZptPuC1xcnvUkB09IFqNttUpyKSRjNVNUA.webp",
-              content: comment.comment.content,
-              createdAt: comment.comment.createdAt,
-              reportCount: comment.comment.reportCount,
-            };
-          }
-        );
-        setComments(extractedComments);
+        console.log("useEffect", response.data);
+        // const extractedComments = response.data.comments[0].comment.map(
+        //   (comment: Comment) => {
+        //     return {
+        //       nickName: comment.nickName,
+        //       profileImg:
+        //         "https://i.namu.wiki/i/Pmt-X4ekyEZoJL003elEka-ePn1YUsaHlJps0EXgy92xgYISoP6lZptPuC1xcnvUkB09IFqNttUpyKSRjNVNUA.webp",
+        //       content: comment.content,
+        //       createdAt: comment.createdAt,
+        //       reportCount: comment.reportCount,
+        //     };
+        //   }
+        // );
+        // setComments(extractedComments);
       })
       .catch((error) => console.log(error));
   }, [answerId, questionId]);
@@ -84,7 +84,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
       const updatedComments = [...prevComments];
       updatedComments[index] = {
         ...updatedComments[index],
-        reportCount: updatedComments[index].reportCount + 1,
+        // reportCount: updatedComments[index].reportCount + 1,
       };
       return updatedComments;
     });
@@ -96,19 +96,16 @@ const CommentForm: React.FC<CommentFormProps> = () => {
         {comments &&
           comments.map((comment, index) => (
             <Box key={index} display="flex" alignItems="center">
-              <Avatar
-                src={comment.comment.profileImg}
-                alt={comment.comment.nickName}
-              />
+              <Avatar src={comment.profileImg} alt={comment.nickName} />
               <Box>
                 <Typography
                   sx={{ ml: 2, wordWrap: "break-word", whiteSpace: "pre-wrap" }}
                 >
-                  {comment.comment.content}
+                  {comment.content}
                 </Typography>
                 <Typography variant="caption" sx={{ ml: 2 }}>
-                  {comment.comment.nickName} | {comment.comment.createdAt} |
-                  신고수: {comment.comment.reportCount}
+                  {comment.nickName} | {comment.createdAt} | 신고수:{" "}
+                  {comment.reportCount}
                 </Typography>
               </Box>
               <IconButton size="small" onClick={() => handleReport(index)}>

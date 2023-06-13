@@ -21,12 +21,18 @@ export interface Answer {
 
 export interface CommentFormProps {}
 
-export interface Comment {
-  comment: {
-    nickName: string;
-    profileImg: string;
-    content: string;
-    createdAt: string;
-    reportCount: string;
-  };
-}
+// export interface Comment {
+//   nickName: string;
+//   profileImg: string;
+//   content: string;
+//   createdAt: string;
+//   reportCount: string;
+// }
+
+export type Comment = {
+  nickName: string;
+  profileImg: string;
+  content: string;
+  createdAt: string;
+  reportCount: string;
+};
