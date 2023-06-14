@@ -149,9 +149,10 @@ const LoginForm: React.FC = () => {
 
   const Profile = React.memo(styled.div`
     position: relative;
-    height: 17rem;
-    width: 100%;
-    margin-bottom: 3rem;
+    height: 19rem;
+    width: 372px;
+    margin-bottom: 9rem;
+    margin-right: 5rem;
     background-image: url(${isPasswordEmpty ? crocoBack : closedCroco});
     background-size: cover;
 
@@ -163,86 +164,120 @@ const LoginForm: React.FC = () => {
       top: ${crocoTop};
       left:  ${crocoLeft};
       transform: translate(-50%, -50%);
-      height: 17rem;
-      width: 100%;
+      height: 19rem;
+      width: 372px;
       background-image: url(${crocoFront});
       background-size: cover;
     }
-  `
+    `
       : ""}
+
+    @media (max-width: 1100px) {
+      height: 17rem;
+      width: 100%;
+      ${isPasswordEmpty
+        ? `
+      &::after {
+        content: "";
+        position: absolute;
+        top: ${crocoTop};
+        left:  ${crocoLeft};
+        transform: translate(-50%, -50%);
+        height: 17rem;
+        width: 100%;
+        background-image: url(${crocoFront});
+        background-size: cover;
+      }
+      `
+        : ""}
+    }
   `);
 
   return (
     <Container component="main" maxWidth="xs">
-      <Paper
-        elevation={3}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          textAlign: "center",
-          marginTop: 8,
-          padding: 3,
-          borderRadius: 5,
-        }}
-      >
-        <div style={{ fontSize: "3rem", fontWeight: 750 }}>Login</div>
-        <Profile />
-        <form onSubmit={HandleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                type="email"
-                label="Email Address"
-                fullWidth
-                value={email}
-                onChange={handleEmailChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                type="password"
-                label="Password"
-                fullWidth
-                value={password}
-                onChange={handlePasswordChange}
-                required
-              />
-            </Grid>
-          </Grid>
-          {loginStatus === "failure" && (
-            <div style={{ fontSize: "0.8rem", fontWeight: 350, color: "red" }}>
-              <br />
-              아이디 또는 비밀번호를 잘못 입력했습니다.
-            </div>
-          )}
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ marginTop: 3, marginBottom: 2 , backgroundColor: "#2c9960",
-            "&:hover": {
-              backgroundColor: "#24794d"// hover 시 변경할 배경색
-            }}}
-          >
-            로그인
-          </Button>
-        </form>
-        <Button
-          onClick={handleSignUp}
-          variant="contained"
-          fullWidth
-          sx={{ marginBottom: 2, backgroundColor: "#2c9960",
-          "&:hover": {
-            backgroundColor: "#24794d"// hover 시 변경할 배경색
-          }}}
+      <Grid container justifyContent="center">
+        <Paper
+          elevation={3}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            marginTop: 12,
+            padding: 3,
+            borderRadius: 5,
+            position: "absolute",
+            minWidth: "372px",
+            width: "880px",
+            zIndex: 2,
+            "@media (max-width: 1100px)": {
+              marginTop: 8,
+              flexDirection: "column",
+              width: "372px"
+            }
+          }}
         >
-          회원가입
-        </Button>
-      </Paper>
+          <Profile>
+            <div style={{ fontSize: "3rem", fontWeight: 750, position: "relative", top: "18rem", left: "7rem" }}>Login</div>
+          </Profile>
+          <Grid>
+            <form onSubmit={HandleSubmit}>
+              <Grid container spacing={2} style={{ width: "320px" }}>
+                <Grid item xs={12}>
+                  <TextField
+                    type="email"
+                    label="Email Address"
+                    fullWidth
+                    value={email}
+                    onChange={handleEmailChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    type="password"
+                    label="Password"
+                    fullWidth
+                    value={password}
+                    onChange={handlePasswordChange}
+                    required
+                  />
+                </Grid>
+              </Grid>
+              {loginStatus === "failure" && (
+                <div style={{ fontSize: "0.8rem", fontWeight: 350, color: "red" }}>
+                  <br />
+                  아이디 또는 비밀번호를 잘못 입력했습니다.
+                </div>
+              )}
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{ marginTop: 3, marginBottom: 2 , backgroundColor: "#2c9960",
+                "&:hover": {
+                  backgroundColor: "#24794d"// hover 시 변경할 배경색
+                }}}
+              >
+                로그인
+              </Button>
+            </form>
+            <Button
+              onClick={handleSignUp}
+              variant="contained"
+              fullWidth
+              sx={{ marginBottom: 2, backgroundColor: "#2c9960",
+              "&:hover": {
+                backgroundColor: "#24794d"// hover 시 변경할 배경색
+              }}}
+            >
+              회원가입
+            </Button>
+          </Grid>
+        </Paper>
+      </Grid>
     </Container>
   );
 };
