@@ -93,21 +93,6 @@ const LoginForm: React.FC = () => {
   const crocoTop = crocoPosition.top;
   const crocoLeft = crocoPosition.left;
 
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // 컴포넌트가 unmount될 때 이벤트 리스너 제거
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
     setIsPasswordEmpty(e.target.value === "");
@@ -164,10 +149,8 @@ const LoginForm: React.FC = () => {
 
   const Profile = React.memo(styled.div`
     position: relative;
-    height: 19rem;
-    width: 372px;
-    margin-bottom: 9rem;
-    margin-right: 5rem;
+    height: 17rem;
+    width: 18rem;
     background-image: url(${isPasswordEmpty ? crocoBack : closedCroco});
     background-size: cover;
 
@@ -179,70 +162,38 @@ const LoginForm: React.FC = () => {
       top: ${crocoTop};
       left:  ${crocoLeft};
       transform: translate(-50%, -50%);
-      height: 19rem;
-      width: 372px;
+      height: 17rem;
+      width: 18rem;
       background-image: url(${crocoFront});
       background-size: cover;
     }
     `
       : ""}
-
-    @media (max-width: 1100px) {
-      height: 17rem;
-      width: 304px;
-      margin: 0 auto;
-      ${isPasswordEmpty
-        ? `
-      &::after {
-        height: 17rem;
-        width: 304px;
-        margin: 0 auto;
-      }
-      `
-        : ""}
-    }
   `);
 
   return (
     <Container component="main" maxWidth="xs">
-      <Grid container justifyContent="center">
         <Paper
           elevation={3}
           sx={{
             display: "flex",
-            flexDirection: "row",
+            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
             textAlign: "center",
-            marginTop: 12,
+            marginTop: 8,
             padding: 3,
             borderRadius: 5,
             position: "absolute",
-            minWidth: "372px",
-            width: "880px",
+            width: "20rem",
             zIndex: 10,
-            "@media (max-width: 1100px)": {
-              marginTop: 8,
-              flexDirection: "column",
-              width: "380px",
-            }
           }}
         >
-          <Grid>
-            {windowWidth  <= 1100 ? (
-              <>
-                <div style={{ fontSize: "3rem", fontWeight: 750 }}>Login</div>
-                <Profile />
-              </>
-            ) : (
-              <Profile>
-                <div style={{ fontSize: "3rem", fontWeight: 750, position: "relative", top: "18rem", left: "7rem" }}>Login</div>
-              </Profile>
-            )}
-          </Grid>
+          <div style={{ fontSize: "3rem", fontWeight: 750 }}>Login</div>
+          <Profile />
           <Grid>
             <form onSubmit={HandleSubmit}>
-              <Grid container spacing={2} style={{ width: "320px" }}>
+              <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
                     type="email"
@@ -296,7 +247,6 @@ const LoginForm: React.FC = () => {
             </Button>
           </Grid>
         </Paper>
-      </Grid>
     </Container>
   );
 };
