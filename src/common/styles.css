@@ -6,7 +6,6 @@ img.cloud1 {
 	animation-timing-function: linear;
 	top: 100px;
 	left: 0px;
-	z-index: 1;
 }
 img.cloud2 {
 	position: absolute;
@@ -16,7 +15,6 @@ img.cloud2 {
 	animation-timing-function: linear;
 	top: 100px;
 	left: 1200px;
-	z-index: 1;
 }
 
 img.cloud3 {
@@ -27,7 +25,6 @@ img.cloud3 {
 	animation-timing-function: linear;
 	top: 100px;
 	left: 700px;
-	z-index: 1;
 }
 
 @keyframes cloud {

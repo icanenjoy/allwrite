@@ -220,7 +220,7 @@ const LoginForm: React.FC = () => {
             position: "absolute",
             minWidth: "372px",
             width: "880px",
-            zIndex: 2,
+            zIndex: 10,
             "@media (max-width: 1100px)": {
               marginTop: 8,
               flexDirection: "column",
