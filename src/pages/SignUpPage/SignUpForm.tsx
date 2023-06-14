@@ -39,7 +39,7 @@ const SignUpForm: React.FC = () => {
 
     // 회원가입 처리 논리 구현
     axios
-      .post("http://34.64.145.63:5000/api/v1/user", data)
+      .post("https://allwrite.kro.kr/api/v1/user", data)
       .then((response) => {
         alert(response.data); // 응답 데이터를 표시
       })

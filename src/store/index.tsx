@@ -3,11 +3,17 @@ import { legacy_createStore as createStore } from "redux";
 // 초기 상태 정의
 export interface RootState {
   questionId: string | null;
+  answerId: string | null;
 }
 
 // 액션 타입 정의
 interface SetQuestionIdAction {
   type: "SET_QUESTION_ID";
+  payload: string;
+}
+
+interface SetAnswerIdAction {
+  type: "SET_ANSWER_ID";
   payload: string;
 }
 
@@ -19,10 +25,17 @@ export const setQuestionId = (questionId: string): SetQuestionIdAction => {
   };
 };
 
+export const setAnswerId = (answerId: string): SetAnswerIdAction => {
+  return {
+    type: "SET_ANSWER_ID",
+    payload: answerId,
+  };
+};
+
 // 리듀서 함수 정의
 const reducer = (
-  state: RootState = { questionId: null },
-  action: SetQuestionIdAction
+  state: RootState = { questionId: null, answerId: null }, // answerId 기본값 추가
+  action: SetQuestionIdAction | SetAnswerIdAction // SetAnswerIdAction 추가
 ): RootState => {
   switch (action.type) {
     case "SET_QUESTION_ID":
@@ -30,6 +43,12 @@ const reducer = (
       return {
         ...state,
         questionId: action.payload,
+      };
+    case "SET_ANSWER_ID":
+      console.log("New answerId:", action.payload);
+      return {
+        ...state,
+        answerId: action.payload,
       };
     default:
       return state;

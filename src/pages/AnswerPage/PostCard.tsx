@@ -8,6 +8,8 @@ import { Height, Translate } from "@mui/icons-material";
 import { AnswerDetail } from "./AnswerDetail";
 import { PostCardProps, HeartButtonProps } from "./PostCardProps";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, setAnswerId } from "../../store";
 
 const HoverCard = styled(Card)`
   height: 350px;
@@ -22,8 +24,12 @@ const PostCard: React.FC<PostCardProps> = (answer) => {
   const [open, setOpen] = useState(false);
   const [like, setLike] = useState(false);
   const navigate = useNavigate();
+  const answerId = useSelector((state: RootState) => state.answerId);
+
+  const dispatch = useDispatch(); // useDispatch 훅을 사용하여 dispatch 함수를 가져옴
 
   const handleCardClick = () => {
+    dispatch(setAnswerId(answer.answer_id)); // dispatch 함수를 사용하여 setAnswerId 액션 디스패치
     setOpen(true);
   };
 

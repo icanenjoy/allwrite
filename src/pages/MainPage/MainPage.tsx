@@ -6,7 +6,7 @@ import MainProfileImg from "../../asset/img/croco.png";
 import ProfileImg2 from "../../asset/img/croco1.png";
 import ProfileImg3 from "../../asset/img/croco2.png";
 import ProfileImg4 from "../../asset/img/croco3.png";
-import bgImg from "../../asset/img/bgImg.png";
+import axios from "axios";
 import rightAnimals from "../../asset/img/rightAnimals.png";
 import leftAnimals from "../../asset/img/leftAnimals.png";
 
@@ -17,10 +17,11 @@ import userEvent from "@testing-library/user-event";
 import FooterImage from "./FooterImage";
 
 function Main() {
-  const [count, setCount] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [selectedProfile, setSelectedProfile] = useState(MainProfileImg);
   const [user, setUser] = useState<any | null>(null);
+  const [level, setLevel] = useState<any | null>(null);
+  const [exp, setExp] = useState<number | null>(null);
 
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
     "at",
@@ -41,25 +42,43 @@ function Main() {
     };
     checkToken();
   }, []);
-  console.log(user);
 
   function changeProfile2() {
     setSelectedProfile(ProfileImg2); // Set the selectedProfile to rabbit2
+    alert("2번 선택");
   }
   function changeProfile3() {
-    setSelectedProfile(ProfileImg3); // Set the selectedProfile to rabbit2
+    setSelectedProfile(ProfileImg3);
+    alert("3번 선택");
   }
   function changeProfile4() {
-    setSelectedProfile(ProfileImg4); // Set the selectedProfile to rabbit2
+    setSelectedProfile(ProfileImg4);
+    alert("4번 선택");
   }
+
   useEffect(() => {
-    // Update the container width to its full width after a delay
+    axios
+      .get("https://allwrite.kro.kr/api/v1/user", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        setLevel(response.data.level);
+        setExp(response.data.currentExp);
+      })
+      .catch((err) => {
+        console.log("error");
+      });
+  }, []);
+
+  useEffect(() => {
     const timeout = setTimeout(() => {
-      setContainerWidth(80);
+      setContainerWidth(Number(exp) || 0);
     }, 700);
 
     return () => clearTimeout(timeout);
-  }, []);
+  }, [exp]);
 
   return (
     <>
@@ -72,7 +91,7 @@ function Main() {
         <TopProfile onClick={changeProfile4}></TopProfile>
 
         <Name>{user && <div>{user.nickName}</div>}</Name>
-        <Level>LV14</Level>
+        <Level>LV {level}</Level>
         <Container>
           <Progress
             style={{ width: `${containerWidth}%` }} // Set the width dynamically

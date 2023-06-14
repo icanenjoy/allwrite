@@ -52,7 +52,7 @@ const LoginForm: React.FC = () => {
 
   useEffect(() => {
     axios
-      .post("http://34.64.145.63:5000/api/v1/auth", data)
+      .post("https://allwrite.kro.kr/api/v1/auth", data)
       .then((response) => {
         setAccessToken(response.data.token.accessToken);
         setRefreshToken(response.data.token.refreshToken);
@@ -129,7 +129,7 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
 
     axios
-      .post("http://34.64.145.63:5000/api/v1/auth", data)
+      .post("https://allwrite.kro.kr/api/v1/auth", data)
       .then((response) => {
         setAccessToken(response.data.token.accessToken);
         setRefreshToken(response.data.token.refreshToken);

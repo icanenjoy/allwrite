@@ -4,10 +4,13 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import axios from "axios";
 import { HeartButtonProps } from "./PostCardProps";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
-const HeartButton: React.FC<HeartButtonProps> = ({ answer_id }) => {
+const HeartButton: React.FC = () => {
   const [clicked, setClicked] = useState(false);
   const [count, setCount] = useState(0);
+  const answerId = useSelector((state: RootState) => state.answerId);
 
   const handleHeartClick = () => {
     if (!clicked) {
@@ -22,11 +25,11 @@ const HeartButton: React.FC<HeartButtonProps> = ({ answer_id }) => {
     try {
       if (clicked) {
         await axios.post(
-          `http://34.64.145.63:5000/api/v1/answer/like/${answer_id}`
+          `https://allwrite.kro.kr/api/v1/answer/like/${answerId}`
         );
       } else {
         await axios.delete(
-          `http://34.64.145.63:5000/api/v1/answer/like/${answer_id}`
+          `https://allwrite.kro.kr/api/v1/answer/like/${answerId}`
         );
       }
     } catch (error) {
