@@ -7,6 +7,7 @@ import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRound
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, setQuestionId } from "../store";
+import { useNavigate } from "react-router-dom";
 
 const TodayAnswer = () => {
   const [question] = useState<any>([]);
@@ -19,10 +20,11 @@ const TodayAnswer = () => {
 
   const dispatch = useDispatch();
   const questionId = useSelector((state: RootState) => state.questionId);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get("http://34.64.145.63:5000/api/v1/question", {
+      .get("https://allwrite.kro.kr/api/v1/question", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -104,6 +106,9 @@ const TodayAnswer = () => {
             "&:hover": {
               backgroundColor: "#f9aa43",
             },
+          }}
+          onClick={() => {
+            navigate("/answer");
           }}
         >
           {currentMessage}

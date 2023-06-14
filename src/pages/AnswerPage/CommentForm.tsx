@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CommentFormProps } from "./PostCardProps";
+import { CommentFormProps, Comment } from "./PostCardProps";
 import axios from "axios";
 import {
   Avatar,
@@ -12,37 +12,80 @@ import {
   IconButton,
 } from "@mui/material";
 import { Report } from "@mui/icons-material";
-import { Comment } from "./PostCardProps";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { useLocalStorage } from "usehooks-ts";
+import jwtDecode from "jwt-decode";
 
-const CommentForm = () => {
+const CommentForm: React.FC<CommentFormProps> = () => {
   const [comments, setComments] = useState<Comment[]>([]);
-  const [newComment, setNewComment] = useState("");
+  const [newComment, setNewComment] = useState<string>("");
+  const questionId = useSelector((state: RootState) => state.questionId);
   const answerId = useSelector((state: RootState) => state.answerId);
+  const [accessToken, setAccessToken] = useLocalStorage<string | null>(
+    "at",
+    null
+  );
+  const [refreshToken, setRefreshToken] = useLocalStorage<string | null>(
+    "rt",
+    null
+  );
 
   useEffect(() => {
     axios
-      .get<Comment[]>(
-        `http://34.64.145.63:5000/api/v1/answer/${answerId}/comments`
+      .get<{ comments: { comment: Comment[] }[] }>(
+        `https://allwrite.kro.kr/api/v1/question/answer/detail/${questionId}/${answerId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       )
-      .then((response) => setComments(response.data))
+      .then((response) => {
+        console.log("useEffect", response.data);
+        const extractedComments = response.data.comments[0].comment.map(
+          (comment: Comment) => {
+            return {
+              nickName: comment.nickName,
+              profileImg:
+                "https://i.namu.wiki/i/Pmt-X4ekyEZoJL003elEka-ePn1YUsaHlJps0EXgy92xgYISoP6lZptPuC1xcnvUkB09IFqNttUpyKSRjNVNUA.webp",
+              content: comment.content,
+              createdAt: comment.createdAt,
+              reportCount: comment.reportCount,
+            };
+          }
+        );
+        setComments(extractedComments);
+      })
       .catch((error) => console.log(error));
-  }, [answerId]);
+  }, [answerId, questionId, accessToken]);
 
   const handleSubmit = () => {
-    // 실제로 서버에 댓글을 등록하는 로직을 구현해야 합니다.
-    // 여기서는 단순히 새 댓글을 comments 상태에 추가하는 예시입니다.
-    // setComments((prevComments) => [...prevComments, newCommentObj]);
-    // setNewComment("");
+    const newCommentObj = {
+      content: newComment,
+      reportCount: 0,
+    };
+    axios
+      .post(
+        `https://allwrite.kro.kr/api/v1/answer/comment/${answerId}`,
+        newCommentObj,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then(() => alert("댓글 생성 성공"))
+      .catch((e) => alert(e));
   };
 
   const handleReport = (index: number) => {
-    // 해당 댓글을 신고하는 로직을 구현해야 합니다.
-    // 여기서는 신고 수를 증가시키는 예시입니다.
     setComments((prevComments) => {
       const updatedComments = [...prevComments];
-      updatedComments[index].reportCount += 1;
+      updatedComments[index] = {
+        ...updatedComments[index],
+        reportCount: updatedComments[index].reportCount + 1,
+      };
       return updatedComments;
     });
   };
@@ -50,25 +93,26 @@ const CommentForm = () => {
   return (
     <Paper elevation={2} sx={{ p: 2, backgroundColor: "orange" }}>
       <Stack spacing={2}>
-        {comments.map((comment, index) => (
-          <Box key={index} display="flex" alignItems="center">
-            <Avatar src={comment.profileImg} alt={comment.nickName} />
-            <Box>
-              <Typography
-                sx={{ ml: 2, wordWrap: "break-word", whiteSpace: "pre-wrap" }}
-              >
-                {comment.content}
-              </Typography>
-              <Typography variant="caption" sx={{ ml: 2 }}>
-                {comment.nickName} | {comment.createdAt} | 신고수:{" "}
-                {comment.reportCount}
-              </Typography>
+        {comments &&
+          comments.map((comment, index) => (
+            <Box key={index} display="flex" alignItems="center">
+              <Avatar src={comment.profileImg} alt={comment.nickName} />
+              <Box>
+                <Typography
+                  sx={{ ml: 2, wordWrap: "break-word", whiteSpace: "pre-wrap" }}
+                >
+                  {comment.content}
+                </Typography>
+                <Typography variant="caption" sx={{ ml: 2 }}>
+                  {comment.nickName} | {comment.createdAt} | 신고수:{" "}
+                  {comment.reportCount}
+                </Typography>
+              </Box>
+              <IconButton size="small" onClick={() => handleReport(index)}>
+                <Report />
+              </IconButton>
             </Box>
-            <IconButton size="small" onClick={() => handleReport(index)}>
-              <Report />
-            </IconButton>
-          </Box>
-        ))}
+          ))}
       </Stack>
       <TextField
         label="댓글 작성"

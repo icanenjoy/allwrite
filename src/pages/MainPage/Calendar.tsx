@@ -48,7 +48,7 @@ export default function DateCalendarServerRequest() {
         .padStart(2, "0")}`;
       try {
         const response = await axios.get(
-          `http://34.64.145.63:5000/api/v1/question/${date}`
+          `https://allwrite.kro.kr/api/v1/question/${date}`
         );
         console.log(response.data); // 요청 결과를 콘솔에 출력
         setData(response.data);

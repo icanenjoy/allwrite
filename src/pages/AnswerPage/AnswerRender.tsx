@@ -33,8 +33,8 @@ const AnswerRender = () => {
         );
 
         const response = await axios
-          // .get(`http://34.64.145.63:5000/api/v1/question/${questionId)/answer`)
-          .get(`https://34.64.145.63/api/v1/question/answer/${questionId}`, {
+          // .get(`https://allwrite.kro.kr/api/v1/question/${questionId)/answer`)
+          .get(`https://allwrite.kro.kr/api/v1/question/answer/${questionId}`, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },

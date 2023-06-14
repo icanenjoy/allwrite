@@ -53,7 +53,7 @@ function MyPage() {
     setmyprofile(false);
     try {
       const response = await axios.post(
-        "http://34.64.145.63:5000/api/v1/friend/relation",
+        "https://allwrite.kro.kr/api/v1/friend/relation",
         {
           friendNickName: nickName,
         },
@@ -78,7 +78,7 @@ function MyPage() {
     //친구끊기
     try {
       const response = await axios.delete(
-        `http://34.64.145.63:5000/api/v1/friend/${nickName}`,
+        `https://allwrite.kro.kr/api/v1/friend/${nickName}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -96,7 +96,7 @@ function MyPage() {
     //친구수락
     try {
       const response = await axios.post(
-        "http://34.64.145.63:5000/api/v1/friend/response",
+        "https://allwrite.kro.kr/api/v1/friend/response",
         {
           friendNickName: nickName,
         },
@@ -117,7 +117,7 @@ function MyPage() {
     //친구거절
     try {
       const response = await axios.delete(
-        "http://34.64.145.63:5000/api/v1/friend/reject",
+        "https://allwrite.kro.kr/api/v1/friend/reject",
         {
           data: {
             friendNickName: nickName,
@@ -137,7 +137,7 @@ function MyPage() {
     //친구요청보내기
     try {
       const response = await axios.post(
-        "http://34.64.145.63:5000/api/v1/friend/request",
+        "https://allwrite.kro.kr/api/v1/friend/request",
         {
           friendNickName: nickName,
         },
