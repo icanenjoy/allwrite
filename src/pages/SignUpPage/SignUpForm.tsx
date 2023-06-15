@@ -89,15 +89,6 @@ const SignUpForm: React.FC = () => {
     });
   };
 
-  const [accessToken, setAccessToken] = useLocalStorage<string | null>(
-    "at",
-    null
-  );
-  const [refreshToken, setRefreshToken] = useLocalStorage<string | null>(
-    "rt",
-    null
-  );
-
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
