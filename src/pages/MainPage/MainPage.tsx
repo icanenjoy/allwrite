@@ -9,6 +9,7 @@ import ProfileImgLove from "../../asset/img/crocolove.png";
 import ProfileImgLoveLock from "../../asset/img/crocolovelock.png";
 import ProfileImgSadLock from "../../asset/img/crocosadlock.png";
 import ProfileImgAngryLock from "../../asset/img/crocoangrylock.png";
+import ProfileImgDefault from "../../asset/img/croco.png";
 import axios from "axios";
 import rightAnimals from "../../asset/img/rightAnimals.png";
 import leftAnimals from "../../asset/img/leftAnimals.png";
@@ -160,6 +161,7 @@ function Main() {
           setMainImg(ProfileImgSad);
         } else if (response.data.emotion === "love") {
           setMainImg(ProfileImgLove);
+        } else {
         }
       })
       .catch((err) => {
