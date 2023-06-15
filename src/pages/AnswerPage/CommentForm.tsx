@@ -114,6 +114,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
   const handleReport = (index: number) => {
     const commentId = comments[index]._id;
     setReportedCommentId(commentId);
+    console.log(commentId);
     axios
       .post(
         `https://allwrite.kro.kr/api/v1/answer/comment/complaint/${answerId}/${commentId}`,
