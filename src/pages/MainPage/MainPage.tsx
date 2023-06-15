@@ -162,9 +162,7 @@ function Main() {
           setMainImg(ProfileImgLove);
         }
       })
-      .catch((err) => {
-        alert(err);
-      });
+      .catch((err) => {});
   }, []);
 
   return (
