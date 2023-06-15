@@ -11,7 +11,7 @@ import {
   DateCalendarProps,
 } from "@mui/x-date-pickers/DateCalendar";
 import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
-import croco from "../../asset/img/croco1.png";
+import croco from "../../asset/img/croco.png";
 import { Box, IconButton, Button } from "@mui/material";
 
 const initialValue = dayjs();
@@ -20,7 +20,6 @@ export default function DateCalendarServerRequest() {
   const requestAbortController = React.useRef<AbortController | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [highlightedDays, setHighlightedDays] = React.useState<number[]>([]);
-  const [highlightedDays2, setHighlightedDays2] = React.useState<number[]>([]);
   const [selectedDate, setSelectedDate] = React.useState<Dayjs>(initialValue);
   const [year, setYear] = useState<number | null>(null);
   const [month, setMonth] = useState<number | null>(null);
@@ -33,10 +32,8 @@ export default function DateCalendarServerRequest() {
 
     // Simulating API request delay
     setTimeout(() => {
-      const highlighted = [1, 1, 14];
-      const highlighted2 = [13, 18, 19];
+      const highlighted = [5, 10, 20];
       setHighlightedDays(highlighted);
-      setHighlightedDays2(highlighted2);
       setIsLoading(false);
     }, 100);
   };
@@ -93,9 +90,6 @@ export default function DateCalendarServerRequest() {
     const isSelected =
       !outsideCurrentMonth && highlightedDays.indexOf(day.date()) > -1;
 
-    const isSelected2 =
-      !outsideCurrentMonth && highlightedDays2.indexOf(day.date()) > -1;
-
     const handleClick = () => {
       setSelectedDate(day);
       setYear(day.year());
@@ -107,7 +101,7 @@ export default function DateCalendarServerRequest() {
       <StyledBadge
         key={day.toString()}
         overlap="circular"
-        badgeContent={isSelected ? "😡" : isSelected2 ? "😭" : undefined}
+        badgeContent={isSelected ? "😄" : undefined}
         style={{ width: 40, height: 40, fontSize: 40 }}
       >
         <PickersDay

@@ -3,9 +3,9 @@ import styled from "styled-components";
 import TodayAnswer from "../../common/TodayAnswer";
 import Calendar from "./Calendar";
 import MainProfileImg from "../../asset/img/croco.png";
-import ProfileImg2 from "../../asset/img/croco1.png";
-import ProfileImg3 from "../../asset/img/croco2.png";
-import ProfileImg4 from "../../asset/img/croco3.png";
+import ProfileImgAngry from "../../asset/img/croco1.png";
+import ProfileImgSad from "../../asset/img/croco2.png";
+import ProfileImgLove from "../../asset/img/croco3.png";
 import axios from "axios";
 import rightAnimals from "../../asset/img/rightAnimals.png";
 import leftAnimals from "../../asset/img/leftAnimals.png";
@@ -18,6 +18,12 @@ import FooterImage from "./FooterImage";
 import DoneIcon from "@mui/icons-material/Done";
 
 function Main() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  const [mainImg, setMainImg] = useState<any | null>(null);
+  const formattedDate = `${year}-${month}-${day}`;
   const [containerWidth, setContainerWidth] = useState(0);
   const [selectedProfile, setSelectedProfile] = useState(MainProfileImg);
   const [user, setUser] = useState<any | null>(null);
@@ -43,19 +49,60 @@ function Main() {
     checkToken();
   }, []);
 
-  function changeProfile2() {
-    setSelectedProfile(ProfileImg2);
-    alert("2번 선택");
-  }
-  function changeProfile3() {
-    setSelectedProfile(ProfileImg3);
-    alert("3번 선택");
-  }
-  function changeProfile4() {
-    setSelectedProfile(ProfileImg4);
-    alert("4번 선택");
+  useEffect(() => {
+    axios
+      .get(`https://allwrite.kro.kr/api/v1/emotion/${formattedDate}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        // setMainImg(response.data.emotion);
+        console.log(response.data.emotion);
+        if (response.data.emotion === "angry") {
+          setMainImg(ProfileImgAngry);
+        } else if (response.data.emotion === "sad") {
+          setMainImg(ProfileImgSad);
+        } else if (response.data.emotion === "love") {
+          setMainImg(ProfileImgLove);
+        }
+      })
+      .catch((err) => {
+        console.log("error");
+      });
+  }, []);
+
+  async function changeProfile(emotion: string) {
+    try {
+      const response = await axios.post(
+        `https://allwrite.kro.kr/api/v1/emotion/${formattedDate}`,
+        {
+          emotion: emotion,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log(response.data);
+      window.location.reload();
+    } catch (e) {
+      console.log(e);
+    }
   }
 
+  async function changeProfile2() {
+    await changeProfile("angry");
+  }
+
+  async function changeProfile3() {
+    await changeProfile("sad");
+  }
+
+  async function changeProfile4() {
+    await changeProfile("love");
+  }
   useEffect(() => {
     axios
       .get("https://allwrite.kro.kr/api/v1/user", {
@@ -83,16 +130,14 @@ function Main() {
   return (
     <>
       <Container1>
-        <Profile
-          style={{ backgroundImage: `url(${selectedProfile})` }}
-        ></Profile>
+        <Profile style={{ backgroundImage: `url(${mainImg})` }}></Profile>
         <LeftProfile onClick={changeProfile2}></LeftProfile>
         <RightProfile onClick={changeProfile3}></RightProfile>
         <TopProfile onClick={changeProfile4}></TopProfile>
         <Name>{user && <div>{user.nickName}</div>}</Name>
-        <Save>
+        {/* <Save>
           <DoneIcon />
-        </Save>
+        </Save> */}
         <Level>LV {level}</Level>
         <Container>
           <Progress
@@ -159,7 +204,7 @@ const RightProfile = styled.button`
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-color: transparent;
-  background-image: url(${ProfileImg3});
+  background-image: url(${ProfileImgSad});
   transition: transform 0.3s;
   /* background-color: red; */
 
@@ -181,7 +226,7 @@ const TopProfile = styled.button`
   position: absolute;
   background-color: transparent;
   background-repeat: no-repeat;
-  background-image: url(${ProfileImg4});
+  background-image: url(${ProfileImgLove});
   transition: transform 0.3s;
 
   &:hover {
@@ -202,7 +247,7 @@ const LeftProfile = styled.button`
   position: absolute;
   background-color: transparent;
   background-repeat: no-repeat;
-  background-image: url(${ProfileImg2});
+  background-image: url(${ProfileImgAngry});
   transition: transform 0.3s;
 
   &:hover {
@@ -211,22 +256,22 @@ const LeftProfile = styled.button`
     cursor: pointer;
   }
 `;
-const Save = styled.button`
-  height: 2rem;
-  width: 2.4rem;
-  overflow: visible;
-  color: #c55c0c;
-  background-color: #f09936;
-  font-weight: 550;
-  border: none;
-  border-radius: 10rem;
-  &:hover {
-    transform: scale(1.05);
-    overflow: hidden;
-    background-color: #f3ad5e;
-    cursor: pointer;
-  }
-`;
+// const Save = styled.button`
+//   height: 2rem;
+//   width: 2.4rem;
+//   overflow: visible;
+//   color: #c55c0c;
+//   background-color: #f09936;
+//   font-weight: 550;
+//   border: none;
+//   border-radius: 10rem;
+//   &:hover {
+//     transform: scale(1.05);
+//     overflow: hidden;
+//     background-color: #f3ad5e;
+//     cursor: pointer;
+//   }
+// `;
 
 const Name = styled.div`
   font-size: 1.7rem;
