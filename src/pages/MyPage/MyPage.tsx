@@ -22,7 +22,6 @@ function MyPage() {
     isReqFriend: boolean;
     isResFriend: boolean;
   }
-
   const location = useLocation();
   const [containerWidth, setContainerWidth] = useState(0);
   const [nickName, setNickName] = useState(""); // 페이지 유저아이디
@@ -63,7 +62,7 @@ function MyPage() {
   const getMyProfile = async () => {
     setmyprofile(true);
     try {
-      const response = await axios.get("http://34.64.145.63:5000/api/v1/user", {
+      const response = await axios.get(`https://allwrite.kro.kr/api/v1/user`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
@@ -80,7 +79,7 @@ function MyPage() {
     setmyprofile(false);
     try {
       let response = await axios.post(
-        "http://34.64.145.63:5000/api/v1/friend/relation",
+        `https://allwrite.kro.kr/api/v1/friend/relation`,
         {
           friendNickName: nickName,
         },
@@ -94,7 +93,7 @@ function MyPage() {
       setRelation(response.data);
 
       response = await axios.get(
-        `http://34.64.145.63:5000/api/v1/user/${nickName}`,
+        `https://allwrite.kro.kr/api/v1/user/${nickName}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -259,7 +258,7 @@ function MyPage() {
               }}
             />
             <Name>{profile && profile.nickName}</Name>
-            <Level>{profile && profile.level}LV</Level>
+            <Level>LV{profile && profile.level}</Level>
             <Container2>
               <Progress style={{ width: `${containerWidth}%` }}></Progress>
             </Container2>
@@ -287,6 +286,8 @@ const LeftContainer = styled.div`
   height: 50rem;
   display: flex;
   justify-content: center;
+  margin-left: 3rem;
+  margin-right: 6rem;
 `;
 
 const Profiles = styled.div`
