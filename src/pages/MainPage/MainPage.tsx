@@ -77,15 +77,30 @@ function Main() {
   }
 
   async function changeProfile2() {
-    await changeProfile("angry");
+    console.log(String(angryImg));
+    if (angryImg.includes("lock")) {
+      alert("선택할 수 없습니다!");
+    } else {
+      await changeProfile("angry");
+    }
   }
 
   async function changeProfile3() {
-    await changeProfile("sad");
+    console.log(sadImg);
+    if (sadImg.includes("lock")) {
+      alert("레벨 15 이상 사용이 가능합니다!");
+    } else {
+      await changeProfile("sad");
+    }
   }
 
   async function changeProfile4() {
-    await changeProfile("love");
+    console.log(loveImg);
+    if (loveImg.includes("lock")) {
+      alert("레벨 20 이상 사용이 가능합니다!");
+    } else {
+      await changeProfile("love");
+    }
   }
   useEffect(() => {
     axios
@@ -95,8 +110,26 @@ function Main() {
         },
       })
       .then((response) => {
+        console.log(response.data);
         setLevel(response.data.level);
         setExp(response.data.currentExp);
+        if (Number(response.data.level) < 5) {
+          setAngryImg(ProfileImgAngryLock);
+          setSadImg(ProfileImgSadLock);
+          setLoveImg(ProfileImgLoveLock);
+        } else if (Number(response.data.level) < 10) {
+          setAngryImg(ProfileImgAngry);
+          setSadImg(ProfileImgSadLock);
+          setLoveImg(ProfileImgLoveLock);
+        } else if (Number(response.data.level) < 15) {
+          setAngryImg(ProfileImgAngry);
+          setSadImg(ProfileImgSad);
+          setLoveImg(ProfileImgLoveLock);
+        } else if (Number(response.data.level) < 20) {
+          setAngryImg(ProfileImgAngry);
+          setSadImg(ProfileImgSad);
+          setLoveImg(ProfileImgLove);
+        }
       })
       .catch((err) => {
         console.log("error");
@@ -120,36 +153,13 @@ function Main() {
       })
       .then((response) => {
         console.log(response.data);
-        // console.log(level);
-        setEmotion(response.data.emotion);
+
         if (response.data.emotion === "angry") {
-          if (Number(level) > 5) {
-            setMainImg(ProfileImgAngry);
-            setAngryImg(ProfileImgAngry);
-            setSadImg(ProfileImgSadLock);
-            setLoveImg(ProfileImgLoveLock);
-          } else {
-            setMainImg(ProfileImgAngryLock);
-            setAngryImg(ProfileImgAngryLock);
-            setSadImg(ProfileImgSadLock);
-            setLoveImg(ProfileImgLoveLock);
-          }
+          setMainImg(ProfileImgAngry);
         } else if (response.data.emotion === "sad") {
-          if (Number(level) < 10) {
-            setMainImg(ProfileImgSadLock);
-            setSadImg(ProfileImgSadLock);
-          } else {
-            setMainImg(ProfileImgSad);
-            setSadImg(ProfileImgSad);
-          }
+          setMainImg(ProfileImgSad);
         } else if (response.data.emotion === "love") {
-          if (Number(level) < 10) {
-            setMainImg(ProfileImgLoveLock);
-            setLoveImg(ProfileImgLoveLock);
-          } else {
-            setMainImg(ProfileImgLove);
-            setLoveImg(ProfileImgLove);
-          }
+          setMainImg(ProfileImgLove);
         }
       })
       .catch((err) => {
