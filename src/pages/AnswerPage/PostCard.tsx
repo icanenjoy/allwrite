@@ -43,7 +43,7 @@ const PostCard: React.FC<PostCardProps> = (answer) => {
 
   const goMyPage = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     e.stopPropagation();
-    navigate(`/mypage/?nickName="${answer.nickName}"`);
+    navigate(`/mypage/?nickName=${answer.nickName}`);
   };
   return (
     <>
@@ -112,6 +112,7 @@ const PostCard: React.FC<PostCardProps> = (answer) => {
         <AnswerDetail
           answer_id={answer.answer_id}
           content={answer.content}
+          nickName={answer.nickName}
           onClose={handleClose}
           likeCount={answer.likeCount}
         />

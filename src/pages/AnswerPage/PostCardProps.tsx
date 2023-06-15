@@ -3,6 +3,7 @@ export interface AnswerDetailProps {
   content: string;
   onClose: () => void;
   likeCount: number; // Add the likeCount property
+  nickName: string;
 }
 
 export interface PostCardProps {

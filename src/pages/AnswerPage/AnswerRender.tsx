@@ -21,10 +21,12 @@ const AnswerRender = () => {
   );
   const questionId = useSelector((state: RootState) => state.questionId);
   const [visibilityScope, setVisibilityScope] = useState("friends");
+  const nickName = useSelector((state: RootState) => state.nickName);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     console.log(questionId);
+    console.log("테스트", nickName);
 
     const fetchData = async () => {
       try {

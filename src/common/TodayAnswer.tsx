@@ -59,16 +59,17 @@ const TodayAnswer = () => {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
   const handleNextClick = () => {
-    setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % question.length);
-    dispatch(setQuestionId(question[currentMessageIndex][0])); // questionId 업데이트
-    console.log(currentMessageIndex);
+    const nextIndex = (currentMessageIndex + 1) % question.length;
+    setCurrentMessageIndex(nextIndex);
+    const nextQuestionId = question[nextIndex][0];
+    dispatch(setQuestionId(nextQuestionId)); // questionId 업데이트
+    console.log(nextIndex);
   };
 
   const handlePrevClick = () => {
     const newIndex =
       (currentMessageIndex - 1 + question.length) % question.length;
     setCurrentMessageIndex(newIndex);
-
     const newQuestionId = question[newIndex][0];
     dispatch(setQuestionId(newQuestionId)); // questionId 업데이트
   };

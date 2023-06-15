@@ -4,6 +4,7 @@ import { legacy_createStore as createStore } from "redux";
 export interface RootState {
   questionId: string | null;
   answerId: string | null;
+  nickName: string | null;
 }
 
 // 액션 타입 정의
@@ -14,6 +15,11 @@ interface SetQuestionIdAction {
 
 interface SetAnswerIdAction {
   type: "SET_ANSWER_ID";
+  payload: string;
+}
+
+interface SetNickNameAction {
+  type: "SET_NICKNAME";
   payload: string;
 }
 
@@ -32,10 +38,17 @@ export const setAnswerId = (answerId: string): SetAnswerIdAction => {
   };
 };
 
+export const setNickName = (nickName: string): SetNickNameAction => {
+  return {
+    type: "SET_NICKNAME",
+    payload: nickName,
+  };
+};
+
 // 리듀서 함수 정의
 const reducer = (
-  state: RootState = { questionId: null, answerId: null }, // answerId 기본값 추가
-  action: SetQuestionIdAction | SetAnswerIdAction // SetAnswerIdAction 추가
+  state: RootState = { questionId: null, answerId: null, nickName: null }, // answerId 기본값 추가
+  action: SetQuestionIdAction | SetAnswerIdAction | SetNickNameAction // SetAnswerIdAction 추가
 ): RootState => {
   switch (action.type) {
     case "SET_QUESTION_ID":
@@ -49,6 +62,12 @@ const reducer = (
       return {
         ...state,
         answerId: action.payload,
+      };
+    case "SET_NICKNAME":
+      console.log("New NickName:", action.payload);
+      return {
+        ...state,
+        nickName: action.payload,
       };
     default:
       return state;
