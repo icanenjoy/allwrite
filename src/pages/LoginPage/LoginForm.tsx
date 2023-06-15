@@ -175,7 +175,6 @@ const LoginForm: React.FC = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Grid container justifyContent="center">
         <Paper
           elevation={3}
           sx={{
@@ -259,7 +258,6 @@ const LoginForm: React.FC = () => {
             </Button>
           </Grid>
         </Paper>
-      </Grid>
     </Container>
   );
 };
