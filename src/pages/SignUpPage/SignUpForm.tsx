@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import { TextField, Button, Box } from "@mui/material";
+import { TextField, Button, Box, Grid, } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -10,6 +10,7 @@ interface SignUpFormState {
   confirmPassword: string;
   nickName: string;
   name: string;
+  isPasswordMatched: boolean;
 }
 
 const SignUpForm: React.FC = () => {
@@ -22,14 +23,33 @@ const SignUpForm: React.FC = () => {
     confirmPassword: "",
     nickName: "",
     name: "",
+    isPasswordMatched: true,
   });
 
+  const isPasswordMatched = (password: string, confirmPassword: string) => {
+    return password === confirmPassword;
+  };
+
+  const [isIdDuplicated, setIsIdDuplicated] = useState(false);
+  const [isNickNameDuplicated, setIsNickNameDuplicated] = useState(false);
+  
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  
+    if (name === "confirmPassword") {
+      const isMatched = isPasswordMatched(formData.password, value);
+  
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        isPasswordMatched: isMatched,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
@@ -40,6 +60,37 @@ const SignUpForm: React.FC = () => {
     "rt",
     null
   );
+
+  const handleBlur = (e: FormEvent) => {
+    e.preventDefault();
+
+    const data = {
+      email: formData.email,
+      nickName: formData.nickName,
+    };
+
+    // 회원가입 처리 논리 구현
+    axios
+      .post("https://allwrite.kro.kr/api/v1/user", data)
+      .catch((error) => {
+        // 회원가입 실패
+        if (error.response) {
+          if (error.response.data.message === "계정이 이미 가입되어있습니다.") {
+            // 아이디가 중복된 경우
+            setIsIdDuplicated(true);
+          } else {
+            setIsIdDuplicated(false);
+          }
+    
+          if (error.response.data.message === "이미 사용중인 닉네임입니다.") {
+            // 닉네임이 중복된 경우
+            setIsNickNameDuplicated(true);
+          } else {
+            setIsNickNameDuplicated(false);
+          }
+        }
+      });
+  };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -65,7 +116,20 @@ const SignUpForm: React.FC = () => {
       .catch((error) => {
         // 회원가입 실패
         if (error.response) {
-          // 서버 응답이 있는 경우
+          if (error.response.data.message === "계정이 이미 가입되어있습니다.") {
+            // 아이디가 중복된 경우
+            setIsIdDuplicated(true);
+          } else {
+            setIsIdDuplicated(false);
+          }
+    
+          if (error.response.data.message === "이미 사용중인 닉네임입니다.") {
+            // 닉네임이 중복된 경우
+            setIsNickNameDuplicated(true);
+          } else {
+            setIsNickNameDuplicated(false);
+          }
+
           console.log("회원가입 실패:", error.response.data.message);
         } else {
           // 서버 응답이 없는 경우 또는 요청 자체가 실패한 경우
@@ -82,17 +146,37 @@ const SignUpForm: React.FC = () => {
           flexDirection: "column",
           maxWidth: "300px",
           margin: "0 auto",
+          backgroundColor: "white",
+          padding: "2.5rem 1.5rem",
+          marginTop: 8,
+          borderRadius: 5,
+          width: "20rem",
+          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.3)",
+          position: "absolute",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 10,
         }}
       >
+        <Grid textAlign="center">
+          <div style={{ fontSize: "3rem", fontWeight: 750, zIndex: 11, marginBottom: "30px" }}>Sign Up</div>
+        </Grid>
         <TextField
           label="Email"
           type="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
+          onBlur={handleBlur}
           required
           margin="normal"
         />
+        <div>
+          {isIdDuplicated ? (
+            <span style={{ color: "red", fontSize: "13px" }}>아이디가 이미 존재합니다.</span>
+            ) : null
+          }
+        </div>
         <TextField
           label="Password"
           type="password"
@@ -111,15 +195,27 @@ const SignUpForm: React.FC = () => {
           required
           margin="normal"
         />
+        <div>
+          {formData.isPasswordMatched ? null : (
+            <span style={{ color: "red", fontSize: "13px" }}>비밀번호가 일치하지 않습니다.</span>
+          )}
+        </div>
         <TextField
           label="NickName"
           type="text"
           name="nickName"
           value={formData.nickName}
           onChange={handleChange}
+          onBlur={handleBlur}
           required
           margin="normal"
         />
+        <div>
+          {isNickNameDuplicated ? (
+            <span style={{ color: "red", fontSize: "13px" }}>닉네임이 이미 존재합니다.</span>
+            ) : null
+          }
+        </div>
         <TextField
           label="Name"
           type="text"
@@ -129,7 +225,10 @@ const SignUpForm: React.FC = () => {
           required
           margin="normal"
         />
-        <Button type="submit" variant="contained" sx={{ marginTop: "1rem" }}>
+        <Button type="submit" variant="contained" sx={{ marginTop: "1rem", backgroundColor: "#2c9960",
+          "&:hover": {
+            backgroundColor: "#24794d"// hover 시 변경할 배경색
+          }}}>
           Sign Up
         </Button>
       </Box>
