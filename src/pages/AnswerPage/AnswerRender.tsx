@@ -11,6 +11,7 @@ import { resolve } from "path";
 
 const AnswerRender = () => {
   const [data, setData] = useState([]);
+  const [isWriteAnswer, setIsWriteAnswer] = useState(false);
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
     "at",
     null
@@ -21,26 +22,30 @@ const AnswerRender = () => {
   );
   const questionId = useSelector((state: RootState) => state.questionId);
   const [visibilityScope, setVisibilityScope] = useState("friends");
+  const nickName = useSelector((state: RootState) => state.nickName);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     console.log(questionId);
+    console.log("테스트", nickName);
 
     const fetchData = async () => {
       try {
         console.log(
-          `https://allwrite.kro.kr/api/v1/question/answer/${questionId}`
+          `https://allwrite.kro.kr/api/v1/question/answer/friend/${questionId}`
         );
 
         const response = await axios.get(
-          `https://allwrite.kro.kr/api/v1/question/answer/${questionId}`,
+          `https://allwrite.kro.kr/api/v1/question/answer/friend/${questionId}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
           }
         );
-        setData(response.data);
+        setData(response.data.answers);
+        setIsWriteAnswer(response.data.isWriteAnswer);
+        console.log(isWriteAnswer);
         console.log(response.data);
       } catch (err) {
         // Handle error
@@ -69,7 +74,7 @@ const AnswerRender = () => {
               },
             }
           )
-          .then((response) => setData(response.data))
+          .then((response) => setData(response.data.answers))
           .catch((e) => alert(e));
         break;
 
@@ -80,7 +85,7 @@ const AnswerRender = () => {
               Authorization: `Bearer ${accessToken}`,
             },
           })
-          .then((response) => setData(response.data))
+          .then((response) => setData(response.data.answers))
           .catch((e) => alert(e));
         break;
 
@@ -93,7 +98,7 @@ const AnswerRender = () => {
     <div>
       <TodayAnswer></TodayAnswer>
       <div style={{ display: "flex", justifyContent: "right", margin: 20 }}>
-        <WriteButton></WriteButton>
+        {!isWriteAnswer && <WriteButton></WriteButton>}
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", margin: 20 }}>
@@ -119,24 +124,47 @@ const AnswerRender = () => {
 
       <div style={{ display: "flex", justifyContent: "center", margin: 20 }}>
         <Grid container spacing={3}>
-          {data &&
-            data.map(
-              (answer: {
-                _id: string;
-                nickName: string;
-                content: string;
-                likeCount: number;
-              }) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <PostCard
-                    answer_id={answer._id}
-                    nickName={answer.nickName}
-                    content={answer.content}
-                    likeCount={answer.likeCount}
-                  />
-                </Grid>
+          {isWriteAnswer
+            ? data &&
+              data.map(
+                (answer: {
+                  _id: string;
+                  nickName: string;
+                  content: string;
+                  likeCount: number;
+                  isWriteAnswer: boolean;
+                }) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <PostCard
+                      answer_id={answer._id}
+                      nickName={answer.nickName}
+                      content={answer.content}
+                      likeCount={answer.likeCount}
+                      isWriteAnswer={isWriteAnswer}
+                    />
+                  </Grid>
+                )
               )
-            )}
+            : data &&
+              data.map(
+                (answer: {
+                  _id: string;
+                  nickName: string;
+                  content: string;
+                  likeCount: number;
+                  isWriteAnswer: boolean;
+                }) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <PostCard
+                      answer_id={answer._id}
+                      nickName={answer.nickName}
+                      content={answer.content}
+                      likeCount={answer.likeCount}
+                      isWriteAnswer={answer.isWriteAnswer}
+                    />
+                  </Grid>
+                )
+              )}
         </Grid>
       </div>
     </div>

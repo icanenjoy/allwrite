@@ -118,6 +118,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
     axios
       .post(
         `https://allwrite.kro.kr/api/v1/answer/comment/complaint/${answerId}/${commentId}`,
+        {},
         // api/v1/answer/comment/complaint/:answerId/:commentId
         {
           headers: {

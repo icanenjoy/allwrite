@@ -10,9 +10,14 @@ import { useLocalStorage } from "usehooks-ts";
 interface HeartButtonProps {
   likeCount: number;
   isLiked: boolean;
+  setData: Function;
 }
 
-const HeartButton: React.FC<HeartButtonProps> = ({ likeCount, isLiked }) => {
+const HeartButton: React.FC<HeartButtonProps> = ({
+  likeCount,
+  isLiked,
+  setData,
+}) => {
   const [clicked, setClicked] = useState(isLiked);
   const [count, setCount] = useState(likeCount);
   const answerId = useSelector((state: RootState) => state.answerId);
@@ -44,10 +49,7 @@ const HeartButton: React.FC<HeartButtonProps> = ({ likeCount, isLiked }) => {
             }
           )
           .then((response) => {
-            console.log(response.data);
-            alert("좋아요 성공");
-            setCount((prev) => prev + 1);
-            setClicked((prev) => !prev);
+            setData({ likeCount: likeCount + 1, isLiked: true });
           })
           .catch((e) => alert(e));
       } else {
@@ -58,9 +60,7 @@ const HeartButton: React.FC<HeartButtonProps> = ({ likeCount, isLiked }) => {
             },
           })
           .then(() => {
-            alert("좋아요 취소 성공");
-            setCount((prev) => prev - 1);
-            setClicked((prev) => !prev);
+            setData({ likeCount: likeCount - 1, isLiked: false });
           })
           .catch((e) => alert(e));
       }
