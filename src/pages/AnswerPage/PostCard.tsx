@@ -113,6 +113,7 @@ const PostCard: React.FC<PostCardProps> = (answer) => {
           answer_id={answer.answer_id}
           content={answer.content}
           onClose={handleClose}
+          likeCount={answer.likeCount}
         />
       )}
     </>

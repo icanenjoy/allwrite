@@ -30,9 +30,11 @@ const CommentForm: React.FC<CommentFormProps> = () => {
     "rt",
     null
   );
+  const [reportedCommentId, setReportedCommentId] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
-    console.log("과연", questionId, answerId);
     axios
       .get<{ comments: { comment: Comment[] }[] }>(
         `https://allwrite.kro.kr/api/v1/question/answer/detail/${questionId}/${answerId}`,
@@ -47,6 +49,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
         const extractedComments = response.data.comments[0].comment.map(
           (comment: Comment) => {
             return {
+              _id: comment._id,
               nickName: comment.nickName,
               profileImage: comment.profileImage,
               content: comment.content,
@@ -75,19 +78,59 @@ const CommentForm: React.FC<CommentFormProps> = () => {
           },
         }
       )
-      .then(() => alert("댓글 생성 성공"))
+      .then(() => {
+        alert("댓글 작성 성공");
+        setNewComment("");
+        axios
+          .get<{ comments: { comment: Comment[] }[] }>(
+            `https://allwrite.kro.kr/api/v1/question/answer/detail/${questionId}/${answerId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          )
+          .then((response) => {
+            console.log("useEffect", response.data);
+            const extractedComments = response.data.comments[0].comment.map(
+              (comment: Comment) => {
+                return {
+                  _id: comment._id,
+                  nickName: comment.nickName,
+                  profileImage: comment.profileImage,
+                  content: comment.content,
+                  createdAt: comment.createdAt,
+                  reportCount: comment.reportCount,
+                };
+              }
+            );
+            setComments(extractedComments);
+          })
+          .catch((error) => console.log(error));
+      })
       .catch((e) => alert(e));
   };
 
   const handleReport = (index: number) => {
-    setComments((prevComments) => {
-      const updatedComments = [...prevComments];
-      updatedComments[index] = {
-        ...updatedComments[index],
-        reportCount: updatedComments[index].reportCount + 1,
-      };
-      return updatedComments;
-    });
+    const commentId = comments[index]._id;
+    setReportedCommentId(commentId);
+    axios
+      .post(
+        `https://allwrite.kro.kr/api/v1/answer/comment/complaint/${answerId}/${commentId}`,
+        // api/v1/answer/comment/complaint/:answerId/:commentId
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then(() => alert("댓글 신고 성공"))
+      .catch((e) => {
+        console.log(
+          `https://allwrite.kro.kr/api/v1/answer/comment/complaint/${answerId}/${commentId}`
+        );
+        alert(e);
+      });
   };
 
   return (

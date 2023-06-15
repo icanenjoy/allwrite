@@ -53,9 +53,9 @@ const WriteButton: React.FC = () => {
   const handleSave = () => {
     // 작성 완료 버튼을 눌렀을 때 실행될 로직을 여기에 작성하세요.
     if (isPublic) {
-      var pub = 0;
-    } else {
       var pub = 1;
+    } else {
+      var pub = 0;
     }
     const data = {
       content: content,
