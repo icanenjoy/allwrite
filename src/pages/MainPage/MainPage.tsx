@@ -164,9 +164,7 @@ function Main() {
         } else {
         }
       })
-      .catch((err) => {
-        alert(err);
-      });
+      .catch((err) => {});
   }, []);
 
   return (
