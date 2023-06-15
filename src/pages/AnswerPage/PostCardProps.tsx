@@ -2,15 +2,19 @@ export interface AnswerDetailProps {
   answer_id: string;
   content: string;
   onClose: () => void;
+  likeCount: number; // Add the likeCount property
 }
+
 export interface PostCardProps {
   answer_id: string;
   nickName: string;
   content: string;
+  likeCount: number;
 }
 
 export interface HeartButtonProps {
-  answer_id: string;
+  likeCount: number;
+  isLiked: boolean;
 }
 
 export interface Answer {
@@ -30,9 +34,10 @@ export interface CommentFormProps {}
 // }
 
 export type Comment = {
+  _id: string;
   nickName: string;
-  profileImg: string;
+  profileImage: string;
   content: string;
   createdAt: string;
-  reportCount: string;
+  reportCount: number;
 };
