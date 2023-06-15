@@ -13,10 +13,12 @@ import {
 import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
 import croco from "../../asset/img/croco.png";
 import { Box, IconButton, Button } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 const initialValue = dayjs();
 
 export default function DateCalendarServerRequest() {
+  const location = useLocation();
   const requestAbortController = React.useRef<AbortController | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [highlightedDays, setHighlightedDays] = React.useState<number[]>([]);
@@ -24,6 +26,7 @@ export default function DateCalendarServerRequest() {
   const [year, setYear] = useState<number | null>(null);
   const [month, setMonth] = useState<number | null>(null);
   const [days, setDays] = useState<number | null>(null);
+  const [nickName, setNickName] = useState(""); // 페이지 유저아이디
   const [data, setData] = useState<any[]>([]);
 
   const fetchHighlightedDays = (date: Dayjs) => {
@@ -66,6 +69,12 @@ export default function DateCalendarServerRequest() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const nickName = searchParams.get("nickName");
+    setNickName(nickName || "");
+  }, [location]);
 
   useEffect(() => {
     fetchData();
@@ -115,18 +124,20 @@ export default function DateCalendarServerRequest() {
   };
 
   return (
-    <Container>
+    <Container style={nickName ? { marginTop: 0 } : {}}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <SelectedDateText
-          style={{
-            width: "100%",
-            color: "#ed7e28",
-            marginLeft: "20.5rem",
-            marginTop: "-1rem",
-          }}
-        >
-          {selectedDate && `${selectedDate.format("YYYY.MM.DD")}`}
-        </SelectedDateText>
+        {!nickName && (
+          <SelectedDateText
+            style={{
+              width: "100%",
+              color: "#ed7e28",
+              marginLeft: "20.5rem",
+              marginTop: "-1rem",
+            }}
+          >
+            {selectedDate && `${selectedDate.format("YYYY.MM.DD")}`}
+          </SelectedDateText>
+        )}
         <DateCalendar
           sx={{
             fontSize: "25rem",
@@ -153,27 +164,19 @@ export default function DateCalendarServerRequest() {
           }}
         />
       </LocalizationProvider>
-      {data.map((item, index) => (
-        <Button
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            marginLeft: "32rem",
-            marginTop: "-9.5rem",
-            backgroundColor: "#f9aa43",
-            padding: "2rem",
-            width: "30rem",
-            height: "4rem",
-            borderRadius: "1rem",
-            color: "#8d3e02",
-            transition: "transform 0.3s",
-            "&:hover": {
-              transform: "scale(1.05)",
-              backgroundColor: "#f9aa43",
-            },
+      {nickName && (
+        <SelectedDateText
+          style={{
+            width: "100%",
+            color: "#ed7e28",
+            marginTop: "-1rem",
           }}
-          key={index}
         >
+          {selectedDate && `${selectedDate.format("YYYY.MM.DD")}`}
+        </SelectedDateText>
+      )}
+      {data.map((item, index) => (
+        <Button sx={nickName ? mypageButton : mainButton} key={index}>
           {/* 여기에서 데이터를 표시할 JSX를 작성 */}
           <p>{item.content}</p>
 
@@ -205,3 +208,39 @@ const StyledBadge = styled(Badge)`
     font-size: 15.5px;
   }
 `;
+
+const mainButton = {
+  display: "flex",
+  alignItems: "center",
+  marginLeft: "32rem",
+  marginTop: "-9.5rem",
+  backgroundColor: "#f9aa43",
+  padding: "2rem",
+  width: "30rem",
+  height: "4rem",
+  borderRadius: "1rem",
+  color: "#8d3e02",
+  transition: "transform 0.3s",
+  "&:hover": {
+    transform: "scale(1.05)",
+    backgroundColor: "#f9aa43",
+  },
+};
+
+const mypageButton = {
+  display: "flex",
+  alignItems: "center",
+  marginLeft: "0rem",
+  marginTop: "2.5rem",
+  backgroundColor: "#f9aa43",
+  padding: "2rem",
+  width: "30rem",
+  height: "4rem",
+  borderRadius: "1rem",
+  color: "#8d3e02",
+  transition: "transform 0.3s",
+  "&:hover": {
+    transform: "scale(1.05)",
+    backgroundColor: "#f9aa43",
+  },
+};
