@@ -10,7 +10,7 @@ import { RootState, setQuestionId } from "../store";
 import { useNavigate } from "react-router-dom";
 
 const TodayAnswer = () => {
-  const [question] = useState<any>([]);
+  const [question, setQuestion] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
@@ -30,13 +30,14 @@ const TodayAnswer = () => {
         },
       })
       .then((response) => {
-        for (let i = 0; i < response.data.question.length; i++) {
-          question.push([
-            response.data.question[i]._id,
-            response.data.question[i].content,
-          ]);
-        }
-        console.log("가나다라", question);
+        console.log("하영", response.data);
+        const newQuestion = response.data.question.map((q: any) => [
+          q._id,
+          q.content,
+        ]);
+        setQuestion(newQuestion);
+
+        console.log("Response Question", newQuestion);
         setLoading(false);
       })
       .catch((err) => {
@@ -60,13 +61,16 @@ const TodayAnswer = () => {
   const handleNextClick = () => {
     setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % question.length);
     dispatch(setQuestionId(question[currentMessageIndex][0])); // questionId 업데이트
+    console.log(currentMessageIndex);
   };
 
   const handlePrevClick = () => {
-    setCurrentMessageIndex((prevIndex) =>
-      prevIndex === 0 ? question.length - 1 : prevIndex - 1
-    );
-    dispatch(setQuestionId(question[currentMessageIndex][0])); // questionId 업데이트
+    const newIndex =
+      (currentMessageIndex - 1 + question.length) % question.length;
+    setCurrentMessageIndex(newIndex);
+
+    const newQuestionId = question[newIndex][0];
+    dispatch(setQuestionId(newQuestionId)); // questionId 업데이트
   };
 
   if (loading) {
@@ -108,6 +112,7 @@ const TodayAnswer = () => {
             },
           }}
           onClick={() => {
+            dispatch(setQuestionId(question[currentMessageIndex][0])); // questionId 업데이트
             navigate("/answer");
           }}
         >
