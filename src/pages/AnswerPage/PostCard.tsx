@@ -52,7 +52,11 @@ const PostCard: React.FC<PostCardProps> = (answer: PostCardProps) => {
 
   const goMyPage = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     e.stopPropagation();
-    navigate(`/mypage/?nickName=${answer.nickName}`);
+    if (!answer.isWriteAnswer) {
+      alert("답변을 작성하셔야 다른 사람들의 게시글을 확인할 수 있습니다.");
+    } else {
+      navigate(`/mypage/?nickName=${answer.nickName}`);
+    }
   };
 
   return (
@@ -76,7 +80,7 @@ const PostCard: React.FC<PostCardProps> = (answer: PostCardProps) => {
           >
             <Avatar
               alt="Profile Image"
-              src="https://i.namu.wiki/i/Pmt-X4ekyEZoJL003elEka-ePn1YUsaHlJps0EXgy92xgYISoP6lZptPuC1xcnvUkB09IFqNttUpyKSRjNVNUA.webp"
+              src={answer.profileImage}
               variant="circular"
               sx={{
                 width: 100,

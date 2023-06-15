@@ -12,6 +12,7 @@ export interface PostCardProps {
   content: string;
   likeCount: number;
   isWriteAnswer: boolean;
+  profileImage: string;
 }
 
 export interface HeartButtonProps {
