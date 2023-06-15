@@ -3,9 +3,12 @@ import styled from "styled-components";
 import TodayAnswer from "../../common/TodayAnswer";
 import Calendar from "./Calendar";
 import MainProfileImg from "../../asset/img/croco.png";
-import ProfileImgAngry from "../../asset/img/croco1.png";
-import ProfileImgSad from "../../asset/img/croco2.png";
-import ProfileImgLove from "../../asset/img/croco3.png";
+import ProfileImgAngry from "../../asset/img/crocoangry.png";
+import ProfileImgSad from "../../asset/img/crocosad.png";
+import ProfileImgLove from "../../asset/img/crocolove.png";
+import ProfileImgLoveLock from "../../asset/img/crocolovelock.png";
+import ProfileImgSadLock from "../../asset/img/crocosadlock.png";
+import ProfileImgAngryLock from "../../asset/img/crocoangrylock.png";
 import axios from "axios";
 import rightAnimals from "../../asset/img/rightAnimals.png";
 import leftAnimals from "../../asset/img/leftAnimals.png";
@@ -23,9 +26,13 @@ function Main() {
   const month = String(today.getMonth() + 1).padStart(2, "0");
   const day = String(today.getDate()).padStart(2, "0");
   const [mainImg, setMainImg] = useState<any | null>(null);
+  const [angryImg, setAngryImg] = useState<any | null>(null);
+  const [sadImg, setSadImg] = useState<any | null>(null);
+  const [loveImg, setLoveImg] = useState<any | null>(null);
+  const [emotion, setEmotion] = useState<any | null>(null);
   const formattedDate = `${year}-${month}-${day}`;
   const [containerWidth, setContainerWidth] = useState(0);
-  const [selectedProfile, setSelectedProfile] = useState(MainProfileImg);
+
   const [user, setUser] = useState<any | null>(null);
   const [level, setLevel] = useState<any | null>(null);
   const [exp, setExp] = useState<number | null>(null);
@@ -49,29 +56,6 @@ function Main() {
     checkToken();
   }, []);
 
-  useEffect(() => {
-    axios
-      .get(`https://allwrite.kro.kr/api/v1/emotion/${formattedDate}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        // setMainImg(response.data.emotion);
-        console.log(response.data.emotion);
-        if (response.data.emotion === "angry") {
-          setMainImg(ProfileImgAngry);
-        } else if (response.data.emotion === "sad") {
-          setMainImg(ProfileImgSad);
-        } else if (response.data.emotion === "love") {
-          setMainImg(ProfileImgLove);
-        }
-      })
-      .catch((err) => {
-        console.log("error");
-      });
-  }, []);
-
   async function changeProfile(emotion: string) {
     try {
       const response = await axios.post(
@@ -93,15 +77,30 @@ function Main() {
   }
 
   async function changeProfile2() {
-    await changeProfile("angry");
+    console.log(String(angryImg));
+    if (angryImg.includes("lock")) {
+      alert("선택할 수 없습니다!");
+    } else {
+      await changeProfile("angry");
+    }
   }
 
   async function changeProfile3() {
-    await changeProfile("sad");
+    console.log(sadImg);
+    if (sadImg.includes("lock")) {
+      alert("레벨 15 이상 사용이 가능합니다!");
+    } else {
+      await changeProfile("sad");
+    }
   }
 
   async function changeProfile4() {
-    await changeProfile("love");
+    console.log(loveImg);
+    if (loveImg.includes("lock")) {
+      alert("레벨 20 이상 사용이 가능합니다!");
+    } else {
+      await changeProfile("love");
+    }
   }
   useEffect(() => {
     axios
@@ -111,8 +110,26 @@ function Main() {
         },
       })
       .then((response) => {
+        console.log(response.data);
         setLevel(response.data.level);
         setExp(response.data.currentExp);
+        if (Number(response.data.level) < 5) {
+          setAngryImg(ProfileImgAngryLock);
+          setSadImg(ProfileImgSadLock);
+          setLoveImg(ProfileImgLoveLock);
+        } else if (Number(response.data.level) < 10) {
+          setAngryImg(ProfileImgAngry);
+          setSadImg(ProfileImgSadLock);
+          setLoveImg(ProfileImgLoveLock);
+        } else if (Number(response.data.level) < 15) {
+          setAngryImg(ProfileImgAngry);
+          setSadImg(ProfileImgSad);
+          setLoveImg(ProfileImgLoveLock);
+        } else if (Number(response.data.level) < 20) {
+          setAngryImg(ProfileImgAngry);
+          setSadImg(ProfileImgSad);
+          setLoveImg(ProfileImgLove);
+        }
       })
       .catch((err) => {
         console.log("error");
@@ -127,13 +144,45 @@ function Main() {
     return () => clearTimeout(timeout);
   }, [exp]);
 
+  useEffect(() => {
+    axios
+      .get(`https://allwrite.kro.kr/api/v1/emotion/${formattedDate}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+
+        if (response.data.emotion === "angry") {
+          setMainImg(ProfileImgAngry);
+        } else if (response.data.emotion === "sad") {
+          setMainImg(ProfileImgSad);
+        } else if (response.data.emotion === "love") {
+          setMainImg(ProfileImgLove);
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }, []);
+
   return (
     <>
       <Container1>
         <Profile style={{ backgroundImage: `url(${mainImg})` }}></Profile>
-        <LeftProfile onClick={changeProfile2}></LeftProfile>
-        <RightProfile onClick={changeProfile3}></RightProfile>
-        <TopProfile onClick={changeProfile4}></TopProfile>
+        <AngryProfile
+          style={{ backgroundImage: `url(${angryImg})` }}
+          onClick={changeProfile2}
+        ></AngryProfile>
+        <SadProfile
+          style={{ backgroundImage: `url(${sadImg})` }}
+          onClick={changeProfile3}
+        ></SadProfile>
+        <LoveProfile
+          style={{ backgroundImage: `url(${loveImg})` }}
+          onClick={changeProfile4}
+        ></LoveProfile>
         <Name>{user && <div>{user.nickName}</div>}</Name>
         {/* <Save>
           <DoneIcon />
@@ -193,7 +242,7 @@ const Profile = styled.button`
   }
 `;
 
-const RightProfile = styled.button`
+const SadProfile = styled.button`
   height: 7rem;
   width: 7rem;
   border: none;
@@ -204,7 +253,6 @@ const RightProfile = styled.button`
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-color: transparent;
-  background-image: url(${ProfileImgSad});
   transition: transform 0.3s;
   /* background-color: red; */
 
@@ -215,7 +263,7 @@ const RightProfile = styled.button`
   }
 `;
 
-const TopProfile = styled.button`
+const LoveProfile = styled.button`
   height: 7rem;
   width: 7rem;
   background-size: 100% 100%;
@@ -226,7 +274,6 @@ const TopProfile = styled.button`
   position: absolute;
   background-color: transparent;
   background-repeat: no-repeat;
-  background-image: url(${ProfileImgLove});
   transition: transform 0.3s;
 
   &:hover {
@@ -236,7 +283,7 @@ const TopProfile = styled.button`
   }
 `;
 
-const LeftProfile = styled.button`
+const AngryProfile = styled.button`
   height: 7rem;
   width: 8rem;
   background-size: 100% 100%;
@@ -247,7 +294,6 @@ const LeftProfile = styled.button`
   position: absolute;
   background-color: transparent;
   background-repeat: no-repeat;
-  background-image: url(${ProfileImgAngry});
   transition: transform 0.3s;
 
   &:hover {
