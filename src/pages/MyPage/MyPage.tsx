@@ -266,17 +266,13 @@ function MyPage() {
             {!myprofile && <ProfileButton />}
           </Profiles>
         </LeftContainer>
-        <StyledCalendar />
+        <Calendar />
       </Container>
     </>
   );
 }
 
 export default MyPage;
-
-const StyledCalendar = styled(Calendar)`
-  color: black; // 원하는 색상으로 변경해주세요.
-`;
 
 const Container = styled.div`
   width: 100rem;

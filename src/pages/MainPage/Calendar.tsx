@@ -35,7 +35,7 @@ export default function DateCalendarServerRequest() {
       const highlighted = [5, 10, 20];
       setHighlightedDays(highlighted);
       setIsLoading(false);
-    }, 1000);
+    }, 100);
   };
 
   const fetchData = async () => {
