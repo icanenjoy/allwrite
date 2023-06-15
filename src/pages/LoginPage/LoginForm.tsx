@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import styled from "styled-components";
-import catImage from "./img/cat.png";
-import catBack from "./img/cat-back.png";
-import catFront from "./img/cat-front.png";
-import closedCat from "./img/closed-cat.png";
+import crocoBack from "./img/croco-back.png";
+import crocoFront from "./img/croco-front.png";
+import closedCroco from "./img/closed-croco.png";
 
 import {
   Button,
@@ -69,24 +68,30 @@ const LoginForm: React.FC = () => {
     []
   );
 
-  const catPosition = useMemo(() => {
+  const crocoPosition = useMemo(() => {
     const emailLength = email.length;
     let top = 50;
     let left = 50;
 
-    if (emailLength <= 20) {
+    if (emailLength <= 4) {
       top = 50 + emailLength * 0.1;
-      left = 50 + emailLength * 0.2;
+      left = 50 + emailLength * 0.1;
+    } else if (4 < emailLength && emailLength <= 23) {
+      top = 50.4;
+      left = 50.4 + (emailLength - 4) * 0.2;
+    } else if (23 < emailLength && emailLength <=30) {
+      top = 50.4 - (emailLength - 23) * 0.1;
+      left = 54.2 + (emailLength - 23) * 0.2;
     } else {
-      top = 52 - (emailLength - 20) * 0.1;
-      left = 54 + (emailLength - 20) * 0.1;
+      top = 49.7;
+      left = 55.5;
     }
 
     return { top: `${top}%`, left: `${left}%` };
   }, [email]);
 
-  const catTop = catPosition.top;
-  const catLeft = catPosition.left;
+  const crocoTop = crocoPosition.top;
+  const crocoLeft = crocoPosition.left;
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -145,8 +150,8 @@ const LoginForm: React.FC = () => {
   const Profile = React.memo(styled.div`
     position: relative;
     height: 17rem;
-    width: 17rem;
-    background-image: url(${isPasswordEmpty ? catBack : closedCat});
+    width: 18rem;
+    background-image: url(${isPasswordEmpty ? crocoBack : closedCroco});
     background-size: cover;
 
     ${isPasswordEmpty
@@ -154,83 +159,96 @@ const LoginForm: React.FC = () => {
     &::after {
       content: "";
       position: absolute;
-      top: ${catTop};
-      left: ${catLeft};
+      top: ${crocoTop};
+      left:  ${crocoLeft};
       transform: translate(-50%, -50%);
       height: 17rem;
-      width: 17rem;
-      background-image: url(${catFront});
+      width: 18rem;
+      background-image: url(${crocoFront});
       background-size: cover;
     }
-  `
+    `
       : ""}
   `);
 
   return (
     <Container component="main" maxWidth="xs">
-      <Paper
-        elevation={3}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          textAlign: "center",
-          marginTop: 8,
-          padding: 3,
-          borderRadius: 5,
-        }}
-      >
-        <div style={{ fontSize: "3rem", fontWeight: 750 }}>Login</div>
-        <Profile />
-        <form onSubmit={HandleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                type="email"
-                label="Email Address"
-                fullWidth
-                value={email}
-                onChange={handleEmailChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                type="password"
-                label="Password"
-                fullWidth
-                value={password}
-                onChange={handlePasswordChange}
-                required
-              />
-            </Grid>
-          </Grid>
-          {loginStatus === "failure" && (
-            <div style={{ fontSize: "0.8rem", fontWeight: 350, color: "red" }}>
-              <br />
-              아이디 또는 비밀번호를 잘못 입력했습니다.
-            </div>
-          )}
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ marginTop: 3, marginBottom: 2 }}
-          >
-            로그인
-          </Button>
-        </form>
-        <Button
-          onClick={handleSignUp}
-          variant="contained"
-          fullWidth
-          sx={{ marginBottom: 2 }}
+      <Grid container justifyContent="center">
+        <Paper
+          elevation={3}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            marginTop: 8,
+            padding: 3,
+            borderRadius: 5,
+            position: "absolute",
+            width: "20rem",
+            zIndex: 10,
+          }}
         >
-          회원가입
-        </Button>
-      </Paper>
+          <div style={{ fontSize: "3rem", fontWeight: 750 }}>Login</div>
+          <Profile />
+          <Grid>
+            <form onSubmit={HandleSubmit}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    type="email"
+                    label="Email Address"
+                    fullWidth
+                    value={email}
+                    onChange={handleEmailChange}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    type="password"
+                    label="Password"
+                    fullWidth
+                    value={password}
+                    onChange={handlePasswordChange}
+                    required
+                  />
+                </Grid>
+              </Grid>
+              {loginStatus === "failure" && (
+                <div style={{ fontSize: "0.8rem", fontWeight: 350, color: "red" }}>
+                  <br />
+                  아이디 또는 비밀번호를 잘못 입력했습니다.
+                </div>
+              )}
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{ marginTop: 3, marginBottom: 2 , backgroundColor: "#2c9960",
+                "&:hover": {
+                  backgroundColor: "#24794d"// hover 시 변경할 배경색
+                }}}
+              >
+                로그인
+              </Button>
+            </form>
+            <Button
+              onClick={handleSignUp}
+              variant="contained"
+              fullWidth
+              sx={{ marginBottom: 2, backgroundColor: "#2c9960",
+              "&:hover": {
+                backgroundColor: "#24794d"// hover 시 변경할 배경색
+              }}}
+            >
+              회원가입
+            </Button>
+          </Grid>
+        </Paper>
+      </Grid>
     </Container>
   );
 };
