@@ -7,7 +7,7 @@ import { useLocalStorage } from "usehooks-ts";
 import axios from "axios";
 import styled from "styled-components";
 import profileImg from "../../asset/img/profileImg.png";
-import Calendar from "../MainPage/calendartest";
+import Calendar from "../MainPage/Calendar";
 import jwtDecode from "jwt-decode";
 
 function MyPage() {
