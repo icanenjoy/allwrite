@@ -18,6 +18,7 @@ import CommentForm from "./CommentForm";
 import { useLocalStorage } from "usehooks-ts";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import jwtDecode from "jwt-decode";
 
 export const AnswerDetail: React.FC<AnswerDetailProps> = ({
   answer_id,
@@ -37,7 +38,9 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
   const [isReported, setIsReported] = useState(false);
   const questionId = useSelector((state: RootState) => state.questionId);
   const answerId = useSelector((state: RootState) => state.answerId);
-  const myNickName = useSelector((state: RootState) => state.nickName);
+  const myNickName: string | null = accessToken
+    ? jwtDecode<{ nickName: string }>(accessToken).nickName
+    : null;
   //api/v1/adminUser/warning
 
   useEffect(() => {
@@ -172,7 +175,11 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
           </Typography>
         </Box>
         <DialogContent sx={{ flex: 1 }}>
-          <HeartButton likeCount={data.likeCount} isLiked={data.isLiked} />
+          <HeartButton
+            likeCount={data.likeCount}
+            isLiked={data.isLiked}
+            setData={setData}
+          />
           <CommentForm />
         </DialogContent>
       </Paper>

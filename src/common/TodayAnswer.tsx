@@ -39,6 +39,7 @@ const TodayAnswer = () => {
 
         console.log("Response Question", newQuestion);
         setLoading(false);
+        dispatch(setQuestionId(newQuestion[0][0])); // questionId 업데이트
       })
       .catch((err) => {
         console.log("error");
