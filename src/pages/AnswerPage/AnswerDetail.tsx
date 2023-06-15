@@ -10,7 +10,7 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { Edit, Delete, Report } from "@mui/icons-material";
+import { Edit, Delete, Report, Save } from "@mui/icons-material";
 import axios from "axios";
 import HeartButton from "./HeartButton";
 import { AnswerDetailProps } from "./PostCardProps";
@@ -34,6 +34,10 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
     "rt",
     null
   );
+  const [editedContent, setEditedContent] = useState(content);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
   const [data, setData] = useState<any>([]);
   const [isReported, setIsReported] = useState(false);
   const questionId = useSelector((state: RootState) => state.questionId);
@@ -53,12 +57,9 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
           },
         }
       )
-      .then((response) => setData(response.data));
+      .then((response) => setData(response.data))
+      .then(() => console.log(data));
   }, [questionId]);
-
-  const handleEdit = () => {
-    // Handle edit logic here
-  };
 
   const handleDelete = () => {
     const confirmed = window.confirm(
@@ -77,6 +78,45 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
         .then((response) => alert("게시물 삭제 성공"))
         .catch((e) => alert(e));
     } else {
+    }
+  };
+
+  const handleEdit = () => {
+    if (isEditMode) {
+      setIsSaving(true);
+      axios
+        .put(
+          `https://allwrite.kro.kr/api/v1/question/answer/${questionId}/${answerId}`,
+          { content: editedContent },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        )
+        .then((response) => {
+          alert("게시물이 수정되었습니다.");
+          setIsEditMode(false);
+          setIsSaving(false);
+          // Perform any necessary updates with the response data
+          axios
+            .get(
+              `https://allwrite.kro.kr/api/v1/question/answer/detail/${questionId}/${answerId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              }
+            )
+            .then((response) => setData(response.data));
+        })
+        .catch((e) => {
+          alert("게시물 수정에 실패했습니다.");
+          setIsSaving(false);
+          console.error(e);
+        });
+    } else {
+      setIsEditMode(true);
     }
   };
 
@@ -149,8 +189,8 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
           }}
         >
           {nickName === myNickName && (
-            <IconButton onClick={handleEdit}>
-              <Edit />
+            <IconButton onClick={handleEdit} disabled={isSaving}>
+              {isEditMode ? <Save /> : <Edit />}
             </IconButton>
           )}
           {nickName === myNickName && (
@@ -170,10 +210,23 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
             padding: "1rem",
           }}
         >
-          <Typography variant="h6" textAlign="center">
-            {content}
-          </Typography>
+          {isEditMode ? (
+            <TextField
+              value={editedContent}
+              onChange={(e) => setEditedContent(e.target.value)}
+              multiline
+              fullWidth
+            />
+          ) : (
+            data.answers &&
+            data.answers.length > 0 && (
+              <Typography variant="h6" textAlign="center">
+                {data.answers[0].content}
+              </Typography>
+            )
+          )}
         </Box>
+
         <DialogContent sx={{ flex: 1 }}>
           <HeartButton
             likeCount={data.likeCount}
