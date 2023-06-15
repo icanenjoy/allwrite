@@ -102,7 +102,7 @@ export default function HeaderBar() {
     const friendslistload = async () => {
       try {
         let response = await axios.get(
-          "http://34.64.145.63:5000/api/v1/friend/all",
+          "https://allwrite.kro.kr/api/v1/friend/all",
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -112,7 +112,7 @@ export default function HeaderBar() {
         setFriendList(response.data);
 
         response = await axios.get(
-          "http://34.64.145.63:5000/api/v1/friend/request",
+          "https://allwrite.kro.kr/api/v1/friend/request",
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
