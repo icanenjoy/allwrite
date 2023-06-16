@@ -90,7 +90,7 @@ const TodayAnswer = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            backgroundColor: "#f9aa43",
+            backgroundColor: "#1bb36a",
             padding: "5px",
             height: "4rem",
             borderRadius: "1.5rem",
@@ -101,16 +101,16 @@ const TodayAnswer = () => {
           }}
         >
           <IconButton onClick={handlePrevClick}>
-            <StyledArrowBack sx={{ color: "#8d3e02" }} />
+            <StyledArrowBack sx={{ color: "#f7f4f1" }} />
           </IconButton>
           <Button
             sx={{
               width: "100%",
               height: "4.4rem",
-              backgroundColor: "#f9aa43",
-              color: "#8d3e02",
+              backgroundColor: "#1bb36a",
+              color: "#f7f4f1",
               "&:hover": {
-                backgroundColor: "#f9aa43",
+                backgroundColor: "#1bb36a",
               },
             }}
             onClick={() => {
@@ -121,7 +121,7 @@ const TodayAnswer = () => {
             {currentMessage}
           </Button>
           <IconButton onClick={handleNextClick}>
-            <StyledArrowForward sx={{ color: "#8d3e02" }} />
+            <StyledArrowForward sx={{ color: "#f7f4f1" }} />
           </IconButton>
         </Box>
       </Grid>

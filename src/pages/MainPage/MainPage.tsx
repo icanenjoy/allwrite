@@ -456,7 +456,7 @@ const Name = styled.div`
   width: 100%;
   overflow: visible;
   margin-top: 2rem;
-  color: #ea9f27;
+  color: #1bb36a;
   font-weight: 750;
 `;
 
@@ -467,7 +467,7 @@ const Level = styled.div`
   overflow: visible;
   position: absoulte;
   margin-top: 1rem;
-  color: #ea9f27;
+  color: #1bb36a;
   font-weight: 750;
 `;
 
@@ -483,7 +483,7 @@ const Container = styled.div`
 `;
 
 const Progress = styled.div`
-  background-color: #f9aa43;
+  background-color: #1bb36a;
   width: ${(props) => props.style?.width || 0}%;
   height: 100%;
   transition: width 1s;
@@ -510,7 +510,7 @@ const Question = styled.div`
   overflow: visible;
   position: absoulte;
   margin-top: 4rem;
-  color: #ea9f27;
+  color: #1bb36a;
   font-weight: 750;
 `;
 
@@ -529,6 +529,6 @@ const BestAnswerContainer = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
-  color: #ea9f27;
+  color: #1bb36a;
   font-weight: 750;
 `;
