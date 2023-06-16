@@ -6,6 +6,7 @@ import MainProfileImg from "../../asset/img/croco.png";
 import ProfileImgAngry from "../../asset/img/crocoangry.png";
 import ProfileImgSad from "../../asset/img/crocosad.png";
 import ProfileImgLove from "../../asset/img/crocolove.png";
+
 import ProfileImgLoveLock from "../../asset/img/crocolovelock.png";
 import ProfileImgSadLock from "../../asset/img/crocosadlock.png";
 import ProfileImgAngryLock from "../../asset/img/crocoangrylock.png";
