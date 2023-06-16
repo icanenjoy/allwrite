@@ -1,19 +1,56 @@
 import React, { useState, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import Badge from "@mui/material/Badge";
-import styled from "styled-components";
 import axios from "axios";
+import styled from "styled-components";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
-import {
-  DateCalendar,
-  DateCalendarProps,
-} from "@mui/x-date-pickers/DateCalendar";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
-import croco from "../../asset/img/croco.png";
+import { useLocalStorage } from "usehooks-ts";
 import { Box, IconButton, Button } from "@mui/material";
+import MainProfileImg from "../../asset/img/croco.png";
+import ProfileImgAngry from "../../asset/img/crocoangry.png";
+import ProfileImgSad from "../../asset/img/crocosad.png";
+import ProfileImgLove from "../../asset/img/crocolove.png";
 import { useLocation } from "react-router-dom";
+import { DisplaySettingsTwoTone } from "@mui/icons-material";
+
+const thismonthemotion: any = {};
+
+/**
+ * Mimic fetch with abort controller https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
+ * ⚠️ No IE11 support
+ */
+function fakeFetch(
+  date: Dayjs,
+  { signal }: { signal: AbortSignal },
+  emotion: any
+) {
+  return new Promise<{ daysToHighlight: number[] }>((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      const daysInMonth = date.daysInMonth(); //달의 마지막 날 반환
+      const YearMonth = date.format("YYYY-MM"); //현재 해와 달을 알려줌
+      const daysToHighlight: number[] = [0];
+      for (let i = 0; i < emotion.length; i++) {
+        const month = emotion[i].date; //사용자의 감정의 날짜를 가져옴
+        if (month.includes(YearMonth)) {
+          //이번달과 같으면
+          daysToHighlight.push(parseInt(emotion[i].date.slice(8, 10)));
+          thismonthemotion[parseInt(emotion[i].date.slice(8, 10))] =
+            emotion[i].emotion; // 데이터 출력
+        }
+      }
+      resolve({ daysToHighlight });
+    }, 500);
+
+    signal.onabort = () => {
+      clearTimeout(timeout);
+      reject(new DOMException("aborted", "AbortError"));
+    };
+  });
+}
 
 const initialValue = dayjs();
 
@@ -21,25 +58,18 @@ export default function DateCalendarServerRequest() {
   const location = useLocation();
   const requestAbortController = React.useRef<AbortController | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [highlightedDays, setHighlightedDays] = React.useState<number[]>([]);
+  const [highlightedDays, setHighlightedDays] = React.useState([1, 2, 15]);
+  const [emotion, setEmotion] = useState();
   const [selectedDate, setSelectedDate] = React.useState<Dayjs>(initialValue);
   const [year, setYear] = useState<number | null>(null);
   const [month, setMonth] = useState<number | null>(null);
   const [days, setDays] = useState<number | null>(null);
-  const [nickName, setNickName] = useState(""); // 페이지 유저아이디
   const [data, setData] = useState<any[]>([]);
-
-  const fetchHighlightedDays = (date: Dayjs) => {
-    const controller = new AbortController();
-    requestAbortController.current = controller;
-
-    // Simulating API request delay
-    setTimeout(() => {
-      const highlighted = [5, 10, 20];
-      setHighlightedDays(highlighted);
-      setIsLoading(false);
-    }, 100);
-  };
+  const [nickName, setNickName] = useState(""); // 페이지 유저아이디
+  const [accessToken, setAccessToken] = useLocalStorage<string | null>(
+    "at",
+    null
+  ); // accessToken
 
   const fetchData = async () => {
     if (year !== null && month !== null && days !== null) {
@@ -59,16 +89,30 @@ export default function DateCalendarServerRequest() {
     }
   };
 
-  useEffect(() => {
-    fetchHighlightedDays(initialValue);
+  const fetchHighlightedDays = (date: Dayjs) => {
+    const controller = new AbortController();
+    if (emotion) {
+      fakeFetch(
+        date,
+        {
+          signal: controller.signal,
+        },
+        emotion
+      )
+        .then(({ daysToHighlight }) => {
+          setHighlightedDays(daysToHighlight);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          // ignore the error if it's caused by `controller.abort`
+          if (error.name !== "AbortError") {
+            throw error;
+          }
+        });
+    }
 
-    // Abort request on unmount
-    return () => {
-      if (requestAbortController.current) {
-        requestAbortController.current.abort();
-      }
-    };
-  }, []);
+    requestAbortController.current = controller;
+  };
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -76,53 +120,101 @@ export default function DateCalendarServerRequest() {
     setNickName(nickName || "");
   }, [location]);
 
-  useEffect(() => {
-    fetchData();
-  }, [year, month, days]);
+  React.useEffect(() => {
+    fetchHighlightedDays(initialValue);
 
-  const ServerDay = (
-    props: PickersDayProps<Dayjs> & {
-      highlightedDays?: number[];
-      selectedDate: Dayjs;
-      setSelectedDate: React.Dispatch<React.SetStateAction<Dayjs>>;
+    const emotionLoad = async () => {
+      try {
+        const response = await axios.get(
+          "https://allwrite.kro.kr/api/v1/emotion",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setEmotion(response.data);
+        console.log(response.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    emotionLoad();
+    return () => requestAbortController.current?.abort();
+  }, []);
+
+  const handleMonthChange = (date: Dayjs) => {
+    if (requestAbortController.current) {
+      // make sure that you are aborting useless requests
+      // because it is possible to switch between months pretty quickly
+      requestAbortController.current.abort();
     }
-  ) => {
-    const {
-      highlightedDays = [],
-      day,
-      outsideCurrentMonth,
-      selectedDate,
-      setSelectedDate,
-      ...other
-    } = props;
+
+    setIsLoading(true);
+    setHighlightedDays([]);
+    fetchHighlightedDays(date);
+  };
+  function ServerDay(
+    props: PickersDayProps<Dayjs> & { highlightedDays?: number[] }
+  ) {
+    const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
 
     const isSelected =
-      !outsideCurrentMonth && highlightedDays.indexOf(day.date()) > -1;
+      !props.outsideCurrentMonth &&
+      highlightedDays.indexOf(props.day.date()) > 0;
 
-    const handleClick = () => {
+    let dayemotion = "";
+    if (isSelected) {
+      let day = props.day.date();
+      dayemotion = thismonthemotion[day];
+    }
+
+    const dayGet = () => {
       setSelectedDate(day);
+      console.log(day.year());
+      console.log(day.month() + 1);
+      console.log(day.date());
       setYear(day.year());
       setMonth(day.month() + 1);
       setDays(day.date());
+      fetchData();
     };
 
     return (
-      <StyledBadge
-        key={day.toString()}
+      <Badge
+        key={props.day.toString()}
         overlap="circular"
-        badgeContent={isSelected ? "😄" : undefined}
-        style={{ width: 40, height: 40, fontSize: 40 }}
+        badgeContent={
+          (isSelected && dayemotion === "love" && (
+            <img
+              src={ProfileImgLove}
+              style={{ width: "20px", height: "20px" }}
+            ></img>
+          )) ||
+          (isSelected && dayemotion === "happy" && (
+            <img
+              src={ProfileImgSad}
+              style={{ width: "20px", height: "20px" }}
+            ></img>
+          )) ||
+          (isSelected && dayemotion === "angry" && (
+            <img
+              src={ProfileImgAngry}
+              style={{ width: "20px", height: "20px" }}
+            ></img>
+          ))
+        }
       >
         <PickersDay
           {...other}
           outsideCurrentMonth={outsideCurrentMonth}
           day={day}
-          onClick={handleClick}
+          onClick={dayGet}
         />
-      </StyledBadge>
+      </Badge>
     );
-  };
-
+  }
   return (
     <Container style={nickName ? { marginTop: 0 } : {}}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -154,8 +246,6 @@ export default function DateCalendarServerRequest() {
                 }}
                 {...slotProps}
                 highlightedDays={highlightedDays}
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
               />
             ),
           }}
