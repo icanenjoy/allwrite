@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { Box, IconButton, Button } from "@mui/material";
+import { Box, IconButton, Button, Grid } from "@mui/material";
 import { useLocalStorage } from "usehooks-ts";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
@@ -83,61 +83,50 @@ const TodayAnswer = () => {
     question.length > 0 ? question[currentMessageIndex][1] : null;
 
   return (
-    <Container>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          backgroundColor: "#f9aa43",
-          padding: "5px",
-          width: "54.8rem",
-          height: "4rem",
-          borderRadius: "1.5rem",
-          transition: "transform 0.3s",
-          "&:hover": {
-            transform: "scale(1.05)",
-          },
-        }}
-      >
-        <IconButton onClick={handlePrevClick}>
-          <StyledArrowBack sx={{ color: "#8d3e02" }} />
-        </IconButton>
-        <Button
+    <Grid container justifyContent="center" alignItems="center" spacing={2}>
+      <Grid item xs={12} sm={8} md={7} lg={6}>
+        <Box
           sx={{
-            width: "55rem",
-            height: "4.4rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
             backgroundColor: "#f9aa43",
-            color: "#8d3e02",
+            padding: "5px",
+            height: "4rem",
+            borderRadius: "1.5rem",
+            transition: "transform 0.3s",
             "&:hover": {
-              backgroundColor: "#f9aa43",
+              transform: "scale(1.05)",
             },
           }}
-          onClick={() => {
-            dispatch(setQuestionId(question[currentMessageIndex][0])); // questionId 업데이트
-            // dispatch(setQuestionId("648b382f77afc1f1df53a4bf"));
-            navigate("/answer");
-          }}
         >
-          {currentMessage}
-        </Button>
-        <IconButton onClick={handleNextClick}>
-          <StyledArrowForward sx={{ color: "#8d3e02" }} />
-        </IconButton>
-      </Box>
-    </Container>
+          <IconButton onClick={handlePrevClick}>
+            <StyledArrowBack sx={{ color: "#8d3e02" }} />
+          </IconButton>
+          <Button
+            sx={{
+              width: "100%",
+              height: "4.4rem",
+              backgroundColor: "#f9aa43",
+              color: "#8d3e02",
+              "&:hover": {
+                backgroundColor: "#f9aa43",
+              },
+            }}
+            onClick={() => {
+              dispatch(setQuestionId(question[currentMessageIndex][0])); // questionId 업데이트
+              navigate("/answer");
+            }}
+          >
+            {currentMessage}
+          </Button>
+          <IconButton onClick={handleNextClick}>
+            <StyledArrowForward sx={{ color: "#8d3e02" }} />
+          </IconButton>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
-
-const Container = styled.div`
-  width: 100%;
-  height: 5rem;
-  margin-top: 3rem;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  color: #f9aa43;
-  font-weight: 750;
-`;
 
 export default TodayAnswer;

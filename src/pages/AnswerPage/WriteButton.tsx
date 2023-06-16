@@ -16,7 +16,7 @@ import { useLocalStorage } from "usehooks-ts";
 
 const MAX_CONTENT_LENGTH = 200;
 
-const WriteButton: React.FC = () => {
+const WriteButton: React.FC = (onSubmit) => {
   const [open, setOpen] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
   const [content, setContent] = useState("");
@@ -74,10 +74,12 @@ const WriteButton: React.FC = () => {
         console.log("작성", questionId);
         alert("게시글 작성이 완료되었습니다.");
       })
+      .then(() => {
+        window.location.reload();
+      })
       .catch((e) => alert(e));
 
     // 작성 완료 후 모달을 닫으려면 handleClose() 함수를 호출하세요.
-    handleClose();
   };
 
   return (
