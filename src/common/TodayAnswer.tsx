@@ -101,14 +101,18 @@ const TodayAnswer = () => {
           }}
         >
           <IconButton onClick={handlePrevClick}>
-            <StyledArrowBack sx={{ color: "#f7f4f1" }} />
+            <StyledArrowBack sx={{ color: "#f6f2e2" }} />
           </IconButton>
           <Button
             sx={{
               width: "100%",
               height: "4.4rem",
               backgroundColor: "#1bb36a",
-              color: "#f7f4f1",
+              color: "#f6f2e2",
+              fontSize: "1rem",
+              fontWeight: "900",
+              fontFamily: "Pretendard-Regular",
+
               "&:hover": {
                 backgroundColor: "#1bb36a",
               },
@@ -121,7 +125,7 @@ const TodayAnswer = () => {
             {currentMessage}
           </Button>
           <IconButton onClick={handleNextClick}>
-            <StyledArrowForward sx={{ color: "#f7f4f1" }} />
+            <StyledArrowForward sx={{ color: "#f6f2e2" }} />
           </IconButton>
         </Box>
       </Grid>

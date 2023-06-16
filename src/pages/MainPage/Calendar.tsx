@@ -225,6 +225,7 @@ export default function DateCalendarServerRequest() {
               color: "#1bb36a",
               marginLeft: "20.5rem",
               marginTop: "-1rem",
+              fontFamily: "GmarketSansMedium",
             }}
           >
             {selectedDate && `${selectedDate.format("YYYY.MM.DD")}`}
@@ -260,6 +261,7 @@ export default function DateCalendarServerRequest() {
             width: "100%",
             color: "#ed7e28",
             marginTop: "-1rem",
+            fontFamily: "GmarketSansMedium",
           }}
         >
           {selectedDate && `${selectedDate.format("YYYY.MM.DD")}`}

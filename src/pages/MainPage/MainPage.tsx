@@ -307,7 +307,7 @@ const Profile = styled.button`
   position: relative;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.3);
     overflow: hidden;
     cursor: pointer;
   }
@@ -328,7 +328,7 @@ const SadProfile = styled.button`
   /* background-color: red; */
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.3);
     overflow: hidden;
     cursor: pointer;
   }
@@ -348,7 +348,7 @@ const LoveProfile = styled.button`
   transition: transform 0.3s;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.3);
     overflow: hidden;
     cursor: pointer;
   }
@@ -368,7 +368,7 @@ const SosoProfile = styled.button`
   transition: transform 0.3s;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.3);
     overflow: hidden;
     cursor: pointer;
   }
@@ -388,7 +388,7 @@ const HappyProfile = styled.button`
   transition: transform 0.3s;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.3);
     overflow: hidden;
     cursor: pointer;
   }
@@ -408,7 +408,7 @@ const BadProfile = styled.button`
   transition: transform 0.3s;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.3);
     overflow: hidden;
     cursor: pointer;
   }
@@ -428,7 +428,7 @@ const AngryProfile = styled.button`
   transition: transform 0.3s;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.3);
     overflow: hidden;
     cursor: pointer;
   }
@@ -457,7 +457,8 @@ const Name = styled.div`
   overflow: visible;
   margin-top: 2rem;
   color: #1bb36a;
-  font-weight: 750;
+  font-weight: 1000;
+  font-family: "GmarketSansMedium";
 `;
 
 const Level = styled.div`
@@ -468,7 +469,8 @@ const Level = styled.div`
   position: absoulte;
   margin-top: 1rem;
   color: #1bb36a;
-  font-weight: 750;
+  font-weight: 1000;
+  font-family: "Pretendard-Regular";
 `;
 
 const Container = styled.div`
@@ -512,6 +514,7 @@ const Question = styled.div`
   margin-top: 4rem;
   color: #1bb36a;
   font-weight: 750;
+  font-family: "GmarketSansMedium";
 `;
 
 const Container3 = styled.div`
