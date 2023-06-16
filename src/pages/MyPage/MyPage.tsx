@@ -391,8 +391,7 @@ function MyPage() {
             {!myprofile && <ProfileButton />}
           </Profiles>
         </LeftContainer>
-
-        <List>
+        <BottonContainer>
           {question.map((question: any, index: string) => (
             <Button
               key={index}
@@ -402,7 +401,7 @@ function MyPage() {
               <p>{question.content}</p>
             </Button>
           ))}
-        </List>
+        </BottonContainer>
       </Container>
       {open && <AnswerDetail nickName={nickName} onClose={handleClose} />}
     </>
@@ -529,3 +528,11 @@ const questionButton = {
     backgroundColor: "#2c9960",
   },
 };
+
+const BottonContainer = styled.div`
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
