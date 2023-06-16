@@ -140,6 +140,22 @@ export default function DateCalendarServerRequest() {
     };
 
     emotionLoad();
+
+    const firstdata = async () => {
+      const date = initialValue;
+      try {
+        const response = await axios.get(
+          `https://allwrite.kro.kr/api/v1/question/${date}`
+        );
+        console.log(response.data); // 요청 결과를 콘솔에 출력
+        setData(response.data);
+        // 여기에서 데이터를 처리하거나 상태를 업데이트할 수 있습니다.
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    firstdata();
+
     return () => requestAbortController.current?.abort();
   }, []);
 

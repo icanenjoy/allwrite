@@ -12,7 +12,13 @@ import jwtDecode from "jwt-decode";
 import EditIcon from "@mui/icons-material/Edit";
 import { IconButton } from "@mui/material";
 import { Box, Typography } from "@mui/material";
-import { Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  List,
+} from "@mui/material";
 
 function MyPage() {
   const Relation = {
@@ -33,6 +39,9 @@ function MyPage() {
   const [myprofile, setmyprofile] = useState(false); //본인인지 상대 페이지 인지 구분
   const [relation, setRelation] = useState<Relation>(Relation); //친구와의 관계
   const [user, setUser] = useState<any | null>("");
+  const [answerId, setAnswerId] = useState("");
+  const [questionId, setQuestionId] = useState("");
+  const [question, setQuestion] = useState<any | null>([]);
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
     "at",
     null
@@ -62,6 +71,7 @@ function MyPage() {
     } else if (nickName) {
       getFriendProfile();
     }
+    getQuestion();
   }, [user]);
 
   useEffect(() => {
@@ -72,6 +82,29 @@ function MyPage() {
     }, 700);
     return () => clearTimeout(timeout);
   }, [profile]);
+
+  const getQuestion = async () => {
+    try {
+      const response = await axios.get(
+        `https://allwrite.kro.kr/api/v1/question/answer/user/${nickName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setQuestion(response.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleClickOpen = (qId: string, ansId: string) => {
+    //버튼클릭
+    setAnswerId(ansId);
+    setQuestionId(qId);
+    alert(`${qId}, ${ansId}`);
+  };
 
   const getMyProfile = async () => {
     setmyprofile(true);
@@ -361,7 +394,17 @@ function MyPage() {
             {!myprofile && <ProfileButton />}
           </Profiles>
         </LeftContainer>
-        <Calendar />
+        <List>
+          {question.map((question: any, index: string) => (
+            <Button
+              key={index}
+              sx={questionButton}
+              onClick={() => handleClickOpen(question.questionId, question._id)}
+            >
+              <p>{question.content}</p>
+            </Button>
+          ))}
+        </List>
       </Container>
     </>
   );
@@ -481,5 +524,23 @@ const ProfileFriendButton2 = {
   "&:hover": {
     backgroundColor: "#1f7047",
     color: "white",
+  },
+};
+
+const questionButton = {
+  display: "flex",
+  alignItems: "center",
+  marginLeft: "2rem",
+  marginTop: "2.5rem",
+  backgroundColor: "#f9aa43",
+  padding: "2rem",
+  width: "27rem",
+  height: "4rem",
+  borderRadius: "1rem",
+  color: "#8d3e02",
+  transition: "transform 0.3s",
+  "&:hover": {
+    transform: "scale(1.05)",
+    backgroundColor: "#f9aa43",
   },
 };
