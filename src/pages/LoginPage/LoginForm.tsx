@@ -74,7 +74,7 @@ const LoginForm: React.FC = () => {
           setLoginStatus("success");
         });
     }
-  }, [email, password]);
+  }, []);
 
   const handleEmailChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,7 +129,8 @@ const LoginForm: React.FC = () => {
         setLoginStatus("success");
         dispatch(
           setNickName(
-            jwt_decode<JwtLoginPayload>(accessToken as string).nickName
+            jwt_decode<JwtLoginPayload>(response.data.token.accessToken)
+              .nickName
           )
         );
       })
