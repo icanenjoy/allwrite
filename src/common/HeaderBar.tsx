@@ -120,9 +120,7 @@ export default function HeaderBar() {
           }
         );
         setFriendReq(response.data);
-      } catch (e) {
-        console.log(e);
-      }
+      } catch (e) {}
     };
 
     friendslistload();
@@ -131,7 +129,6 @@ export default function HeaderBar() {
       try {
         if (accessToken !== null) {
           setUser(jwtDecode(accessToken));
-          console.log(jwtDecode(accessToken));
         }
       } catch (e) {
         console.error("Token decoding error:", e);
@@ -168,9 +165,7 @@ export default function HeaderBar() {
           }
         );
         setFriendReq(response.data);
-      } catch (e) {
-        console.log(e);
-      }
+      } catch (e) {}
     };
 
     friendslistload();

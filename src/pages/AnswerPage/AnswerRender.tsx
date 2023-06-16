@@ -26,8 +26,6 @@ const AnswerRender = () => {
   const nickName = useSelector((state: RootState) => state.nickName);
 
   useEffect(() => {
-    console.log("Render UseEffect", visibilityScope);
-
     const fetchData = async () => {
       try {
         if (visibilityScope === "public") {
@@ -54,12 +52,8 @@ const AnswerRender = () => {
           setData(response.data.answers);
           setIsWriteAnswer(response.data.isWriteAnswer);
           setMaxPage(Math.ceil(response.data.answerCount / 12));
-          console.log(maxPage);
         }
-      } catch (err) {
-        // Handle error
-        alert("이거야?");
-      }
+      } catch (err) {}
     };
 
     fetchData();

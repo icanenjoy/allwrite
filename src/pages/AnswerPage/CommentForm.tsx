@@ -51,7 +51,6 @@ const CommentForm: React.FC<CommentFormProps> = () => {
         }
       )
       .then((response) => {
-        console.log("useEffect", response.data);
         const extractedComments = response.data.comments[0].comment.map(
           (comment: Comment) => {
             return {
@@ -66,7 +65,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
         );
         setComments(extractedComments);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {});
   }, [answerId, questionId, accessToken]);
 
   const handleSubmit = () => {
@@ -97,7 +96,6 @@ const CommentForm: React.FC<CommentFormProps> = () => {
             }
           )
           .then((response) => {
-            console.log("useEffect", response.data);
             const extractedComments = response.data.comments[0].comment.map(
               (comment: Comment) => {
                 return {
@@ -112,7 +110,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
             );
             setComments(extractedComments);
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {});
       })
       .catch((e) => alert(e));
   };
@@ -120,7 +118,6 @@ const CommentForm: React.FC<CommentFormProps> = () => {
   const handleReport = (index: number) => {
     const commentId = comments[index]._id;
     setReportedCommentId(commentId);
-    console.log(commentId);
     axios
       .post(
         `https://allwrite.kro.kr/api/v1/answer/comment/complaint/${answerId}/${commentId}`,
@@ -133,9 +130,6 @@ const CommentForm: React.FC<CommentFormProps> = () => {
       )
       .then(() => alert("댓글 신고 성공"))
       .catch((e) => {
-        console.log(
-          `https://allwrite.kro.kr/api/v1/answer/comment/complaint/${answerId}/${commentId}`
-        );
         alert(e);
       });
   };
@@ -163,7 +157,6 @@ const CommentForm: React.FC<CommentFormProps> = () => {
             }
           )
           .then((response) => {
-            console.log("useEffect", response.data);
             const extractedComments = response.data.comments[0].comment.map(
               (comment: Comment) => {
                 return {
@@ -178,7 +171,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
             );
             setComments(extractedComments);
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {});
       })
       .catch((e) => alert(e));
   };
@@ -220,7 +213,6 @@ const CommentForm: React.FC<CommentFormProps> = () => {
               }
             )
             .then((response) => {
-              console.log("useEffect", response.data);
               const extractedComments = response.data.comments[0].comment.map(
                 (comment: Comment) => {
                   return {
@@ -235,7 +227,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
               );
               setComments(extractedComments);
             })
-            .catch((error) => console.log(error));
+            .catch((error) => {});
         })
         .catch((e) => alert(e));
     }

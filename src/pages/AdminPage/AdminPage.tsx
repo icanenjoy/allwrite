@@ -42,7 +42,6 @@ const AdminPage = () => {
             },
           }
         );
-        console.log(response.data[0]);
         setUser(response.data[0]);
 
         response = await axios.get(
@@ -53,11 +52,8 @@ const AdminPage = () => {
             },
           }
         );
-        console.log(response.data);
         setQuestion(response.data);
-      } catch (e) {
-        console.log(e);
-      }
+      } catch (e) {}
     };
 
     firstdata();
@@ -101,10 +97,7 @@ const AdminPage = () => {
             },
           }
         );
-        console.log(response);
-      } catch (e) {
-        console.log(e);
-      }
+      } catch (e) {}
     };
 
     changeque();

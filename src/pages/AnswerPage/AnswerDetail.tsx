@@ -56,8 +56,7 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
           },
         }
       )
-      .then((response) => setData(response.data))
-      .then(() => console.log(data));
+      .then((response) => setData(response.data));
   }, [questionId, infiniteBlockCode]);
 
   const handleDelete = () => {

@@ -70,7 +70,6 @@ const LoginForm: React.FC = () => {
           navigate("/main"); // 로그인 성공 시 /main으로 이동
         })
         .catch((err) => {
-          console.log(data);
           setLoginStatus("success");
         });
     }
@@ -138,7 +137,6 @@ const LoginForm: React.FC = () => {
         navigate("/main"); // 로그인 성공 시 /main으로 이동
       })
       .catch((err) => {
-        console.log(data);
         setLoginStatus("failure");
       });
   };
@@ -147,8 +145,6 @@ const LoginForm: React.FC = () => {
     const checkToken = async () => {
       try {
         if (accessToken !== null) {
-          console.log(accessToken);
-
           navigate("/main"); // 토큰이 있을 경우 바로 /main으로 이동
         }
       } catch (e) {

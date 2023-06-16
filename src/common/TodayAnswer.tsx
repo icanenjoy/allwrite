@@ -30,20 +30,16 @@ const TodayAnswer = () => {
         },
       })
       .then((response) => {
-        console.log("하영", response.data);
         const newQuestion = response.data.question.map((q: any) => [
           q._id,
           q.content,
         ]);
         setQuestion(newQuestion);
 
-        console.log("Response Question", newQuestion);
         setLoading(false);
         dispatch(setQuestionId(newQuestion[0][0])); // questionId 업데이트
       })
-      .catch((err) => {
-        console.log("error");
-      });
+      .catch((err) => {});
   }, []);
 
   const StyledArrowBack = styled(ArrowBackIosRoundedIcon)(({ theme }) => ({
@@ -64,7 +60,6 @@ const TodayAnswer = () => {
     setCurrentMessageIndex(nextIndex);
     const nextQuestionId = question[nextIndex][0];
     dispatch(setQuestionId(nextQuestionId)); // questionId 업데이트
-    console.log(nextIndex);
   };
 
   const handlePrevClick = () => {

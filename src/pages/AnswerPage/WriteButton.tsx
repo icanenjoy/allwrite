@@ -71,7 +71,6 @@ const WriteButton: React.FC = (onSubmit) => {
         }
       )
       .then(() => {
-        console.log("작성", questionId);
         alert("게시글 작성이 완료되었습니다.");
       })
       .then(() => {

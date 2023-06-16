@@ -64,9 +64,7 @@ const HeartButton: React.FC<HeartButtonProps> = ({
           })
           .catch((e) => alert(e));
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (

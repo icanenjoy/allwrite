@@ -52,19 +52,16 @@ const reducer = (
 ): RootState => {
   switch (action.type) {
     case "SET_QUESTION_ID":
-      console.log("New questionId:", action.payload);
       return {
         ...state,
         questionId: action.payload,
       };
     case "SET_ANSWER_ID":
-      console.log("New answerId:", action.payload);
       return {
         ...state,
         answerId: action.payload,
       };
     case "SET_NICKNAME":
-      console.log("New NickName:", action.payload);
       return {
         ...state,
         nickName: action.payload,

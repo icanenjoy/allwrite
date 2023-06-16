@@ -17,6 +17,10 @@ import ProfileImgLove from "../../asset/img/crocolove.png";
 import { useLocation } from "react-router-dom";
 import { DisplaySettingsTwoTone } from "@mui/icons-material";
 import { any } from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, setAnswerId, setQuestionId } from "../../store";
+import jwtDecode from "jwt-decode";
+import { AnswerDetail } from "../AnswerPage/AnswerDetail";
 
 let thismonthemotion: any = {};
 
@@ -62,9 +66,9 @@ export default function DateCalendarServerRequest() {
   const [highlightedDays, setHighlightedDays] = React.useState([1, 2, 15]);
   const [emotion, setEmotion] = useState();
   const [selectedDate, setSelectedDate] = React.useState<Dayjs>(initialValue);
-  const [year, setYear] = useState<number | null>(null);
-  const [month, setMonth] = useState<number | null>(null);
-  const [days, setDays] = useState<number | null>(null);
+  const [year, setYear] = useState<number>(dayjs().year());
+  const [month, setMonth] = useState<number>(dayjs().month() + 1);
+  const [days, setDays] = useState<number>(dayjs().date());
   const [data, setData] = useState<any[]>([]);
   const [nickName, setNickName] = useState(""); // 페이지 유저아이디
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
@@ -72,7 +76,17 @@ export default function DateCalendarServerRequest() {
     null
   ); // accessToken
 
-  const fetchData = async () => {
+  const dispatch = useDispatch(); // useDispatch 훅을 사용하여 dispatch 함수를 가져옴
+  const answerId = useSelector((state: RootState) => state.answerId);
+  const questionId = useSelector((state: RootState) => state.questionId);
+  const [open, setOpen] = useState(false);
+  const [nick, setNick] = useState<any>("");
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const fetchData = async (year: number, month: number, days: number) => {
     if (year !== null && month !== null && days !== null) {
       const date = `${year}-${month.toString().padStart(2, "0")}-${days
         .toString()
@@ -89,6 +103,13 @@ export default function DateCalendarServerRequest() {
       }
     }
   };
+  useEffect(() => {
+    fetchData(year, month, days);
+    const myNickName: string | null = accessToken
+      ? jwtDecode<{ nickName: string }>(accessToken).nickName
+      : null;
+    setNick(myNickName);
+  }, [year, month, days]);
 
   const fetchHighlightedDays = (date: Dayjs) => {
     const controller = new AbortController();
@@ -141,20 +162,20 @@ export default function DateCalendarServerRequest() {
 
     emotionLoad();
 
-    const firstdata = async () => {
-      const date = initialValue;
-      try {
-        const response = await axios.get(
-          `https://allwrite.kro.kr/api/v1/question/${date}`
-        );
-        console.log(response.data); // 요청 결과를 콘솔에 출력
-        setData(response.data);
-        // 여기에서 데이터를 처리하거나 상태를 업데이트할 수 있습니다.
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    firstdata();
+    // const firstdata = async () => {
+    //   const date = initialValue;
+    //   try {
+    //     const response = await axios.get(
+    //       `https://allwrite.kro.kr/api/v1/question/${date}`
+    //     );
+    //     console.log(response.data); // 요청 결과를 콘솔에 출력
+    //     setData(response.data);
+    //     // 여기에서 데이터를 처리하거나 상태를 업데이트할 수 있습니다.
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };
+    // firstdata();
 
     return () => requestAbortController.current?.abort();
   }, []);
@@ -197,7 +218,6 @@ export default function DateCalendarServerRequest() {
       setYear(day.year());
       setMonth(day.month() + 1);
       setDays(day.date());
-      fetchData();
     };
 
     return (
@@ -231,6 +251,7 @@ export default function DateCalendarServerRequest() {
           day={day}
           onClick={dayGet}
         />
+        {open && <AnswerDetail nickName={nick} onClose={handleClose} />}
       </Badge>
     );
   }
@@ -288,13 +309,40 @@ export default function DateCalendarServerRequest() {
         </SelectedDateText>
       )}
       {data.map((item, index) => (
-        <Button sx={nickName ? mypageButton : mainButton} key={index}>
+        <Button
+          sx={nickName ? mypageButton : mainButton}
+          key={index}
+          onClick={() => {
+            dispatch(setQuestionId(item._id));
+            axios
+              .get(
+                `https://allwrite.kro.kr/api/v1/question/answer/calendar/${questionId}/${nick}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                  },
+                }
+              )
+              .then((response) => {
+                if (response.data.message === "") {
+                  dispatch(setAnswerId(response.data.answerId));
+                  setOpen(true);
+                } else {
+                  alert(response.data.message);
+                }
+              })
+              .catch((e) => {
+                alert(e);
+              });
+          }}
+        >
           {/* 여기에서 데이터를 표시할 JSX를 작성 */}
           <p>{item.content}</p>
 
           {/* ... */}
         </Button>
       ))}
+      {open && <AnswerDetail nickName={nick} onClose={handleClose} />}
     </Container>
   );
 }

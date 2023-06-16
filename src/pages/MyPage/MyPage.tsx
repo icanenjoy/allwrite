@@ -19,6 +19,9 @@ import {
   DialogContent,
   List,
 } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, setAnswerId, setQuestionId } from "../../store";
+import { AnswerDetail } from "../AnswerPage/AnswerDetail";
 
 function MyPage() {
   const Relation = {
@@ -39,13 +42,19 @@ function MyPage() {
   const [myprofile, setmyprofile] = useState(false); //본인인지 상대 페이지 인지 구분
   const [relation, setRelation] = useState<Relation>(Relation); //친구와의 관계
   const [user, setUser] = useState<any | null>("");
-  const [answerId, setAnswerId] = useState("");
-  const [questionId, setQuestionId] = useState("");
+  const [newAnswerId, setNewAnswerId] = useState("");
+  const [newQuestionId, setNewQuestionId] = useState("");
   const [question, setQuestion] = useState<any | null>([]);
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
     "at",
     null
   ); // accessToken
+  const [open, setOpen] = useState(false);
+
+  const dispatch = useDispatch(); // useDispatch 훅을 사용하여 dispatch 함수를 가져옴
+
+  const answerId = useSelector((state: RootState) => state.answerId);
+  const questionId = useSelector((state: RootState) => state.questionId);
 
   const [photoopen, setPhotoOpen] = useState(false);
 
@@ -55,6 +64,10 @@ function MyPage() {
 
   const handleCloseModal = () => {
     setPhotoOpen(false);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -94,16 +107,14 @@ function MyPage() {
         }
       );
       setQuestion(response.data);
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const handleClickOpen = (qId: string, ansId: string) => {
     //버튼클릭
-    setAnswerId(ansId);
-    setQuestionId(qId);
-    alert(`${qId}, ${ansId}`);
+    dispatch(setQuestionId(qId));
+    dispatch(setAnswerId(ansId));
+    setOpen(true);
   };
 
   const getMyProfile = async () => {
@@ -116,10 +127,7 @@ function MyPage() {
         },
       });
       setProfile(response.data);
-      console.log(response.data);
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const getFriendProfile = async () => {
@@ -149,10 +157,7 @@ function MyPage() {
         }
       );
       setProfile(response.data);
-      console.log(response.data);
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const handleProfileChange = () => {
@@ -170,7 +175,6 @@ function MyPage() {
           },
         }
       );
-      console.log(response);
       window.location.reload();
     } catch (e) {
       console.error(e);
@@ -191,11 +195,8 @@ function MyPage() {
           },
         }
       );
-      console.log(response);
       window.location.reload();
-    } catch (e) {
-      console.error(e);
-    }
+    } catch (e) {}
   };
 
   const handleFriendReqdel = async () => {
@@ -212,11 +213,8 @@ function MyPage() {
           },
         }
       );
-      console.log(response);
       window.location.reload();
-    } catch (e) {
-      console.error(e);
-    }
+    } catch (e) {}
   };
   const handleFriendRes = async () => {
     //친구요청보내기
@@ -233,7 +231,6 @@ function MyPage() {
           },
         }
       );
-      console.log(response);
       window.location.reload();
     } catch (e) {
       console.error(e);
@@ -406,6 +403,7 @@ function MyPage() {
           ))}
         </List>
       </Container>
+      {open && <AnswerDetail nickName={nickName} onClose={handleClose} />}
     </>
   );
 }

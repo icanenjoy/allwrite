@@ -133,8 +133,6 @@ const SignUpForm: React.FC = () => {
           } else {
             setIsNickNameDuplicated(false);
           }
-
-          console.log("회원가입 실패:", error.response.data.message);
         } else {
           // 서버 응답이 없는 경우 또는 요청 자체가 실패한 경우
           console.error("회원가입 요청 실패:", error);
