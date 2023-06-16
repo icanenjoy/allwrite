@@ -15,6 +15,7 @@ import AnswerPage from "./pages/AnswerPage/AnswerPage";
 import MyPage from "./pages/MyPage/MyPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
+import AdminPage from "./pages/AdminPage/AdminPage";
 import { useLocalStorage } from "usehooks-ts";
 import LoginCheck from "./common/LoginCheck";
 import { Login } from "@mui/icons-material";
@@ -42,6 +43,7 @@ function App() {
             <Route path="/answer" element={<AnswerPage />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/admin" element={<AdminPage />} />
             <Route path="/" element={<LoginPage />} />
           </Routes>
         </Background>
