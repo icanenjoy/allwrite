@@ -21,8 +21,6 @@ import { RootState } from "../../store";
 import jwtDecode from "jwt-decode";
 
 export const AnswerDetail: React.FC<AnswerDetailProps> = ({
-  answer_id,
-  content,
   onClose,
   nickName,
 }) => {
@@ -34,7 +32,7 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
     "rt",
     null
   );
-  const [editedContent, setEditedContent] = useState(content);
+  const [editedContent, setEditedContent] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -59,7 +57,7 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
       )
       .then((response) => setData(response.data))
       .then(() => console.log(data));
-  }, [questionId]);
+  }, [questionId, data]);
 
   const handleDelete = () => {
     const confirmed = window.confirm(

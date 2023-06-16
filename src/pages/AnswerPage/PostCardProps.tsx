@@ -1,8 +1,5 @@
 export interface AnswerDetailProps {
-  answer_id: string;
-  content: string;
   onClose: () => void;
-  likeCount: number; // Add the likeCount property
   nickName: string;
 }
 

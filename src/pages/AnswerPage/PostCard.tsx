@@ -137,6 +137,9 @@ const PostCard: React.FC<PostCardProps> = (answer: PostCardProps) => {
           >
             <TruncatedText text={answer.content} maxLength={70} />
           </CardContent>
+          //   <CardContent>
+          //     <HeartButton/>
+          //   </CardContent>
         )}
         {/* <CardContent>
           <HeartButton answer_id={answer.answer_id} />
@@ -144,13 +147,7 @@ const PostCard: React.FC<PostCardProps> = (answer: PostCardProps) => {
       </HoverCard>
 
       {open && (
-        <AnswerDetail
-          answer_id={answer.answer_id}
-          content={answer.content}
-          nickName={answer.nickName}
-          onClose={handleClose}
-          likeCount={answer.likeCount}
-        />
+        <AnswerDetail nickName={answer.nickName} onClose={handleClose} />
       )}
     </>
   );
