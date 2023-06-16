@@ -398,7 +398,7 @@ function MyPage() {
               sx={questionButton}
               onClick={() => handleClickOpen(question.questionId, question._id)}
             >
-              <p>{question.content}</p>
+              <p>{question.question}</p>
             </Button>
           ))}
         </BottonContainer>
