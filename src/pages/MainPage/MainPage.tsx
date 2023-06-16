@@ -188,9 +188,7 @@ function Main() {
           setLoveImg(ProfileImgLove);
         }
       })
-      .catch((err) => {
-        console.log("error");
-      });
+      .catch((err) => {});
   }, []);
 
   useEffect(() => {

@@ -1,14 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 import { useLocation } from "react-router-dom";
 import * as React from "react";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import { useLocalStorage } from "usehooks-ts";
 import axios from "axios";
 import styled from "styled-components";
 import profileImg from "../../asset/img/profileImg.png";
 import Calendar from "../MainPage/Calendar";
 import jwtDecode from "jwt-decode";
+import EditIcon from "@mui/icons-material/Edit";
+import { IconButton } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import { Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
 
 function MyPage() {
   const Relation = {
@@ -33,6 +37,16 @@ function MyPage() {
     "at",
     null
   ); // accessToken
+
+  const [photoopen, setPhotoOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setPhotoOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setPhotoOpen(false);
+  };
 
   useEffect(() => {
     //주소바뀔때 아이디값 받아오기
@@ -192,6 +206,61 @@ function MyPage() {
       console.error(e);
     }
   };
+  function FileUpload() {
+    const onDrop = useCallback(async (acceptedFiles: any) => {
+      try {
+        const formData = new FormData();
+        formData.append("profileImage", acceptedFiles[0]);
+
+        const response = await axios.post(
+          "https://allwrite.kro.kr/api/v1/user/profileImage",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        // 파일 업로드 성공 처리
+        window.location.reload();
+      } catch (error) {
+        // 오류 처리
+        console.error("파일 업로드 오류:", error);
+      }
+    }, []);
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+      onDrop,
+    });
+
+    return (
+      <Box
+        {...getRootProps()}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 2,
+          borderWidth: 2,
+          borderRadius: 1,
+          borderColor: "primary.main",
+          backgroundColor: "primary.light",
+          color: "primary.dark",
+          cursor: "pointer",
+        }}
+      >
+        <input {...getInputProps()} />
+        {isDragActive ? (
+          <Typography variant="body1">사진올리기</Typography>
+        ) : (
+          <Typography variant="body1">사진올리기</Typography>
+        )}
+      </Box>
+    );
+  }
   const ProfileButton = () => {
     if (relation.isFriend) {
       return (
@@ -250,13 +319,36 @@ function MyPage() {
       <Container>
         <LeftContainer>
           <Profiles>
-            {myprofile && <EditBtn onClick={handleProfileChange}>수정</EditBtn>}
-            {!myprofile && <ProfileBox />}
+            <ProfileBox />
             <Profile
               style={{
                 backgroundImage: `url(${profile && profile.profileImage})`,
               }}
             />
+            {myprofile && (
+              <IconButton
+                size="large"
+                sx={{
+                  width: 40,
+                  height: 40,
+                  marginTop: -20,
+                  marginBottom: -10,
+                  marginLeft: 13,
+                }}
+                onClick={handleOpenModal}
+              >
+                <EditIcon
+                  sx={{
+                    position: "absolute",
+                  }}
+                />
+              </IconButton>
+            )}
+            <Dialog open={photoopen} onClose={handleCloseModal}>
+              <DialogContent>
+                <FileUpload />
+              </DialogContent>
+            </Dialog>
             <Name>{profile && profile.nickName}</Name>
             <Level>LV{profile && profile.level}</Level>
             <Container2>

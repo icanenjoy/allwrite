@@ -115,6 +115,7 @@ const TodayAnswer = () => {
           }}
           onClick={() => {
             dispatch(setQuestionId(question[currentMessageIndex][0])); // questionId 업데이트
+            // dispatch(setQuestionId("648b382f77afc1f1df53a4bf"));
             navigate("/answer");
           }}
         >

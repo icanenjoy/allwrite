@@ -47,20 +47,33 @@ const LoginForm: React.FC = () => {
     null
   );
   const [loginStatus, setLoginStatus] = useState<"success" | "failure" | null>(
-    null
+    "success"
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .post("https://allwrite.kro.kr/api/v1/auth", data)
-      .then((response) => {
-        setAccessToken(response.data.token.accessToken);
-        setRefreshToken(response.data.token.refreshToken);
-        navigate("/main"); // 로그인 성공 시 /main으로 이동
-      })
-      .catch((err) => {});
+    if (email !== "" && password !== "") {
+      axios
+        .post("https://allwrite.kro.kr/api/v1/auth", { email, password })
+        .then((response) => {
+          setAccessToken(response.data.token.accessToken);
+          setRefreshToken(response.data.token.refreshToken);
+          setLoginStatus("success");
+          dispatch(
+            setNickName(
+              jwt_decode<JwtLoginPayload>(accessToken as string).nickName
+            )
+          );
+        })
+        .then(() => {
+          navigate("/main"); // 로그인 성공 시 /main으로 이동
+        })
+        .catch((err) => {
+          console.log(data);
+          setLoginStatus("success");
+        });
+    }
   }, []);
 
   const handleEmailChange = useCallback(
@@ -109,14 +122,15 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
 
     axios
-      .post("https://allwrite.kro.kr/api/v1/auth", data)
+      .post("https://allwrite.kro.kr/api/v1/auth", { email, password })
       .then((response) => {
         setAccessToken(response.data.token.accessToken);
         setRefreshToken(response.data.token.refreshToken);
         setLoginStatus("success");
         dispatch(
           setNickName(
-            jwt_decode<JwtLoginPayload>(accessToken as string).nickName
+            jwt_decode<JwtLoginPayload>(response.data.token.accessToken)
+              .nickName
           )
         );
       })
@@ -175,78 +189,63 @@ const LoginForm: React.FC = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-        <Paper
-          elevation={3}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            marginTop: 8,
-            padding: 3,
-            borderRadius: 5,
-            position: "absolute",
-            width: "20rem",
-            zIndex: 10,
-          }}
-        >
-          <div style={{ fontSize: "3rem", fontWeight: 750 }}>Login</div>
-          <Profile />
-          <Grid>
-            <form onSubmit={HandleSubmit}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    type="email"
-                    label="Email Address"
-                    fullWidth
-                    value={email}
-                    onChange={handleEmailChange}
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    type="password"
-                    label="Password"
-                    fullWidth
-                    value={password}
-                    onChange={handlePasswordChange}
-                    required
-                  />
-                </Grid>
+      <Paper
+        elevation={3}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          marginTop: 8,
+          padding: 3,
+          borderRadius: 5,
+          position: "absolute",
+          width: "20rem",
+          zIndex: 10,
+        }}
+      >
+        <div style={{ fontSize: "3rem", fontWeight: 750 }}>Login</div>
+        <Profile />
+        <Grid>
+          <form onSubmit={HandleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  type="email"
+                  label="Email Address"
+                  fullWidth
+                  value={email}
+                  onChange={handleEmailChange}
+                  required
+                />
               </Grid>
-              {loginStatus === "failure" && (
-                <div
-                  style={{ fontSize: "0.8rem", fontWeight: 350, color: "red" }}
-                >
-                  <br />
-                  아이디 또는 비밀번호를 잘못 입력했습니다.
-                </div>
-              )}
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-                sx={{
-                  marginTop: 3,
-                  marginBottom: 2,
-                  backgroundColor: "#2c9960",
-                  "&:hover": {
-                    backgroundColor: "#24794d", // hover 시 변경할 배경색
-                  },
-                }}
+              <Grid item xs={12}>
+                <TextField
+                  type="password"
+                  label="Password"
+                  fullWidth
+                  value={password}
+                  onChange={handlePasswordChange}
+                  required
+                />
+              </Grid>
+            </Grid>
+            {loginStatus === "failure" && (
+              <div
+                style={{ fontSize: "0.8rem", fontWeight: 350, color: "red" }}
               >
-                로그인
-              </Button>
-            </form>
+                <br />
+                아이디 또는 비밀번호를 잘못 입력했습니다.
+              </div>
+            )}
             <Button
-              onClick={handleSignUp}
+              type="submit"
               variant="contained"
+              color="primary"
               fullWidth
               sx={{
+                marginTop: 3,
                 marginBottom: 2,
                 backgroundColor: "#2c9960",
                 "&:hover": {
@@ -254,10 +253,25 @@ const LoginForm: React.FC = () => {
                 },
               }}
             >
-              회원가입
+              로그인
             </Button>
-          </Grid>
-        </Paper>
+          </form>
+          <Button
+            onClick={handleSignUp}
+            variant="contained"
+            fullWidth
+            sx={{
+              marginBottom: 2,
+              backgroundColor: "#2c9960",
+              "&:hover": {
+                backgroundColor: "#24794d", // hover 시 변경할 배경색
+              },
+            }}
+          >
+            회원가입
+          </Button>
+        </Grid>
+      </Paper>
     </Container>
   );
 };
