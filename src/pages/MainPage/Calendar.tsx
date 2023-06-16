@@ -313,27 +313,27 @@ export default function DateCalendarServerRequest() {
           sx={nickName ? mypageButton : mainButton}
           key={index}
           onClick={() => {
-            dispatch(setQuestionId(item._id));
-            axios
-              .get(
-                `https://allwrite.kro.kr/api/v1/question/answer/calendar/${questionId}/${nick}`,
-                {
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                  },
-                }
-              )
-              .then((response) => {
-                if (response.data.message === "") {
-                  dispatch(setAnswerId(response.data.answerId));
-                  setOpen(true);
-                } else {
-                  alert(response.data.message);
-                }
-              })
-              .catch((e) => {
-                alert(e);
-              });
+            //     dispatch(setQuestionId(item._id));
+            //     axios
+            //       .get(
+            //         `https://allwrite.kro.kr/api/v1/question/answer/calendar/${questionId}/${nick}`,
+            //         {
+            //           headers: {
+            //             Authorization: `Bearer ${accessToken}`,
+            //           },
+            //         }
+            //       )
+            //       .then((response) => {
+            //         if (response.data.message === "") {
+            //           dispatch(setAnswerId(response.data.answerId));
+            //           setOpen(true);
+            //         } else {
+            //           alert(response.data.message);
+            //         }
+            //       })
+            //       .catch((e) => {
+            //         alert(e);
+            //       });
           }}
         >
           {/* 여기에서 데이터를 표시할 JSX를 작성 */}
@@ -342,7 +342,7 @@ export default function DateCalendarServerRequest() {
           {/* ... */}
         </Button>
       ))}
-      {open && <AnswerDetail nickName={nick} onClose={handleClose} />}
+      {/* {open && <AnswerDetail nickName={nick} onClose={handleClose} />} */}
     </Container>
   );
 }
