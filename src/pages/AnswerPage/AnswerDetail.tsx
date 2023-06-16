@@ -44,6 +44,7 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
     ? jwtDecode<{ nickName: string }>(accessToken).nickName
     : null;
   //api/v1/adminUser/warning
+  const [infiniteBlockCode, setInfiniteBlockCode] = useState(false);
 
   useEffect(() => {
     axios
@@ -57,7 +58,7 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
       )
       .then((response) => setData(response.data))
       .then(() => console.log(data));
-  }, [questionId, data]);
+  }, [questionId, infiniteBlockCode]);
 
   const handleDelete = () => {
     const confirmed = window.confirm(
@@ -74,6 +75,7 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
           }
         )
         .then((response) => alert("게시물 삭제 성공"))
+        .then(() => window.location.reload())
         .catch((e) => alert(e));
     } else {
     }
@@ -158,25 +160,33 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
     }
   };
 
+  const infiniteBlock = () => {
+    setInfiniteBlockCode((prev) => !prev);
+  };
+
   return (
     <Dialog
       open={true}
       onClose={onClose}
       sx={{
         color: "#FFF3BA",
-        height: "100%", // 최대 크기로 설정
-        "& .MuiDialog-paper": {
-          height: "100%", // 최대 크기로 설정
-        },
+        maxWidth: 500,
+        margin: "auto", // 가운데 정렬
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <Paper
         sx={{
           backgroundColor: "#FFF3BA",
           width: "100%",
-          height: "100%",
+          minHeight: 400,
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          margin: "auto", // 가운데 정렬
         }}
       >
         <Box
@@ -229,7 +239,7 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
           <HeartButton
             likeCount={data.likeCount}
             isLiked={data.isLiked}
-            setData={setData}
+            setData={infiniteBlock}
           />
           <CommentForm />
         </DialogContent>
