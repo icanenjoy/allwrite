@@ -10,6 +10,7 @@ import { PostCardProps, HeartButtonProps } from "./PostCardProps";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, setAnswerId } from "../../store";
+import { red } from "@mui/material/colors";
 
 interface StyledCardProps {
   isWriteAnswer: boolean;
@@ -64,7 +65,7 @@ const PostCard: React.FC<PostCardProps> = (answer: PostCardProps) => {
       <HoverCard
         isWriteAnswer={answer.isWriteAnswer}
         sx={{
-          backgroundColor: "#FFCF53",
+          backgroundColor: "#1bb36a",
           borderRadius: 6,
           ...(answer.isWriteAnswer ? {} : { filter: "blur(4px)" }),
         }}
@@ -76,6 +77,7 @@ const PostCard: React.FC<PostCardProps> = (answer: PostCardProps) => {
               alignItems: "center",
               justifyContent: "center",
               marginBottom: "10px", // Adjust the margin here
+              fontFamily: "GmarketSansMedium",
             }}
           >
             <Avatar
@@ -102,6 +104,8 @@ const PostCard: React.FC<PostCardProps> = (answer: PostCardProps) => {
               justifyContent: "center",
               padding: 0,
               marginTop: "-20px", // Adjust the margin here
+              fontFamily: "GmarketSansMedium",
+              color: "#033d21",
             }}
             variant="h5"
           >
@@ -113,10 +117,14 @@ const PostCard: React.FC<PostCardProps> = (answer: PostCardProps) => {
             style={{
               height: "80px",
               overflow: "hidden",
-              backgroundColor: "#FFE673",
+              backgroundColor: "#1bb36a",
               padding: 20,
               margin: "5px 20px", // 조정하고자 하는 마진 값으로 수정해주세요
-              borderRadius: 15,
+              borderColor: "#085430",
+              borderTop: "1px solid black",
+              fontSize: "1.3rem",
+              fontFamily: "GangwonEdu_OTFBoldA",
+              color: "#033d21",
             }}
             onClick={handleCardClick}
           >
@@ -127,7 +135,7 @@ const PostCard: React.FC<PostCardProps> = (answer: PostCardProps) => {
             style={{
               height: "80px",
               overflow: "hidden",
-              backgroundColor: "#FFE673",
+              backgroundColor: "#1bb36a",
               padding: 20,
               margin: "5px 20px", // 조정하고자 하는 마진 값으로 수정해주세요
               borderRadius: 15,

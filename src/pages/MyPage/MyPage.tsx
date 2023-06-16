@@ -7,7 +7,7 @@ import { useLocalStorage } from "usehooks-ts";
 import axios from "axios";
 import styled from "styled-components";
 import profileImg from "../../asset/img/profileImg.png";
-import Calendar from "../MainPage/Calendar";
+
 import jwtDecode from "jwt-decode";
 import EditIcon from "@mui/icons-material/Edit";
 import { IconButton } from "@mui/material";
@@ -436,27 +436,12 @@ const Profiles = styled.div`
 
   border-radius: 4rem;
   justify-content: center;
-  background-color: #faaf2e;
+  background-color: #1bb36a;
 `;
 
 const ProfileBox = styled.div`
   margin-top: 5rem;
   background-color: #000;
-`;
-
-const EditBtn = styled.button`
-  width: 4rem;
-  height: 2rem;
-  margin-top: 2rem;
-  margin-left: 19.5rem;
-  display: flex;
-  border-radius: 1rem;
-  border: none;
-  color: #f30000;
-  background-color: #fa7f3d;
-  justify-content: center;
-  text-align: center;
-  padding: 0.5rem;
 `;
 
 const Name = styled.div`
@@ -486,7 +471,7 @@ const Container2 = styled.div`
 `;
 
 const Progress = styled.div`
-  background-color: #2c9960;
+  background-color: #f99f04;
   width: ${(props) => props.style?.width || 0}%;
   height: 100%;
   transition: width 1s;

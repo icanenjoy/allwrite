@@ -242,7 +242,16 @@ const CommentForm: React.FC<CommentFormProps> = () => {
   };
 
   return (
-    <Paper elevation={2} sx={{ p: 2, backgroundColor: "orange" }}>
+    <Paper
+      elevation={2}
+      sx={{
+        p: 2,
+        width: "23rem",
+        marginTop: "2rem",
+        backgroundColor: "white",
+        borderRadius: "1rem",
+      }}
+    >
       <Stack spacing={2} sx={{ marginBottom: 5 }}>
         {comments &&
           comments.map((comment, index) => (
@@ -255,6 +264,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
                       ml: 2,
                       wordWrap: "break-word",
                       whiteSpace: "pre-wrap",
+                      fontFamily: "Pretendard-Regular",
                     }}
                   >
                     {comment.content}
@@ -263,30 +273,66 @@ const CommentForm: React.FC<CommentFormProps> = () => {
                   <TextField
                     value={editComment}
                     onChange={(e) => setEditComment(e.target.value)}
-                    sx={{ ml: 2, width: "100%" }}
+                    sx={{
+                      ml: 2,
+                      width: "100%",
+                      fontFamily: "GmarketSansMedium",
+                    }}
                   />
                 )}
-                <Typography variant="caption" sx={{ ml: 2 }}>
-                  {comment.nickName} | {comment.createdAt} | 신고수:{" "}
+                <Typography
+                  variant="caption"
+                  sx={{ ml: 2, fontFamily: "GmarketSansMedium" }}
+                >
+                  {comment.nickName} | {comment.createdAt.slice(0, 10)} | 신고 :{" "}
                   {comment.reportCount}
                 </Typography>
               </Box>
               <IconButton size="small" onClick={() => handleReport(index)}>
-                <Report />
+                <Report
+                  sx={{
+                    marginLeft: "1rem",
+                    color: "#f93707",
+                    "&:hover": {
+                      color: "#74210d", // 원하는 호버 시 색상으로 변경
+                    },
+                  }}
+                />
               </IconButton>
               {myNickName === comment.nickName && (
                 <>
                   {!editMode ? ( // Render the edit button or the save button based on editMode state
                     <IconButton size="small" onClick={() => handleEdit(index)}>
-                      <Edit />
+                      <Edit
+                        sx={{
+                          color: "#1bb36a",
+                          "&:hover": {
+                            color: "#088118", // 원하는 호버 시 색상으로 변경
+                          },
+                        }}
+                      />
                     </IconButton>
                   ) : (
                     <IconButton size="small" onClick={handleSave}>
-                      <Save />
+                      <Save
+                        sx={{
+                          color: "#1bb36a",
+                          "&:hover": {
+                            color: "#088118", // 원하는 호버 시 색상으로 변경
+                          },
+                        }}
+                      />
                     </IconButton>
                   )}
                   <IconButton size="small" onClick={() => handleDelete(index)}>
-                    <Delete />
+                    <Delete
+                      sx={{
+                        color: "#1bb36a",
+                        "&:hover": {
+                          color: "#f53809", // 원하는 호버 시 색상으로 변경
+                        },
+                      }}
+                    />
                   </IconButton>
                 </>
               )}
@@ -298,12 +344,19 @@ const CommentForm: React.FC<CommentFormProps> = () => {
         variant="outlined"
         value={newComment}
         onChange={(e) => setNewComment(e.target.value)}
-        sx={{ width: "80%" }}
+        sx={{ width: "80%", height: "5rem" }}
       />
       <Button
         variant="contained"
         onClick={handleSubmit}
-        sx={{ width: "20%", height: 55 }}
+        sx={{
+          width: "20%",
+          height: 55,
+          backgroundColor: "#1bb36a",
+          "&:hover": {
+            backgroundColor: "#0c7643", // 원하는 호버 시 색상으로 변경
+          },
+        }}
       >
         등록
       </Button>

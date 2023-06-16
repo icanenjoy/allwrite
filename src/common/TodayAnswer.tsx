@@ -83,34 +83,45 @@ const TodayAnswer = () => {
     question.length > 0 ? question[currentMessageIndex][1] : null;
 
   return (
-    <Grid container justifyContent="center" alignItems="center" spacing={2}>
-      <Grid item xs={12} sm={8} md={7} lg={6}>
+    <Grid
+      sx={{ zIndex: 999 }}
+      container
+      justifyContent="center"
+      alignItems="center"
+      spacing={2}
+    >
+      <Grid sx={{ zIndex: 999 }} item xs={12} sm={8} md={7} lg={6}>
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            backgroundColor: "#f9aa43",
+            backgroundColor: "#1bb36a",
             padding: "5px",
             height: "4rem",
             borderRadius: "1.5rem",
             transition: "transform 0.3s",
+            zIndex: 999,
             "&:hover": {
               transform: "scale(1.05)",
             },
           }}
         >
-          <IconButton onClick={handlePrevClick}>
-            <StyledArrowBack sx={{ color: "#8d3e02" }} />
+          <IconButton sx={{ zIndex: 999 }} onClick={handlePrevClick}>
+            <StyledArrowBack sx={{ color: "#f6f2e2", zIndex: 999 }} />
           </IconButton>
           <Button
             sx={{
               width: "100%",
               height: "4.4rem",
-              backgroundColor: "#f9aa43",
-              color: "#8d3e02",
+              backgroundColor: "#1bb36a",
+              color: "#f6f2e2",
+              fontSize: "1rem",
+              fontWeight: "900",
+              fontFamily: "Pretendard-Regular",
+              zIndex: 999,
               "&:hover": {
-                backgroundColor: "#f9aa43",
+                backgroundColor: "#1bb36a",
               },
             }}
             onClick={() => {
@@ -120,8 +131,8 @@ const TodayAnswer = () => {
           >
             {currentMessage}
           </Button>
-          <IconButton onClick={handleNextClick}>
-            <StyledArrowForward sx={{ color: "#8d3e02" }} />
+          <IconButton sx={{ zIndex: 999 }} onClick={handleNextClick}>
+            <StyledArrowForward sx={{ color: "#f6f2e2", zIndex: 999 }} />
           </IconButton>
         </Box>
       </Grid>
