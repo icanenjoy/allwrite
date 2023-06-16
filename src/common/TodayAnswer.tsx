@@ -83,8 +83,14 @@ const TodayAnswer = () => {
     question.length > 0 ? question[currentMessageIndex][1] : null;
 
   return (
-    <Grid container justifyContent="center" alignItems="center" spacing={2}>
-      <Grid item xs={12} sm={8} md={7} lg={6}>
+    <Grid
+      sx={{ zIndex: 999 }}
+      container
+      justifyContent="center"
+      alignItems="center"
+      spacing={2}
+    >
+      <Grid sx={{ zIndex: 999 }} item xs={12} sm={8} md={7} lg={6}>
         <Box
           sx={{
             display: "flex",
@@ -95,13 +101,14 @@ const TodayAnswer = () => {
             height: "4rem",
             borderRadius: "1.5rem",
             transition: "transform 0.3s",
+            zIndex: 999,
             "&:hover": {
               transform: "scale(1.05)",
             },
           }}
         >
-          <IconButton onClick={handlePrevClick}>
-            <StyledArrowBack sx={{ color: "#f6f2e2" }} />
+          <IconButton sx={{ zIndex: 999 }} onClick={handlePrevClick}>
+            <StyledArrowBack sx={{ color: "#f6f2e2", zIndex: 999 }} />
           </IconButton>
           <Button
             sx={{
@@ -112,7 +119,7 @@ const TodayAnswer = () => {
               fontSize: "1rem",
               fontWeight: "900",
               fontFamily: "Pretendard-Regular",
-
+              zIndex: 999,
               "&:hover": {
                 backgroundColor: "#1bb36a",
               },
@@ -124,8 +131,8 @@ const TodayAnswer = () => {
           >
             {currentMessage}
           </Button>
-          <IconButton onClick={handleNextClick}>
-            <StyledArrowForward sx={{ color: "#f6f2e2" }} />
+          <IconButton sx={{ zIndex: 999 }} onClick={handleNextClick}>
+            <StyledArrowForward sx={{ color: "#f6f2e2", zIndex: 999 }} />
           </IconButton>
         </Box>
       </Grid>
