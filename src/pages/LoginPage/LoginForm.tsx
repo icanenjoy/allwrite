@@ -197,7 +197,8 @@ const LoginForm: React.FC = () => {
           justifyContent: "center",
           alignItems: "center",
           textAlign: "center",
-          marginTop: 8,
+          marginTop: 4,
+          marginLeft: 2,
           padding: 3,
           borderRadius: 5,
           position: "absolute",
@@ -205,15 +206,25 @@ const LoginForm: React.FC = () => {
           zIndex: 10,
         }}
       >
-        <div style={{ fontSize: "3rem", fontWeight: 750 }}>Login</div>
         <Profile />
+        <div
+          style={{
+            fontSize: "1.6rem",
+            fontWeight: 750,
+            zIndex: 11,
+            marginBottom: "30px",
+            fontFamily: "GangwonEdu_OTFBoldA",
+          }}
+        >
+          로그인
+        </div>
         <Grid>
           <form onSubmit={HandleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   type="email"
-                  label="Email Address"
+                  label="이메일"
                   fullWidth
                   value={email}
                   onChange={handleEmailChange}
@@ -223,7 +234,7 @@ const LoginForm: React.FC = () => {
               <Grid item xs={12}>
                 <TextField
                   type="password"
-                  label="Password"
+                  label="비밀번호"
                   fullWidth
                   value={password}
                   onChange={handlePasswordChange}

@@ -32,7 +32,7 @@ import jwtDecode from "jwt-decode";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
-  borderRadius: "80px",
+  borderRadius: "3rem",
   backgroundColor: alpha(theme.palette.primary.main, 0.15),
   "&:hover": {
     backgroundColor: alpha(theme.palette.primary.main, 0.25),
@@ -55,7 +55,7 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
+  color: "black",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
@@ -333,6 +333,7 @@ export default function HeaderBar() {
         <List>
           {friendReq.map((friend, index) => (
             <ListItem
+              sx={{ fontFamily: "GmarketSansMedium" }}
               button
               key={index}
               onClick={() => {
