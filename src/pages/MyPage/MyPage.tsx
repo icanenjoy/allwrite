@@ -327,13 +327,17 @@ function MyPage() {
             />
             {myprofile && (
               <IconButton
-                size="large"
+                size="small"
                 sx={{
-                  width: 40,
-                  height: 40,
+                  width: 35,
+                  height: 35,
                   marginTop: -20,
                   marginBottom: -10,
                   marginLeft: 13,
+                  backgroundColor: "white",
+                  "&:hover": {
+                    backgroundColor: "#eaebed", // 원하는 호버 시 색상으로 변경
+                  },
                 }}
                 onClick={handleOpenModal}
               >
