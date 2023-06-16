@@ -23,6 +23,7 @@ import { Background } from "./common/Background";
 import Cloud from "./common/Cloud";
 import { Provider } from "react-redux";
 import store from "./store";
+
 function App() {
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
     "at",

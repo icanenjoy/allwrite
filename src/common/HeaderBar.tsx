@@ -323,7 +323,7 @@ export default function HeaderBar() {
             <SearchIcon />
           </SearchIconWrapper>
           <StyledInputBase
-            placeholder="Search…"
+            placeholder="검색하기"
             inputProps={{ "aria-label": "search" }}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -339,7 +339,7 @@ export default function HeaderBar() {
                 handleFriendPage(friend.nickName);
               }}
             >
-              <ListItemIcon sx={{ width: 20, height: 30 }}>
+              <ListItemIcon sx={{ width: 10, height: 30 }}>
                 <img
                   src={friend.profileImage}
                   alt={friend.nickName}
@@ -354,7 +354,14 @@ export default function HeaderBar() {
                 size="large"
                 onClick={() => handleFriendReqOk(friend.nickName)}
               >
-                <CheckIcon />
+                <CheckIcon
+                  sx={{
+                    color: "#1bb36a",
+                    "&:hover": {
+                      color: "#10683e", // 원하는 호버 시 색상으로 변경
+                    },
+                  }}
+                />
               </IconButton>
               <IconButton
                 sx={{ width: 20, height: 30, paddingLeft: "15px" }}
@@ -362,7 +369,14 @@ export default function HeaderBar() {
                 size="large"
                 onClick={() => handleFriendReqDel(friend.nickName)}
               >
-                <DeleteIcon />
+                <DeleteIcon
+                  sx={{
+                    color: "#1bb36a",
+                    "&:hover": {
+                      color: "#f53809", // 원하는 호버 시 색상으로 변경
+                    },
+                  }}
+                />
               </IconButton>
             </ListItem>
           ))}
@@ -380,7 +394,7 @@ export default function HeaderBar() {
                 <img
                   src={friend.profileImage}
                   alt={friend.nickName}
-                  style={{ borderRadius: "50%" }}
+                  style={{ borderRadius: "50%", width: 30, height: 30 }}
                 />
               </ListItemIcon>
               <ListItemText primary={friend.nickName} />

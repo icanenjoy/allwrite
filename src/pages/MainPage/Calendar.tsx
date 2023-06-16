@@ -225,9 +225,10 @@ export default function DateCalendarServerRequest() {
           <SelectedDateText
             style={{
               width: "100%",
-              color: "#ed7e28",
+              color: "#1bb36a",
               marginLeft: "20.5rem",
               marginTop: "-1rem",
+              fontFamily: "GmarketSansMedium",
             }}
           >
             {selectedDate && `${selectedDate.format("YYYY.MM.DD")}`}
@@ -264,6 +265,7 @@ export default function DateCalendarServerRequest() {
             width: "100%",
             color: "#ed7e28",
             marginTop: "-1rem",
+            fontFamily: "GmarketSansMedium",
           }}
         >
           {selectedDate && `${selectedDate.format("YYYY.MM.DD")}`}
@@ -308,16 +310,16 @@ const mainButton = {
   alignItems: "center",
   marginLeft: "32rem",
   marginTop: "-9.5rem",
-  backgroundColor: "#f9aa43",
+  backgroundColor: "#1bb36a",
   padding: "2rem",
-  width: "30rem",
+  width: "25rem",
   height: "4rem",
   borderRadius: "1rem",
-  color: "#8d3e02",
+  color: "white",
   transition: "transform 0.3s",
   "&:hover": {
     transform: "scale(1.05)",
-    backgroundColor: "#f9aa43",
+    backgroundColor: "#1bb36a",
   },
 };
 

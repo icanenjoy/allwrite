@@ -307,7 +307,7 @@ const Profile = styled.button`
   position: relative;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.3);
     overflow: hidden;
     cursor: pointer;
   }
@@ -328,7 +328,7 @@ const SadProfile = styled.button`
   /* background-color: red; */
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.3);
     overflow: hidden;
     cursor: pointer;
   }
@@ -348,7 +348,7 @@ const LoveProfile = styled.button`
   transition: transform 0.3s;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.3);
     overflow: hidden;
     cursor: pointer;
   }
@@ -368,7 +368,7 @@ const SosoProfile = styled.button`
   transition: transform 0.3s;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.3);
     overflow: hidden;
     cursor: pointer;
   }
@@ -388,7 +388,7 @@ const HappyProfile = styled.button`
   transition: transform 0.3s;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.3);
     overflow: hidden;
     cursor: pointer;
   }
@@ -408,7 +408,7 @@ const BadProfile = styled.button`
   transition: transform 0.3s;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.3);
     overflow: hidden;
     cursor: pointer;
   }
@@ -428,7 +428,7 @@ const AngryProfile = styled.button`
   transition: transform 0.3s;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.3);
     overflow: hidden;
     cursor: pointer;
   }
@@ -456,8 +456,9 @@ const Name = styled.div`
   width: 100%;
   overflow: visible;
   margin-top: 2rem;
-  color: #ea9f27;
-  font-weight: 750;
+  color: #1bb36a;
+  font-weight: 1000;
+  font-family: "GmarketSansMedium";
 `;
 
 const Level = styled.div`
@@ -467,8 +468,9 @@ const Level = styled.div`
   overflow: visible;
   position: absoulte;
   margin-top: 1rem;
-  color: #ea9f27;
-  font-weight: 750;
+  color: #1bb36a;
+  font-weight: 1000;
+  font-family: "Pretendard-Regular";
 `;
 
 const Container = styled.div`
@@ -483,7 +485,7 @@ const Container = styled.div`
 `;
 
 const Progress = styled.div`
-  background-color: #f9aa43;
+  background-color: #1bb36a;
   width: ${(props) => props.style?.width || 0}%;
   height: 100%;
   transition: width 1s;
@@ -510,8 +512,9 @@ const Question = styled.div`
   overflow: visible;
   position: absoulte;
   margin-top: 4rem;
-  color: #ea9f27;
+  color: #1bb36a;
   font-weight: 750;
+  font-family: "GmarketSansMedium";
 `;
 
 const Container3 = styled.div`
@@ -529,6 +532,6 @@ const BestAnswerContainer = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
-  color: #ea9f27;
+  color: #1bb36a;
   font-weight: 750;
 `;
