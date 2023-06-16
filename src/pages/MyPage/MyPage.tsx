@@ -391,6 +391,7 @@ function MyPage() {
             {!myprofile && <ProfileButton />}
           </Profiles>
         </LeftContainer>
+
         <List>
           {question.map((question: any, index: string) => (
             <Button
@@ -423,7 +424,7 @@ const LeftContainer = styled.div`
   height: 50rem;
   display: flex;
   justify-content: center;
-  margin-left: 3rem;
+  margin-left: 8rem;
   margin-right: 6rem;
 `;
 
@@ -513,17 +514,18 @@ const ProfileFriendButton2 = {
 const questionButton = {
   display: "flex",
   alignItems: "center",
-  marginLeft: "2rem",
+  marginLeft: "7rem",
   marginTop: "2.5rem",
-  backgroundColor: "#f9aa43",
+  backgroundColor: "#2c9960",
   padding: "2rem",
   width: "27rem",
   height: "4rem",
   borderRadius: "1rem",
-  color: "#8d3e02",
+  color: "white",
   transition: "transform 0.3s",
+  fontFamily: "GmarketSansMedium",
   "&:hover": {
     transform: "scale(1.05)",
-    backgroundColor: "#f9aa43",
+    backgroundColor: "#2c9960",
   },
 };
