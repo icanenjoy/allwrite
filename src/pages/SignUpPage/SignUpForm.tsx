@@ -3,6 +3,7 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 import { TextField, Button, Box, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "usehooks-ts";
+import jwtDecode, { JwtPayload } from "jwt-decode";
 
 interface SignUpFormState {
   email: string;
@@ -11,6 +12,8 @@ interface SignUpFormState {
   nickName: string;
   name: string;
   isPasswordMatched: boolean;
+  isEmailVerified: boolean; // New field for email verification
+  verificationCode: string; // New field for verification code
 }
 
 const SignUpForm: React.FC = () => {
@@ -23,6 +26,8 @@ const SignUpForm: React.FC = () => {
     nickName: "",
     name: "",
     isPasswordMatched: true,
+    isEmailVerified: false, // Initialize email verification state
+    verificationCode: "", // Initialize verification code
   });
 
   const isPasswordMatched = (password: string, confirmPassword: string) => {
@@ -31,6 +36,7 @@ const SignUpForm: React.FC = () => {
 
   const [isIdDuplicated, setIsIdDuplicated] = useState(false);
   const [isNickNameDuplicated, setIsNickNameDuplicated] = useState(false);
+  const [checkEmailCode, setCheckEmailCode] = useState<any>("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -135,6 +141,46 @@ const SignUpForm: React.FC = () => {
       });
   };
 
+  const handleEmailVerification = () => {
+    // Send email verification request and handle the response
+    // For simplicity, let's assume the verification is successful
+
+    const sendData = {
+      email: formData.email,
+    };
+    axios
+      .post("https://allwrite.kro.kr/api/v1/auth/emailAuth", sendData)
+      .then((response) => {
+        alert("이메일에 인증번호가 발송되었습니다.");
+        const token = response.data.token;
+        const tmpCode: string | null = token
+          ? jwtDecode<{ authCode: string }>(token).authCode
+          : null;
+
+        setCheckEmailCode(tmpCode);
+      });
+  };
+
+  const verificationCheck = () => {
+    if (checkEmailCode === formData.verificationCode) {
+      alert("인증완료");
+      setFormData((prevData) => ({
+        ...prevData,
+        isEmailVerified: true,
+      }));
+    } else {
+      alert("인증실패");
+    }
+  };
+
+  const handleVerificationCodeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      verificationCode: value,
+    }));
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <Box
@@ -177,6 +223,21 @@ const SignUpForm: React.FC = () => {
           required
           margin="normal"
         />
+        {!formData.isEmailVerified ? ( // Display verification code field if email is not verified
+          <>
+            <Button onClick={handleEmailVerification}>이메일 인증</Button>
+            <TextField
+              label="Verification Code"
+              type="text"
+              name="verificationCode"
+              value={formData.verificationCode}
+              onChange={handleVerificationCodeChange}
+              required
+              margin="normal"
+            />
+            <Button onClick={verificationCheck}>인증 확인</Button>
+          </>
+        ) : null}
         <div>
           {isIdDuplicated ? (
             <span style={{ color: "red", fontSize: "13px" }}>
@@ -235,19 +296,21 @@ const SignUpForm: React.FC = () => {
           required
           margin="normal"
         />
-        <Button
-          type="submit"
-          variant="contained"
-          sx={{
-            marginTop: "1rem",
-            backgroundColor: "#2c9960",
-            "&:hover": {
-              backgroundColor: "#24794d", // hover 시 변경할 배경색
-            },
-          }}
-        >
-          Sign Up
-        </Button>
+        {formData.isEmailVerified && (
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              marginTop: "1rem",
+              backgroundColor: "#2c9960",
+              "&:hover": {
+                backgroundColor: "#24794d", // hover 시 변경할 배경색
+              },
+            }}
+          >
+            Sign Up
+          </Button>
+        )}
       </Box>
     </form>
   );
