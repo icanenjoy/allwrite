@@ -11,7 +11,7 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
-import { Report } from "@mui/icons-material";
+import { Report, Delete, Edit, Save } from "@mui/icons-material"; // Import the Edit and Save icons
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useLocalStorage } from "usehooks-ts";
@@ -20,6 +20,9 @@ import jwtDecode from "jwt-decode";
 const CommentForm: React.FC<CommentFormProps> = () => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>("");
+  const [editMode, setEditMode] = useState<boolean>(false); // State to track edit mode
+  const [editComment, setEditComment] = useState<string>(""); // State for edited comment
+  const [editedCommentId, setEditedCommentId] = useState<string | null>(null); // State to track the comment being edited
   const questionId = useSelector((state: RootState) => state.questionId);
   const answerId = useSelector((state: RootState) => state.answerId);
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
@@ -33,6 +36,9 @@ const CommentForm: React.FC<CommentFormProps> = () => {
   const [reportedCommentId, setReportedCommentId] = useState<string | null>(
     null
   );
+  const myNickName: string | null = accessToken
+    ? jwtDecode<{ nickName: string }>(accessToken).nickName
+    : null;
 
   useEffect(() => {
     axios
@@ -118,7 +124,7 @@ const CommentForm: React.FC<CommentFormProps> = () => {
     axios
       .post(
         `https://allwrite.kro.kr/api/v1/answer/comment/complaint/${answerId}/${commentId}`,
-        // api/v1/answer/comment/complaint/:answerId/:commentId
+        {},
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -134,6 +140,107 @@ const CommentForm: React.FC<CommentFormProps> = () => {
       });
   };
 
+  const handleDelete = (index: number) => {
+    const commentId = comments[index]._id;
+    axios
+      .delete(
+        `https://allwrite.kro.kr/api/v1/answer/comment/${answerId}/${commentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then(() => {
+        alert("댓글 삭제 성공");
+        axios
+          .get<{ comments: { comment: Comment[] }[] }>(
+            `https://allwrite.kro.kr/api/v1/question/answer/detail/${questionId}/${answerId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          )
+          .then((response) => {
+            console.log("useEffect", response.data);
+            const extractedComments = response.data.comments[0].comment.map(
+              (comment: Comment) => {
+                return {
+                  _id: comment._id,
+                  nickName: comment.nickName,
+                  profileImage: comment.profileImage,
+                  content: comment.content,
+                  createdAt: comment.createdAt,
+                  reportCount: comment.reportCount,
+                };
+              }
+            );
+            setComments(extractedComments);
+          })
+          .catch((error) => console.log(error));
+      })
+      .catch((e) => alert(e));
+  };
+
+  const handleEdit = (index: number) => {
+    const commentId = comments[index]._id;
+    setEditedCommentId(commentId);
+    setEditComment(comments[index].content);
+    setEditMode(true);
+  };
+
+  const handleSave = () => {
+    if (editedCommentId) {
+      const updatedCommentObj = {
+        content: editComment,
+      };
+      axios
+        .put(
+          `https://allwrite.kro.kr/api/v1/answer/comment/${answerId}/${editedCommentId}`,
+          updatedCommentObj,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        )
+        .then(() => {
+          alert("댓글 수정 성공");
+          setEditComment("");
+          setEditedCommentId(null);
+          setEditMode(false);
+          axios
+            .get<{ comments: { comment: Comment[] }[] }>(
+              `https://allwrite.kro.kr/api/v1/question/answer/detail/${questionId}/${answerId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              }
+            )
+            .then((response) => {
+              console.log("useEffect", response.data);
+              const extractedComments = response.data.comments[0].comment.map(
+                (comment: Comment) => {
+                  return {
+                    _id: comment._id,
+                    nickName: comment.nickName,
+                    profileImage: comment.profileImage,
+                    content: comment.content,
+                    createdAt: comment.createdAt,
+                    reportCount: comment.reportCount,
+                  };
+                }
+              );
+              setComments(extractedComments);
+            })
+            .catch((error) => console.log(error));
+        })
+        .catch((e) => alert(e));
+    }
+  };
+
   return (
     <Paper elevation={2} sx={{ p: 2, backgroundColor: "orange" }}>
       <Stack spacing={2} sx={{ marginBottom: 5 }}>
@@ -142,11 +249,23 @@ const CommentForm: React.FC<CommentFormProps> = () => {
             <Box key={index} display="flex" alignItems="center">
               <Avatar src={comment.profileImage} alt={comment.nickName} />
               <Box>
-                <Typography
-                  sx={{ ml: 2, wordWrap: "break-word", whiteSpace: "pre-wrap" }}
-                >
-                  {comment.content}
-                </Typography>
+                {!editMode ? ( // Render the comment or the edit form based on editMode state
+                  <Typography
+                    sx={{
+                      ml: 2,
+                      wordWrap: "break-word",
+                      whiteSpace: "pre-wrap",
+                    }}
+                  >
+                    {comment.content}
+                  </Typography>
+                ) : (
+                  <TextField
+                    value={editComment}
+                    onChange={(e) => setEditComment(e.target.value)}
+                    sx={{ ml: 2, width: "100%" }}
+                  />
+                )}
                 <Typography variant="caption" sx={{ ml: 2 }}>
                   {comment.nickName} | {comment.createdAt} | 신고수:{" "}
                   {comment.reportCount}
@@ -155,6 +274,22 @@ const CommentForm: React.FC<CommentFormProps> = () => {
               <IconButton size="small" onClick={() => handleReport(index)}>
                 <Report />
               </IconButton>
+              {myNickName === comment.nickName && (
+                <>
+                  {!editMode ? ( // Render the edit button or the save button based on editMode state
+                    <IconButton size="small" onClick={() => handleEdit(index)}>
+                      <Edit />
+                    </IconButton>
+                  ) : (
+                    <IconButton size="small" onClick={handleSave}>
+                      <Save />
+                    </IconButton>
+                  )}
+                  <IconButton size="small" onClick={() => handleDelete(index)}>
+                    <Delete />
+                  </IconButton>
+                </>
+              )}
             </Box>
           ))}
       </Stack>

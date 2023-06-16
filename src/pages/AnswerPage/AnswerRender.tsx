@@ -11,6 +11,7 @@ import { resolve } from "path";
 
 const AnswerRender = () => {
   const [data, setData] = useState([]);
+  const [isWriteAnswer, setIsWriteAnswer] = useState(false);
   const [accessToken, setAccessToken] = useLocalStorage<string | null>(
     "at",
     null
@@ -20,34 +21,56 @@ const AnswerRender = () => {
     null
   );
   const questionId = useSelector((state: RootState) => state.questionId);
-  const [visibilityScope, setVisibilityScope] = useState("friends");
+  const [visibilityScope, setVisibilityScope] = useState("friend");
+  const nickName = useSelector((state: RootState) => state.nickName);
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    console.log(questionId);
+    console.log("Render UseEffect", visibilityScope);
 
     const fetchData = async () => {
       try {
-        console.log(
-          `https://allwrite.kro.kr/api/v1/question/answer/${questionId}`
-        );
-
-        const response = await axios.get(
-          `https://allwrite.kro.kr/api/v1/question/answer/${questionId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        setData(response.data);
-        console.log(response.data);
+        if (visibilityScope == "public") {
+          const response = await axios
+            .get(
+              `https://allwrite.kro.kr/api/v1/question/answer/public/${questionId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              }
+            )
+            .then((response) => {
+              setData(response.data.answers);
+              setIsWriteAnswer(response.data.isWriteAnswer);
+            })
+            .then(() => console.log(data))
+            .catch((e) => {
+              alert(e);
+            });
+        } else {
+          const response = await axios
+            .get(
+              `https://allwrite.kro.kr/api/v1/question/answer/friend/${questionId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              }
+            )
+            .then((response) => {
+              setData(response.data.answers);
+              setIsWriteAnswer(response.data.isWriteAnswer);
+            })
+            .then(() => console.log(visibilityScope, data, isWriteAnswer))
+            .catch();
+        }
       } catch (err) {
         // Handle error
       }
     };
+
     fetchData();
-  }, [questionId]);
+  }, [questionId, visibilityScope]);
 
   const handleVisibilityChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -58,42 +81,14 @@ const AnswerRender = () => {
   };
 
   const handleToggleClick = (scope: string) => {
-    switch (scope) {
-      case "friends":
-        axios
-          .get(
-            `https://allwrite.kro.kr/api/v1/question/answer/friend/${questionId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          )
-          .then((response) => setData(response.data))
-          .catch((e) => alert(e));
-        break;
-
-      case "public":
-        axios
-          .get(`https://allwrite.kro.kr/api/v1/question/answer/${questionId}`, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          })
-          .then((response) => setData(response.data))
-          .catch((e) => alert(e));
-        break;
-
-      default:
-        break;
-    }
+    setVisibilityScope(scope);
   };
 
   return (
     <div>
       <TodayAnswer></TodayAnswer>
       <div style={{ display: "flex", justifyContent: "right", margin: 20 }}>
-        <WriteButton></WriteButton>
+        {!isWriteAnswer && <WriteButton></WriteButton>}
       </div>
 
       <div style={{ display: "flex", justifyContent: "center", margin: 20 }}>
@@ -119,24 +114,51 @@ const AnswerRender = () => {
 
       <div style={{ display: "flex", justifyContent: "center", margin: 20 }}>
         <Grid container spacing={3}>
-          {data &&
-            data.map(
-              (answer: {
-                _id: string;
-                nickName: string;
-                content: string;
-                likeCount: number;
-              }) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-                  <PostCard
-                    answer_id={answer._id}
-                    nickName={answer.nickName}
-                    content={answer.content}
-                    likeCount={answer.likeCount}
-                  />
-                </Grid>
+          {isWriteAnswer
+            ? data &&
+              data.map(
+                (answer: {
+                  _id: string;
+                  nickName: string;
+                  content: string;
+                  likeCount: number;
+                  isWriteAnswer: boolean;
+                  profileImage: "string";
+                }) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <PostCard
+                      answer_id={answer._id}
+                      nickName={answer.nickName}
+                      content={answer.content}
+                      likeCount={answer.likeCount}
+                      isWriteAnswer={isWriteAnswer}
+                      profileImage={answer.profileImage}
+                    />
+                  </Grid>
+                )
               )
-            )}
+            : data &&
+              data.map(
+                (answer: {
+                  _id: string;
+                  nickName: string;
+                  content: string;
+                  likeCount: number;
+                  isWriteAnswer: boolean;
+                  profileImage: string;
+                }) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                    <PostCard
+                      answer_id={answer._id}
+                      nickName={answer.nickName}
+                      content={answer.content}
+                      likeCount={answer.likeCount}
+                      isWriteAnswer={answer.isWriteAnswer}
+                      profileImage={answer.profileImage}
+                    />
+                  </Grid>
+                )
+              )}
         </Grid>
       </div>
     </div>
