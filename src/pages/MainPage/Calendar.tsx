@@ -16,8 +16,9 @@ import ProfileImgSad from "../../asset/img/crocosad.png";
 import ProfileImgLove from "../../asset/img/crocolove.png";
 import { useLocation } from "react-router-dom";
 import { DisplaySettingsTwoTone } from "@mui/icons-material";
+import { any } from "prop-types";
 
-const thismonthemotion: any = {};
+let thismonthemotion: any = {};
 
 /**
  * Mimic fetch with abort controller https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
@@ -30,9 +31,9 @@ function fakeFetch(
 ) {
   return new Promise<{ daysToHighlight: number[] }>((resolve, reject) => {
     const timeout = setTimeout(() => {
-      const daysInMonth = date.daysInMonth(); //달의 마지막 날 반환
       const YearMonth = date.format("YYYY-MM"); //현재 해와 달을 알려줌
       const daysToHighlight: number[] = [0];
+      thismonthemotion = {};
       for (let i = 0; i < emotion.length; i++) {
         const month = emotion[i].date; //사용자의 감정의 날짜를 가져옴
         if (month.includes(YearMonth)) {
@@ -121,8 +122,6 @@ export default function DateCalendarServerRequest() {
   }, [location]);
 
   React.useEffect(() => {
-    fetchHighlightedDays(initialValue);
-
     const emotionLoad = async () => {
       try {
         const response = await axios.get(
@@ -143,6 +142,10 @@ export default function DateCalendarServerRequest() {
     emotionLoad();
     return () => requestAbortController.current?.abort();
   }, []);
+
+  useEffect(() => {
+    fetchHighlightedDays(dayjs());
+  }, [emotion]);
 
   const handleMonthChange = (date: Dayjs) => {
     if (requestAbortController.current) {
@@ -237,6 +240,7 @@ export default function DateCalendarServerRequest() {
           }}
           defaultValue={initialValue}
           loading={isLoading}
+          onMonthChange={handleMonthChange}
           renderLoading={() => <DayCalendarSkeleton />}
           slots={{
             day: (slotProps) => (
