@@ -86,7 +86,12 @@ const WriteButton: React.FC = (onSubmit) => {
     <div>
       <Button
         variant="contained"
-        sx={{ backgroundColor: "#FFCF53" }}
+        sx={{
+          backgroundColor: "#1bb36a",
+          "&:hover": {
+            backgroundColor: "#0f864c",
+          },
+        }}
         onClick={handleOpen}
       >
         작성하기
@@ -96,10 +101,12 @@ const WriteButton: React.FC = (onSubmit) => {
         onClose={handleClose}
         sx={{ "& .MuiDialog-paperWidthSm": { maxWidth: "600px" } }}
       >
-        <DialogTitle>글 작성</DialogTitle>
+        <DialogTitle sx={{ fontFamily: "GmarketSansMedium", color: "#1bb36a" }}>
+          답변 작성
+        </DialogTitle>
         <DialogContent>
           <TextField
-            label="내용"
+            label=""
             value={content}
             onChange={handleContentChange}
             multiline
@@ -110,13 +117,53 @@ const WriteButton: React.FC = (onSubmit) => {
             error={content.length > MAX_CONTENT_LENGTH}
           />
           <FormControlLabel
-            control={<Switch checked={isPublic} onChange={handleToggle} />}
+            sx={{
+              color: "#1bb36a",
+            }}
+            control={
+              <Switch
+                sx={{
+                  fontFamily: "GmarketSansMedium",
+                  color: "#1bb36a",
+                }}
+                checked={isPublic}
+                onChange={handleToggle}
+              />
+            }
             label={isPublic ? "전체공개" : "친구공개"}
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>취소</Button>
-          <Button onClick={handleSave}>작성 완료</Button>
+        <DialogActions
+          sx={{
+            color: "#1bb36a",
+          }}
+        >
+          <Button
+            sx={{
+              fontFamily: "GmarketSansMedium",
+              backgroundColor: "#1bb36a",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#0f864c",
+              },
+            }}
+            onClick={handleClose}
+          >
+            취소
+          </Button>
+          <Button
+            sx={{
+              fontFamily: "GmarketSansMedium",
+              backgroundColor: "#1bb36a",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#0f864c",
+              },
+            }}
+            onClick={handleSave}
+          >
+            작성 완료
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

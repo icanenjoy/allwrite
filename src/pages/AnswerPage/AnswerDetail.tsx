@@ -170,17 +170,19 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
       onClose={onClose}
       sx={{
         color: "#FFF3BA",
-        maxWidth: 500,
+        maxWidth: 1000,
         margin: "auto", // 가운데 정렬
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        fontFamily: "GangwonEdu_OTFBoldA",
       }}
     >
       <Paper
         sx={{
-          backgroundColor: "#FFF3BA",
-          width: "100%",
+          fontFamily: "GangwonEdu_OTFBoldA",
+          backgroundColor: "#1bb36a",
+          width: "28rem",
           minHeight: 400,
           display: "flex",
           flexDirection: "column",
@@ -191,6 +193,7 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
       >
         <Box
           sx={{
+            fontFamily: "GangwonEdu_OTFBoldA",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -216,6 +219,7 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
             alignItems: "center",
             justifyContent: "space-between",
             padding: "1rem",
+            fontFamily: "GangwonEdu_OTFBoldA",
           }}
         >
           {isEditMode ? (
@@ -228,7 +232,11 @@ export const AnswerDetail: React.FC<AnswerDetailProps> = ({
           ) : (
             data.answers &&
             data.answers.length > 0 && (
-              <Typography variant="h6" textAlign="center">
+              <Typography
+                sx={{ fontFamily: "GangwonEdu_OTFBoldA" }}
+                variant="h6"
+                textAlign="center"
+              >
                 {data.answers[0].content}
               </Typography>
             )

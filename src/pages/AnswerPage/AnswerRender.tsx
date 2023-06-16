@@ -101,11 +101,23 @@ const AnswerRender = () => {
   return (
     <div>
       <TodayAnswer></TodayAnswer>
-      <div style={{ display: "flex", justifyContent: "right", margin: 20 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "right",
+          margin: 20,
+        }}
+      >
         {!isWriteAnswer && <WriteButton></WriteButton>}
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", margin: 20 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          margin: 20,
+        }}
+      >
         <ToggleButtonGroup
           value={visibilityScope}
           exclusive
@@ -115,13 +127,13 @@ const AnswerRender = () => {
             value="friends"
             onClick={() => handleToggleClick("friends")}
           >
-            Friends
+            친구공개
           </ToggleButton>
           <ToggleButton
             value="public"
             onClick={() => handleToggleClick("public")}
           >
-            Public
+            전체공개
           </ToggleButton>
         </ToggleButtonGroup>
       </div>
